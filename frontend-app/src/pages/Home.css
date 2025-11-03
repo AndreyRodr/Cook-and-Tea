@@ -1,0 +1,60 @@
+.home-page-container {
+  background-color: #f7f3e8; /* Cor de fundo creme/clara */
+  min-height: 100vh;
+}
+
+.home-main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.welcome-text {
+  font-size: 1.1em;
+  color: #333;
+  text-align: center;
+  margin: 20px 0 30px;
+}
+
+.category-cards-section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Garante que os cards quebrem a linha */
+  gap: 15px; /* Espaço entre os cards */
+  margin-bottom: 50px;
+}
+
+/* Estilo para o banner 'Surpreenda-se' */
+.surprise-banner {
+  /*
+    ATENÇÃO: Este caminho (../assets/...) funciona APENAS se o bundler for configurado.
+    Se a imagem for colocada na pasta PUBLIC (o que é recomendado), use: 
+    background-image: url('/assets/images/chef-blur.png');
+    Vou manter o caminho relativo para fins de organização do seu código:
+  */
+  background-image: url('../assets/images/chef-blur.png');
+  background-size: cover;
+  background-position: center;
+  min-height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.surprise-text {
+  font-size: 3em;
+  color: white;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+  padding: 10px;
+}
+
+@media (max-width: 600px) {
+  .welcome-text {
+    font-size: 1em;
+    padding: 0 10px;
+  }
+}

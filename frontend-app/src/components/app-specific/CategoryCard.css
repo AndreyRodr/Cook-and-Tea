@@ -1,0 +1,57 @@
+/* frontend-app/src/components/app-specific/CategoryCard.css */
+.category-card {
+  width: 180px; /* Largura fixa, pode ser ajustada para % ou vw */
+  height: 180px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  margin: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.category-card:hover {
+  transform: translateY(-5px); /* Efeito de elevação ao passar o mouse */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.2s;
+}
+
+.category-card:hover .card-image {
+  opacity: 0.8; /* Escurece um pouco a imagem no hover */
+}
+
+.card-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente para o texto */
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Responsividade: Garante que os cards se ajustem em telas menores */
+@media (max-width: 900px) {
+  .category-card {
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .category-card {
+    width: 40%; /* Ocupa menos espaço em tela */
+    height: 120px;
+  }
+}
