@@ -1,41 +1,224 @@
-import Recipe from '../models/recipeModel.js'
+import { Op } from 'sequelize';
+import { Recipe, User, Avaliation, sequelize } from '../models/index.js' 
 
 /**
  * 
  * @desc Criar uma nova receita
- * @route POST /api/recipe
+ * @route POST /api/recipes
  * @access Privado (requer login e ser do tipo chefe) 
  */
 export const createRecipe = async (req, res) => {
     try {
-        const { name, description, ingredients, instructions, tags, images } = req.body;
+        const { name, description, ingredients, instructions, tags, images, prepTime, portions } = req.body;
 
-        const autorId = req.user.userId;
+        const authorId = req.user.userId;
 
         if(req.user.type !== "chefe") {
             return res.status(403).json({message: "Usuário não autorizado"});
         }
 
-        if (!titulo || !ingredients || !instructions) {
+        if (!name || !ingredients || !instructions || !prepTime || !portions) {
             return res.status(400).json({message: 'Campos obrigatórios estão faltando'});
         }
 
-        const newRecipe = await Recipe(
-            name,
-            autorId,
-            description,
-            ingredients,
-            instructions,
-            tags,
-            images
+        const newRecipe = await Recipe.create(
+            {
+                name,
+                authorId,
+                description,
+                ingredients,
+                instructions,
+                tags,
+                images,
+                prepTime,
+                portions
+            }
         );
+
 
         res.status(201).json(newRecipe);
     } catch (err) {
         console.error("Erro ao criar receita: ", err);
-        if (err.name === "ValidationError") {
+        if (err.name === "SequelizeValidationError") {
             return res.status(400).json({ message: "Dados inválidos", details: err.message });
         }
         res.status(500).json({ message: "Erro no servidor ao tentar criar uma receita" }); 
     }
 }
+
+/**
+ * @desc    Resgatar todas as receitas
+ * @route   GET /api/recipes
+ */
+export const getAllRecipes = async (req, res) => {
+    try {
+        const recipes = await Recipe.findAll({
+            order: [['createdAt', 'DESC']],
+            include: {
+                model: User,
+                as: 'user',
+                attributes: ['userId']
+            }
+        });
+        res.status(200).json(recipes);
+    } catch (err) {
+        console.error("Erro ao buscar receitas: ", err);
+        res.status(500).json({ message: "Erro no servidor" });
+    }
+};
+
+/**
+ * @desc    Resgatar receita por ID
+ * @route   GET /api/recipes/:id
+ */
+export const getRecipeById = async (req, res) => {
+    try {
+        const recipe = await Recipe.findByPk(req.params.id, {
+            include: [
+                { model: User, as: 'user', attributes: ['userId'] },
+                { model: Avaliation, as: 'avaliations', include: { model: User, attributes: ['userId', 'name'] } } 
+            ]
+        });
+
+        if (!recipe) {
+            return res.status(404).json({ message: "Receita não encontrada." });
+        }
+        res.status(200).json(recipe);
+    } catch (err) {
+        console.error("Erro ao buscar receita por ID: ", err);
+        res.status(500).json({ message: "Erro no servidor" });
+    }
+};
+
+/**
+ * @desc    Resgatar receitas por autor
+ * @route   GET /api/recipes/author/:userId
+ */
+export const getRecipeByAuthor = async (req, res) => {
+    try {
+        const recipes = await Recipe.findAll({
+            where: { authorId: req.params.userId },
+            order: [['createdAt', 'DESC']]
+        });
+        res.status(200).json(recipes);
+    } catch (err) {
+        console.error("Erro ao buscar receitas por autor: ", err);
+        res.status(500).json({ message: "Erro no servidor" });
+    }
+};
+
+/**
+ * @desc    Buscar receita por nome (Search)
+ * @route   GET /api/recipes/search?q=...
+ */
+export const getRecipeByName = async (req, res) => {
+    try {
+        const query = req.query.q;
+        const recipes = await Recipe.findAll({
+            where: {
+                name: {
+                    [Op.iLike]: `%${query}%` 
+                }
+            },
+            include: { model: User, as: 'user', attributes: ['userId', 'name'] }
+        });
+        res.status(200).json(recipes);
+    } catch (err) {
+        console.error("Erro ao buscar por nome: ", err);
+        res.status(500).json({ message: "Erro no servidor" });
+    }
+};
+
+/**
+ * @desc    Resgatar receitas por tag
+ * @route   GET /api/recipes/tag/:tagname
+ */
+export const getRecipeByTag = async (req, res) => {
+    try {
+        const { tagname } = req.params;
+        const recipes = await Recipe.findAll({
+            where: {
+                tags: {
+                    [Op.contains]: [tagname] 
+                }
+            },
+            include: { model: User, as: 'user', attributes: ['userId', 'name'] }
+        });
+        res.status(200).json(recipes);
+    } catch (err) {
+        console.error("Erro ao buscar por tag: ", err);
+        res.status(500).json({ message: "Erro no servidor" });
+    }
+};
+
+/**
+ * @desc    Editar uma receita
+ * @route   PUT /api/recipes/:id
+ */
+export const updateRecipe = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const recipe = await Recipe.findByPk(id);
+
+        console.log(id);
+        
+
+        if (!recipe) {
+            return res.status(404).json({ message: "Receita não encontrada." });
+        }
+
+        if (recipe.authorId !== req.user.userId) {
+            return res.status(403).json({ message: "Acesso negado. Você não é o autor desta receita." });
+        }
+
+        const [updated] = await Recipe.update(req.body, {
+            where: { recipeId: id }
+        });
+
+        if (updated) {
+            const updatedRecipe = await Recipe.findByPk(id);
+            return res.status(200).json(updatedRecipe);
+        }
+        
+        throw new Error('Falha ao atualizar a receita.');
+
+    } catch (err) {
+        console.error("Erro ao editar receita: ", err);
+        res.status(500).json({ message: "Erro no servidor" });
+    }
+};
+
+/**
+ * @desc    Deletar uma receita
+ * @route   DELETE /api/recipes/:id
+ * @access  Privado (só o autor)
+ */
+export const deleteRecipe = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const recipe = await Recipe.findByPk(id);
+
+        console.log(recipe.authorId);
+        
+
+        if (!recipe) {
+            return res.status(404).json({ message: "Receita não encontrada." });
+        }
+
+        if (recipe.authorId !== req.user.userId) {
+            return res.status(403).json({ message: "Acesso negado. Você não é o autor." });
+        }
+
+        await Avaliation.destroy({
+            where: { recipeId: id }
+        });
+
+        await recipe.destroy();
+
+        res.status(200).json({ message: "Receita deletada com sucesso." });
+
+    } catch (err) {
+        console.error("Erro ao deletar receita: ", err);
+        res.status(500).json({ message: "Erro no servidor" });
+    }
+};
