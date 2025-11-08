@@ -18,7 +18,6 @@ export const protect = async (req, res, next) => {
                 attributes: { exclude: ['password'] },
             });
 
-            console.log(decoded);
             
             if (!req.user) {
                 return res.status(401).json({ message: 'Não autorizado, usuário não encontrado.' });
@@ -33,3 +32,4 @@ export const protect = async (req, res, next) => {
         return res.status(401).json({ message: 'Não autorizado, sem token.' });
     }
 }
+

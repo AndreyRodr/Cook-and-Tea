@@ -1,11 +1,11 @@
 import { Router } from 'express';
-// import recipeRoutes from './receitaRoutes';
 import userRoutes from "./userRoutes.js"
-
+import recipeRoutes from './recipeRoutes.js';
 const router = Router();
 
-// router.use('/recipe',recipeRoutes);
+router.use('/recipes',recipeRoutes);
 router.use('/users', userRoutes)
+
 
 router.get('/', (req, res) => {
     res.status(200).json({message: "API Rodando"})

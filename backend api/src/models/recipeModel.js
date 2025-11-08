@@ -19,18 +19,18 @@ const Recipe = sequelize.define(
             type: DataTypes.STRING,
         },
         ingredients: {
-            type: DataTypes.ARRAY(DataTypes.STRING),
+            type: DataTypes.ARRAY(DataTypes.TEXT),
             allowNull: false,
         },
         instructions: {
-            type: DataTypes.ARRAY(DataTypes.STRING),
+            type: DataTypes.ARRAY(DataTypes.TEXT),
             allowNull: false,
         },
         tags: {
-            type: DataTypes.ARRAY(DataTypes.STRING),
+            type: DataTypes.ARRAY(DataTypes.TEXT),
         },
         images: {
-            type: DataTypes.ARRAY(DataTypes.STRING),
+            type: DataTypes.ARRAY(DataTypes.TEXT),
         },
         prepTime: {
             type: DataTypes.STRING,

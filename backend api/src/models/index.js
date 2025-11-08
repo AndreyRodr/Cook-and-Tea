@@ -1,7 +1,7 @@
-import { sequelize } from "../config/database";
-import User from "./userModel";
-import Recipe from "./recipeModel";
-import Avaliation from "./avaliationModel";
+import { sequelize } from "../config/database.js";
+import User from "./userModel.js";
+import Recipe from "./recipeModel.js";
+import Avaliation from "./avaliationModel.js";
 
 Recipe.belongsTo(User, {foreignKey: 'authorId'});
 Recipe.hasMany(Avaliation, {foreignKey: 'recipeId', as: 'avaliations'})
