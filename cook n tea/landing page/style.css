@@ -1,0 +1,195 @@
+.frame {
+  background-color: #ffffff;
+  overflow: hidden;
+  width: 100%;
+  min-width: 1920px;
+  min-height: 1073px;
+  position: relative;
+}
+
+.frame .rectangle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 4010px;
+  background-color: #faf3e0;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.frame .chatgpt-image-de {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1073px;
+  object-fit: cover;
+}
+
+.frame .text-wrapper {
+  position: absolute;
+  top: 263px;
+  left: 571px;
+  width: 776px;
+  text-shadow: 0px 4px 4px #00000040;
+  -webkit-text-stroke: 1px #000000;
+  font-family: "Poppins-Bold", Helvetica;
+  font-weight: 700;
+  color: #f77f00;
+  font-size: 128px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.frame .uma-pitada-de-sabor {
+  position: absolute;
+  top: 423px;
+  left: 672px;
+  width: 577px;
+  font-family: "Poppins-SemiBold", Helvetica;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 40px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 46px;
+}
+
+.frame .IR-PRA-HOME {
+  display: flex;
+  width: 402px;
+  height: 70px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 35px;
+  position: absolute;
+  top: 535px;
+  left: 759px;
+  background-color: #e63946;
+  border-radius: 30px;
+  transform: rotate(0.42deg);
+  box-shadow: 0px 4px 4px #00000040;
+  aspect-ratio: 5.74;
+}
+
+.frame .div {
+  position: relative;
+  width: fit-content;
+  margin-left: -24.50px;
+  margin-right: -24.50px;
+  font-family: "Poppins-Bold", Helvetica;
+  font-weight: 700;
+  color: #faf3e0;
+  font-size: 30px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+/* Original CSS code should be injected here from globals.css */
+
+.frame {
+  background-color: #ffffff;
+  overflow: hidden;
+  width: 100%;
+  min-width: 1920px;
+  min-height: 1073px;
+  position: relative;
+}
+
+.frame .rectangle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 4010px;
+  background-color: #faf3e0;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.frame .chatgpt-image-de {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1073px;
+  object-fit: cover;
+}
+
+.frame .text-wrapper {
+  position: absolute;
+  top: 263px;
+  left: 571px;
+  width: 776px;
+  text-shadow: 0px 4px 4px #00000040;
+  -webkit-text-stroke: 1px #000000;
+  font-family: "Poppins-Bold", Helvetica;
+  font-weight: 700;
+  color: #f77f00;
+  font-size: 128px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.frame .uma-pitada-de-sabor {
+  position: absolute;
+  top: 423px;
+  left: 672px;
+  width: 577px;
+  font-family: "Poppins-SemiBold", Helvetica;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 40px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 46px;
+}
+
+.frame .IR-PRA-HOME {
+  display: flex;
+  width: 402px;
+  height: 70px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 35px;
+  position: absolute;
+  top: 535px;
+  left: 759px;
+  background-color: #e63946;
+  border-radius: 30px;
+  transform: rotate(0.42deg);
+  box-shadow: 0px 4px 4px #00000040;
+  aspect-ratio: 5.74;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.frame .IR-PRA-HOME:hover {
+  background-color: #d62839;
+  transform: rotate(0.42deg) scale(1.02);
+}
+
+.frame .IR-PRA-HOME:active {
+  transform: rotate(0.42deg) scale(0.98);
+}
+
+.frame .IR-PRA-HOME:focus {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
+.frame .div {
+  position: relative;
+  width: fit-content;
+  margin-left: -24.50px;
+  margin-right: -24.50px;
+  font-family: "Poppins-Bold", Helvetica;
+  font-weight: 700;
+  color: #faf3e0;
+  font-size: 30px;
+  letter-spacing: 0;
+  line-height: normal;
+}

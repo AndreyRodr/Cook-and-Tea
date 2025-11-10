@@ -1,0 +1,253 @@
+.frame {
+  background-color: #faf3e0;
+  border: 1px solid;
+  border-color: #04040433;
+  overflow-x: hidden;
+  width: 100%;
+  min-width: 1920px;
+  min-height: 1080px;
+  position: relative;
+}
+
+.frame .content {
+  position: absolute;
+  width: 1512px;
+  height: 179px;
+  top: 361px;
+  left: 160px;
+  display: flex;
+}
+
+.frame .hamburgers {
+  margin-top: 1px;
+  width: 241px;
+  height: 178px;
+}
+
+.frame .comida {
+  margin-top: 1px;
+  width: 241px;
+  height: 178px;
+  margin-left: 59px;
+}
+
+.frame .pudim {
+  margin-top: 1px;
+  width: 250px;
+  height: 187px;
+  margin-left: 70px;
+}
+
+.frame .cha {
+  width: 241px;
+  height: 178px;
+  margin-left: 74px;
+}
+
+.frame .bolo {
+  margin-top: 1px;
+  width: 241px;
+  height: 178px;
+  margin-left: 95px;
+}
+
+.frame .text-wrapper {
+  position: absolute;
+  top: 240px;
+  left: 109px;
+  width: 1690px;
+  font-family: "Poppins-SemiBold", Helvetica;
+  font-weight: 600;
+  color: #000000;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.frame .nav {
+  position: absolute;
+  top: 55px;
+  left: 0;
+  width: 1926px;
+  height: 114px;
+  box-shadow: 0px 4px 4px #00000040;
+}
+
+.frame .rectangle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 114px;
+  background-color: #f77f00;
+  border: 0px none;
+}
+
+.frame .div {
+  position: absolute;
+  top: 67px;
+  left: 625px;
+  width: 191px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins-SemiBold", Helvetica;
+  font-weight: 600;
+  color: #fdf7f1;
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.frame .text-wrapper-2 {
+  position: absolute;
+  top: 67px;
+  left: 835px;
+  width: 191px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins-SemiBold", Helvetica;
+  font-weight: 600;
+  color: #fdf7f1;
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.frame .text-wrapper-3 {
+  position: absolute;
+  top: 67px;
+  left: 1056px;
+  width: 191px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins-SemiBold", Helvetica;
+  font-weight: 600;
+  color: #fef8f2;
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.frame .line {
+  left: 824px;
+  position: absolute;
+  top: 65px;
+  width: 1px;
+  height: 43px;
+  object-fit: cover;
+}
+
+.frame .img {
+  left: 1048px;
+  position: absolute;
+  top: 65px;
+  width: 1px;
+  height: 43px;
+  object-fit: cover;
+}
+
+.frame .header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 114px;
+  display: flex;
+  gap: 37.9px;
+  background-color: #f1d0b0;
+}
+
+.frame .image {
+  margin-top: 17.6px;
+  width: 75.93px;
+  height: 77.01px;
+  margin-left: 33.2px;
+  aspect-ratio: 0.99;
+}
+
+.frame .group {
+  margin-top: 36.1px;
+  width: 912.92px;
+  height: 41.51px;
+  position: relative;
+}
+
+.frame .rectangle-2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 892px;
+  height: 42px;
+}
+
+.frame .text-wrapper-4 {
+  position: absolute;
+  top: 7px;
+  left: 24px;
+  width: 302px;
+  font-family: "Poppins-SemiBold", Helvetica;
+  font-weight: 600;
+  color: #aba9a9;
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.frame .tipo {
+  position: absolute;
+  top: 0;
+  left: 697px;
+  width: 195px;
+  height: 42px;
+  background-color: #f77f00;
+  border-radius: 0px 200px 200px 0px;
+}
+
+.frame .text-wrapper-5 {
+  position: absolute;
+  top: 5px;
+  left: 732px;
+  width: 177px;
+  font-family: "Poppins-ExtraBold", Helvetica;
+  font-weight: 800;
+  color: #ffffff;
+  font-size: 22px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.frame .user-svgrepo-com {
+  position: absolute;
+  left: 1799px;
+  bottom: 975px;
+  width: 87px;
+  height: 87px;
+}
+
+.frame .mouse-cursor-symbol {
+  position: absolute;
+  top: 498px;
+  left: 962px;
+  width: 64px;
+  height: 64px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.frame .mask-group {
+  position: absolute;
+  top: 688px;
+  left: 294px;
+  width: 1328px;
+  height: 392px;
+}
