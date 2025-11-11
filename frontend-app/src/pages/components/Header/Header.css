@@ -1,0 +1,125 @@
+.header {
+    background-color: var(--header-color);
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.logo-image {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+}
+
+.left-content {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-bar {
+    max-width: none;
+    height: 38px;
+    width: 100%;
+    display: flex;
+    align-content: center;
+}
+
+.search-bar-input {
+    width: 75%;
+    border-radius: 50px 0 0 50px;
+    border: none;
+    padding: 0 15px;
+    font-size: 12px;
+}
+
+.search-bar-input:focus {
+    outline: 1px solid var(--primary-color);
+}
+
+.search-bar-btn {
+    outline: 1px solid var(--primary-color);
+    border-radius: 0 50px 50px 0;
+    border: none;
+    width: 25%;
+    background-color: var(--primary-color);
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.search-bar-btn:hover {
+    background-color: var(--primary-hover-color);
+    outline: 1px solid var(--primary-hover-color);
+}
+
+.search-bar-btn:focus {
+    background-color: #fff;
+    color: var(--primary-color);
+}
+
+.desktop-user-avatar {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .header {
+        flex-wrap: nowrap;
+        padding: 10px 20px;
+        gap: 20px;
+    }
+
+    .left-content {
+        width: auto;
+        flex-grow: 1;
+        gap: 20px;
+    }
+
+    .logo-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .search-bar {
+        width: 100%;
+        max-width: 600px;
+        height: 42px;
+    }
+
+    .search-bar-input {
+        padding: 0 20px;
+        font-size: 14px;
+    }
+
+    .search-bar-btn {
+        font-size: 14px;
+    }
+
+}
+
+@media (min-width: 1024px) {
+    .logo-image {
+        width: 75px;
+        height: 75px;
+    }
+
+    .search-bar {
+        max-width: 60%;
+    }
+
+    .desktop-user-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        width: 50px;
+        height: 50px;
+        background: #ccc;
+        border-radius: 50%;
+    }
+}
