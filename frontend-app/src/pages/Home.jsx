@@ -1,16 +1,20 @@
-import React from "react";
+import {useEffect, useState} from "react";
 import bolo from "../assets/images/bolos.png";
 import cha from "../assets/images/chas.png";
 import comida from "../assets/images/comidas.png";
 import hamburgers from "../assets/images/lanches.png";
-import logo from "../assets/images/logo.png";
 import supreendase from "../assets/images/chef-blur.png";
 import pudim from "../assets/images/pudim.png";
 import "./Home.css";
 
+import Header from "./components/Header/Header";
+
 export default function Home() {
+    const [searchText, setSearchText] = useState('')
+
     return (
         <div className="home-container">
+            <Header searchSetter={setSearchText}/>
             <div className="content">
                 <img className="hamburgers" alt="Hamburgers" src={hamburgers} />
 
@@ -39,20 +43,6 @@ export default function Home() {
                 <div className="text-wrapper-3">Bebidas</div>
 
             </div>
-
-            <header className="header">
-                <img className="image" alt="Image" src={logo} />
-
-                <div className="group">
-                    {/* <img className="rectangle-2" alt="Rectangle" src={rectangle3} /> */}
-
-                    <div className="text-wrapper-4">PROCURE UMA RECEITA</div>
-
-                    <div className="tipo" />
-
-                    <div className="text-wrapper-5">PROCURAR</div>
-                </div>
-            </header>
 
             {/* <img
                 className="user-svgrepo-com"
