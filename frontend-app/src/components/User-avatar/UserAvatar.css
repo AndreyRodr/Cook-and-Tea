@@ -1,0 +1,25 @@
+.user-avatar{
+    width: 50px;
+    position:fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: transparent;
+    outline: none;
+}
+
+.user-avata-icon svg{
+    width: 100px;
+}
+
+.user-avata-icon:hover {
+    cursor: pointer;
+    fill: var(--secondary-hover-color);
+}
+
+@media (min-width: 1024px) {
+    .user-avatar {
+        position: inherit;
+        width: 50px;
+    }
+}
