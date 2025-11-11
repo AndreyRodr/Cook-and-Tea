@@ -1,14 +1,17 @@
-
 import { FaUserCircle } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import './UserAvatar.css'
 
-export default function UserAvatar(){ 
+import booleanStateHandle from "../../utils/booleanStateHandle";
+
+export default function UserAvatar( {setter, currentValue} ){ 
+
+
     return( 
-        <div className="user-avatar">
+        <button className="user-avatar" onClick={() => booleanStateHandle(setter, currentValue)}>
             <IconContext.Provider value={{color: "var(--secondary-color)", className:"user-avata-icon", size:'60px'}}>
                 <FaUserCircle />
             </IconContext.Provider>
-        </div>
+        </button>
     )
 }

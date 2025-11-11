@@ -1,4 +1,4 @@
-import logo from "../../../assets/images/logo.png";
+import logo from "../../assets/images/logo.png";
 
 import UserAvatar from "../User-avatar/UserAvatar";
 
@@ -18,7 +18,7 @@ function SearchBar( {searchSetter} ) {
     )
 }
 
-export default function Header( {searchSetter} ) {
+export default function Header( {searchSetter, userAvatarModalSituation, userAvatarModalHandle} ) {
     return (
         <header className="header">
             <div className="left-content">
@@ -26,7 +26,7 @@ export default function Header( {searchSetter} ) {
                 <SearchBar searchSetter={searchSetter} />
             </div>
             <div className="desktop-user-avatar">
-                <UserAvatar />
+                <UserAvatar setter={userAvatarModalHandle} currentValue={userAvatarModalSituation}/>
             </div>
         </header>
     )

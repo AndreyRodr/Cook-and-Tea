@@ -4,7 +4,8 @@
     align-items: center;
     align-content: center;
     justify-content: space-between;
-    padding: 10px 20px;
+    box-shadow: 2px 0 10px 5px rgba(0, 0, 0, 0.252);
+    width: 100%;
 }
 
 .logo-image {
@@ -17,19 +18,19 @@
     display: flex;
     width: 100%;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
 }
 
 .search-bar {
     max-width: none;
-    height: 38px;
-    width: 100%;
+    height: 30px;
+    width: 90%;
     display: flex;
     align-content: center;
 }
 
 .search-bar-input {
-    width: 75%;
+    width: 50%;
     border-radius: 50px 0 0 50px;
     border: none;
     padding: 0 15px;
