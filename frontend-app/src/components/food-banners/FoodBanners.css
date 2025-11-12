@@ -1,0 +1,78 @@
+.banners {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+}
+
+.banner {
+    position: relative;
+    width: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.banner:hover::after, .banner:hover h1{
+    opacity: 0;
+    visibility: hidden;
+}
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.banner::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(59, 58, 58, 0.106);
+    border-radius: 16px;
+    backdrop-filter: blur(3px);
+    border-radius: 12px;
+    -webkit-backdrop-filter: blur(8.3px);
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.banner h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    z-index: 2;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.surprise-banner {
+    width: 200px;
+    height: 120px;
+    margin: 30px 0;
+}
+
+.surprise-banner h1 {
+    font-size: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .surprise-banner {
+    width: 60%;
+    height: 300px;
+    margin: 30px 0;
+}
+
+.surprise-banner h1 {
+    font-size: 3rem;
+}
+}

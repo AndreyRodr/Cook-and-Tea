@@ -2,6 +2,8 @@
 .home-container {
     background-color: #faf3e0;
     width: 100%;
+    height: 100vh;
+    display: grid;
 }
 
 .home-container .content {
@@ -43,13 +45,16 @@
 }
 
 .home-container .text-wrapper {
-    color: #000000;
-    font-family: "Poppins-SemiBold", Helvetica;
-    font-size: 24px;
+    color: #2b2520f5;
+    font-size: 18px;
     font-weight: 600;
     letter-spacing: 0;
     line-height: normal;
     top: 240px;
+    width: 70%;
+    justify-self: center;
+    text-align: center;
+    margin-top: 20px;
 }
 
 .home-container .tipo {
@@ -60,6 +65,12 @@
     position: absolute;
     top: 0;
     width: 195px;
+}
+
+.surprise-banner-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
 }
 
 @media (min-width: 1024px) {
