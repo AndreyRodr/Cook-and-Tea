@@ -1,0 +1,28 @@
+.mobile-search-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: var(--header-color);
+    padding: 7px;
+    border-top: 1px solid rgba(0, 0, 0, 0.193);
+    box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.252);
+}
+
+.mobile-search-bar-input {
+    width: 300px;
+    padding: 5px;
+    border-radius: 20px 0 0 20px;
+    border: none;
+    outline: none;
+}
+
+.mobile-search-bar-input:focus {
+    border: 1px solid var(--primary-color);
+}
+
+.mobile-search-bar-btn {
+    background-color: var(--primary-color);
+    border: none;
+    width: 50px;
+    border-radius: 0 20px 20px 0;
+}
