@@ -57,7 +57,7 @@ nav span {
     stroke-width: 1px;
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 1024px) {
     nav {
         width: 100%;
         background-color: var(--primary-color);
@@ -67,7 +67,6 @@ nav span {
         height: 35px;
         box-shadow: 0 5px 5px 1px rgba(0, 0, 0, 0.184);
         position: relative;
-        top: -40px;
     }
 
     .nav-element{ 

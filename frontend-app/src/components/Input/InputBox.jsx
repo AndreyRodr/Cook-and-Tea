@@ -14,7 +14,7 @@ import './InputBox.css';
  * @param {string} [props.placeholder=''] - O texto de placeholder do input.
  * @param {string} [props.name] - O atributo 'name' do input.
  */
-export default function InputBox({ label, type, value, onChange, placeholder = '', name }) {
+export default function InputBox({ label = '', type, value, onChange, placeholder = '', name }) {
     // Estado para controlar a visibilidade da senha (apenas se o type for 'password')
     const [showPassword, setShowPassword] = useState(false);
 

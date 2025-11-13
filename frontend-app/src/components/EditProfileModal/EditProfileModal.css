@@ -1,0 +1,139 @@
+/* Overlay que cobre toda a tela */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro semi-transparente */
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    z-index: 1000; /* Garante que fique acima de todo o conteúdo da página */
+    padding: 20px;
+}
+
+/* O cartão de conteúdo do modal */
+.modal-content-card {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 500px; /* Largura máxima para desktops */
+    transform: scale(1); /* Animação simples de aparecimento */
+    animation: fade-in 0.2s ease-out;
+}
+
+/* Animação */
+@keyframes fade-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Cabeçalho e Botão de Fechar */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    color: #2b2520f5;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: #555;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.close-button:hover {
+    color: #f77f00;
+}
+
+/* Formulário e Grupos de Campos */
+.edit-profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaço entre os grupos de formulário */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2b2520f5;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    padding: 10px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #f77f00;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(247, 127, 0, 0.1);
+}
+
+/* Toggle Chefe */
+.form-group-chef-toggle {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.form-group-chef-toggle input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    accent-color: #f77f00;
+}
+
+.form-group-chef-toggle label {
+    font-size: 15px;
+    color: #2b2520;
+    font-weight: 500;
+}
+
+
+/* Botão Salvar (usando o estilo do seu Button.css como base) */
+.save-button {
+    background-color: #f77f00;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    margin-top: 10px;
+}
+
+.save-button:hover:not(:disabled) {
+    background-color: #cc6a00;
+}
+
+.save-button:disabled {
+    background-color: #fcae55;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
