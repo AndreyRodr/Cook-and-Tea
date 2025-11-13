@@ -1,0 +1,84 @@
+.navbar-container {
+  background-color: #ff914d; /* Cor laranja principal */
+  width: 100%;
+  padding: 10px 0;
+}
+
+.navbar-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.navbar-logo {
+  font-family: 'Arial Black', sans-serif;
+  font-size: 1.5em;
+  color: white; /* Cor do texto no logo */
+  cursor: pointer;
+  min-width: 100px; /* Garante que o logo não encolha */
+}
+
+.search-bar {
+  display: flex;
+  background-color: white;
+  border-radius: 5px;
+  overflow: hidden;
+  max-width: 500px;
+  flex-grow: 1; /* Permite que a barra de pesquisa ocupe o espaço disponível */
+  margin: 0 30px;
+}
+
+.search-input {
+  border: none;
+  padding: 10px 15px;
+  font-size: 1em;
+  outline: none;
+  flex-grow: 1;
+}
+
+.search-button {
+  background-color: #ff914d; /* Cor laranja do botão de procurar */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-button:hover {
+  background-color: #e57e41; /* Laranja mais escuro no hover */
+}
+
+.navbar-profile .profile-icon {
+  color: #000; /* Ícone preto */
+  font-size: 2.5em; /* Tamanho do ícone */
+  cursor: pointer;
+  transition: color 0.2s;
+  background-color: #e5e5e5;
+  border-radius: 50%;
+  padding: 3px;
+}
+
+.navbar-profile .profile-icon:hover {
+  color: #ff914d; /* Muda a cor no hover, se desejar */
+}
+
+/* --- Responsividade da Navbar --- */
+@media (max-width: 768px) {
+  .navbar-content {
+    flex-wrap: wrap; /* Permite que os itens quebrem a linha */
+    justify-content: center;
+  }
+  .search-bar {
+    order: 3; /* Move para baixo em telas menores */
+    width: 100%;
+    margin: 10px 0;
+  }
+  .navbar-logo, .navbar-profile {
+    margin: 5px 15px;
+  }
+}

@@ -1,0 +1,28 @@
+.home-return-button {
+    /* Posição e aparência */
+    background-color: #f77f00; /* Cor primária */
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+
+    /* Posicionamento (Pode ser ajustado na AuthPage.css se for fixo) */
+    position: absolute; /* Torna-o flutuante dentro do container pai */
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+.home-return-button:hover {
+    background-color: #cc6a00;
+    transform: scale(1.05);
+}
+
+.home-return-button:active {
+    transform: scale(1.0);
+}

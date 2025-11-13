@@ -1,0 +1,69 @@
+.input-box-container {
+    /* Define o layout do container para que o label e o input fiquem empilhados */
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px; /* Espaço entre os campos de input */
+    width: 100%; /* Ocupa a largura total do container pai */
+}
+
+/* Novo wrapper para agrupar o input e o botão de toggle */
+.input-field-wrapper {
+    position: relative;
+    width: 100%;
+}
+.input-box-container label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2b2520f5; /* Cor do texto (inspirada no seu Home.css) */
+    margin-bottom: 8px;
+}
+
+.custom-input {
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #f77f00; /* Borda laranja/âmbar, inspirada na sua cor .tipo */
+    border-radius: 8px;
+    background-color: #ffffff; /* Fundo branco para o campo */
+    color: #2b2520;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    box-sizing: border-box; /* Garante que padding e border estão inclusos na largura */
+}
+
+.password-toggle-button {
+    position: absolute;
+    top: 50%; /* Centraliza verticalmente */
+    right: 10px; /* Distância da borda direita */
+    transform: translateY(-50%);
+    
+    /* Estilização do botão */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 18px; /* Tamanho do ícone/emoji */
+    color: #a0a0a0;
+    transition: color 0.2s ease;
+}
+
+.password-toggle-button:hover {
+    color: #f77f00; /* Cor de destaque no hover */
+}
+
+/* Garante que o input não seja cortado pelo botão */
+.password-field .custom-input {
+    padding-right: 40px; /* Aumenta o padding para o ícone caber */
+}
+
+/* Estilo ao focar (clicar) no input */
+.custom-input:focus {
+    border-color: #cc6a00; /* Laranja mais escuro ao focar */
+    outline: none; /* Remove o contorno padrão do navegador */
+    box-shadow: 0 0 5px rgba(247, 127, 0, 0.5); /* Sombra suave */
+}
+
+/* Placeholder style (opcional, mas adiciona um toque visual) */
+.custom-input::placeholder {
+    color: #a0a0a0;
+    font-style: italic;
+}
