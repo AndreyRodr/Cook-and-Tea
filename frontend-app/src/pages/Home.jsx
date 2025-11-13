@@ -8,17 +8,31 @@ import Header from "../components/Header/Header";
 import UserOptionsModal from "../components/User-options-modal/UserOptionsModal";
 import FoodBanners from "../components/food-banners/FoodBanners";
 import Navbar from "../components/Navbar/Navbar";
+import MobileSearchBar from "../components/mobile-search-bar/MobileSearchBar";
+
+import booleanStateHandle from "../utils/booleanStateHandle";
 
 export default function Home() {
     const [userOptionsModalIsOpened, setUserOptionsModalIsOpened] = useState(true)
+    const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
 
     const [searchText, setSearchText] = useState('')
     const [loggedUserType, setLoggedUserType] = useState('chefe')
 
+    const mobileSearchBarHandle = () => {
+        setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
+    }
+
     return (
         <div className="home-container">
-            <Header searchSetter={setSearchText} userAvatarModalSituation={userOptionsModalIsOpened} userAvatarModalHandle={setUserOptionsModalIsOpened} />
+            <Header 
+                searchSetter={setSearchText} 
+                userAvatarModalSituation={userOptionsModalIsOpened} 
+                userAvatarModalHandle={setUserOptionsModalIsOpened} 
+                searchBarHandle={mobileSearchBarHandle}
+            />
             <Navbar userType="chefe"/>
+            <MobileSearchBar searchSetter={setSearchText} isOpened={isMobileSearchBarOpened}/>
             <p className="text-wrapper">
                 Bem-vindo ao CookN’Tea: o maior site de receitas da América Latina com
                 muitas receitas! <br/>Aqui você encontra diversas receitas fáceis e rápidas
