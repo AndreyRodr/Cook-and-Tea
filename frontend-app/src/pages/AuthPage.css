@@ -1,0 +1,96 @@
+.auth-page-container {
+    background-color: #faf3e0; /* Cor de fundo do seu Home.css */
+    width: 100%;
+    min-height: 100vh; /* Ocupa toda a altura da viewport */
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.auth-card {
+    background-color: #ffffff; /* Fundo branco para o cartão de formulário */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Define uma largura máxima para o formulário */
+}
+
+.auth-title {
+    color: #2b2520f5;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaçamento entre os elementos do formulário (inputs e botão) */
+}
+
+/* --- ESTILOS PARA A SELEÇÃO DE PERFIL --- */
+
+.user-type-selection {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+.user-type-selection h3 {
+    font-size: 16px;
+    color: #2b2520f5;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.radio-option input[type="radio"] {
+    /* Estilização básica do radio button */
+    margin-right: 10px;
+    width: 16px;
+    height: 16px;
+    accent-color: #f77f00; /* Usa a cor principal para o 'check' */
+    cursor: pointer;
+}
+
+.radio-option label {
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.radio-option label strong {
+    font-weight: 600;
+}
+
+/* Estilos do rodapé */
+.auth-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.toggle-link {
+    color: #f77f00; /* Cor de destaque para o link de alternância */
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.toggle-link:hover {
+    color: #cc6a00;
+    text-decoration: underline;
+}
