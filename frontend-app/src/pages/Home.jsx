@@ -6,7 +6,8 @@ import "./Home.css";
 import UserAvatar from "../components/User-avatar/UserAvatar";
 import Header from "../components/Header/Header";
 import UserOptionsModal from "../components/User-options-modal/UserOptionsModal";
-import FoodBanners from "../components/food-banners/FoodBanners";
+import FoodBanners from "../components/Food-banners/FoodBanners";
+import InputBox from "../components/Input/InputBox";
 
 export default function Home() {
     const [userOptionsModalIsOpened, setUserOptionsModalIsOpened] = useState(true)
@@ -22,7 +23,7 @@ export default function Home() {
                 muitas receitas! <br/>Aqui você encontra diversas receitas fáceis e rápidas
                 para o seu dia a dia.
             </p>
-
+            
             <FoodBanners />
             <div className="surprise-banner-container">
                 <div className="banner surprise-banner">
