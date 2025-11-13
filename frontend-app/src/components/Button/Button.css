@@ -1,0 +1,31 @@
+.custom-button {
+    /* Aparência base */
+    background-color: #f77f00; /* Cor primária do seu projeto */
+    color: #ffffff; /* Texto branco */
+    font-size: 18px;
+    font-weight: 700;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease, transform 0.1s ease;
+    width: 100%; /* Ocupa a largura total para ser um botão de bloco */
+    box-sizing: border-box;
+}
+
+/* Efeito ao passar o mouse */
+.custom-button:hover:not(:disabled) {
+    background-color: #cc6a00; /* Cor ligeiramente mais escura no hover */
+}
+
+/* Efeito ao clicar (active) */
+.custom-button:active:not(:disabled) {
+    transform: translateY(1px); /* Pequeno movimento para simular o "clique" */
+}
+
+/* Estado desabilitado */
+.custom-button:disabled {
+    background-color: #fcae55; /* Cor mais clara para indicar inatividade */
+    cursor: not-allowed;
+    opacity: 0.6;
+}
