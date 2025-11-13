@@ -7,7 +7,6 @@
 
 .banner {
     position: relative;
-    width: 200px;
     border-radius: 12px;
     overflow: hidden;
     transition: 0.2s;
@@ -56,9 +55,9 @@
 }
 
 .surprise-banner {
-    width: 200px;
-    height: 120px;
+    height: 250px;
     margin: 30px 0;
+    margin-bottom: 100px;
 }
 
 .surprise-banner h1 {
@@ -66,9 +65,13 @@
 }
 
 @media (min-width: 1024px) {
+    .banner {
+        width: 11%;
+    }
+
     .surprise-banner {
-    width: 60%;
-    height: 300px;
+    width: 64%;
+    height: 500px;
     margin: 30px 0;
 }
 

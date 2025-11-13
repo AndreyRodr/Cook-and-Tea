@@ -5,44 +5,6 @@
     height: 100vh;
 }
 
-.home-container .content {
-    display: flex;
-    width: 70%;
-}
-
-.home-container .hamburgers {
-    height: 178px;
-    margin-top: 1px;
-    
-}
-
-.home-container .comida {
-    height: 178px;
-    margin-left: 59px;
-    margin-top: 1px;
-    width: 20%;
-}
-
-.home-container .pudim {
-    height: 187px;
-    margin-left: 70px;
-    margin-top: 1px;
-    width: 20%;
-}
-
-.home-container .cha {
-    height: 178px;
-    margin-left: 74px;
-    width: 20%;
-}
-
-.home-container .bolo {
-    height: 178px;
-    margin-left: 95px;
-    margin-top: 1px;
-    width: 20%;
-}
-
 .home-container .text-wrapper {
     color: #2b2520f5;
     font-size: 20px;
@@ -54,16 +16,7 @@
     justify-self: center;
     text-align: center;
     margin-top: 20px;
-}
-
-.home-container .tipo {
-    background-color: #f77f00;
-    border-radius: 0px 200px 200px 0px;
-    height: 42px;
-    left: 697px;
-    position: absolute;
-    top: 0;
-    width: 195px;
+    margin-bottom: 20px;
 }
 
 .surprise-banner-container {

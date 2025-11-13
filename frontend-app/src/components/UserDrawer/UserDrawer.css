@@ -1,0 +1,105 @@
+/* Container principal: Mantém tudo alinhado */
+.user-menu-container {
+    position: relative; /* Cria um contexto de posicionamento */
+    display: flex;
+    align-items: center;
+    width: fit-content; /* Ocupa apenas o espaço necessário */
+}
+
+/* --- O AVATAR (Gatilho) --- */
+.avatar-wrapper {
+    z-index: 10; /* IMPORTANTE: Maior que o menu para ficar por cima */
+    cursor: pointer;
+    transition: transform 0.2s;
+    width: 60px;
+    height: 60px;
+}
+
+.avatar-wrapper::after {
+    content: "";
+    background-color: #f0dcc5;
+    width: 60px;
+    height: 60px;
+}
+
+.avatar-wrapper:active {
+    transform: scale(0.95); /* Efeito de clique */
+}
+
+.avatar-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- A GAVETA (Menu) --- */
+.drawer-menu {
+    position: absolute;
+    left: 0; /* Começa alinhado na esquerda, embaixo do avatar */
+    top: 5px; /* Pequeno ajuste vertical se necessário */
+    z-index: 1; /* IMPORTANTE: Menor que o avatar para ficar por baixo */
+    
+    /* Estilização visual baseada na sua imagem */
+    background-color: #f0dcc5; /* Cor de fundo bege/laranja claro */
+    border: 2px solid #ff914d; /* Borda laranja */
+    border-radius: 12px;
+    padding: 10px 15px 10px 50px; /* Padding esquerdo grande para não colidir com o avatar */
+    min-width: 200px;
+    
+    /* Configuração da Animação */
+    opacity: 0; /* Começa invisível */
+    transform: translateX(0); /* Começa na posição zero (escondido) */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efeito elástico suave */
+    pointer-events: none; /* Impede cliques quando fechado */
+}
+
+/* O estado "Aberto" */
+.drawer-menu.open {
+    opacity: 1;
+    transform: translateX(30px); /* Empurra para a direita para sair de trás */
+    padding-left: 40px; /* Ajuste visual */
+    pointer-events: auto; /* Habilita cliques */
+}
+
+/* Estilização da lista interna */
+.drawer-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 30px;
+}
+
+.drawer-menu li {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #ff914d; /* Cor do texto laranja */
+    font-weight: 500;
+    font-family: sans-serif;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+}
+
+.drawer-menu li:hover {
+    opacity: 0.7;
+}
+
+.icon {
+    font-size: 1.1rem;
+}
+
+.sair {
+    transform: rotate(45deg);
+}
