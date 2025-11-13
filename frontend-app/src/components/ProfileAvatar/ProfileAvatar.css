@@ -1,0 +1,24 @@
+.profile-avatar-container {
+    /* Base do círculo */
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0; /* Impede que o avatar encolha */
+    background-color: var(--header-color); /* Fundo claro (Cores do index.css) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--primary-color); /* Borda opcional */
+}
+
+.profile-avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que a imagem preencha o círculo */
+}
+
+.profile-avatar-fallback-icon {
+    /* Estilo do ícone de fallback */
+    fill: var(--secondary-color); /* Cor do ícone (Cores do index.css) */
+    width: 80%; /* Ocupa 80% do container */
+    height: 80%;
+}
