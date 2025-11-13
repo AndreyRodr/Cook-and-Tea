@@ -1,11 +1,11 @@
 .user-avatar{
     width: 50px;
     position:fixed;
-    bottom: 50px;
+    bottom: 10px;
     right: 10px;
-    background-color: transparent;
     border: transparent;
     outline: none;
+
 }
 
 .user-avata-icon svg{
@@ -21,5 +21,10 @@
     .user-avatar {
         position: inherit;
         width: 50px;
+        border-radius: 50%;
+    }
+    
+    .user-avatar svg path{
+        background-color: white;
     }
 }

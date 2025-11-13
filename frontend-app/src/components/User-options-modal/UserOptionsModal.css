@@ -46,7 +46,7 @@
 @media (min-width: 1024px) {
     .input {
         position: absolute;
-        top: 73px;
-        right: 10px;
+        top: 10px;
+        right: 130px;
     }
 }

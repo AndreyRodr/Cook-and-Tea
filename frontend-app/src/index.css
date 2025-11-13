@@ -14,3 +14,7 @@
   --secondary-color: #2A8B8F;
   --secondary-hover-color: #67C4C8;
 }
+
+body {
+  background-color: var(--bg-color);
+}

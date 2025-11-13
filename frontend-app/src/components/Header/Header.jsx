@@ -1,8 +1,8 @@
 import logo from "../../assets/images/logo.png";
-import logoMobile from '../../assets/images/logo-sem-txt.png'
 import { IoSearch } from "react-icons/io5";
 import { IconContext } from "react-icons";
 import UserAvatar from "../User-avatar/UserAvatar";
+import UserDrawer from "../UserDrawer/UserDrawer";
 import './Header.css'
 
 function SearchBar( {searchSetter} ) {
@@ -30,14 +30,14 @@ function SearchButton( {func} ) {
     )
 }
 
-export default function Header( {searchSetter, userAvatarModalSituation, userAvatarModalHandle, searchBarHandle} ) {
+export default function Header( {searchSetter, searchBarHandle} ) {
     return (
         <header className="header">
             <img className="logo-image-desktop" alt="Logo Image" src={logo} />
             <SearchBar searchSetter={searchSetter} />
             <SearchButton func={searchBarHandle}/>
             <div className="desktop-user-avatar">
-                <UserAvatar setter={userAvatarModalHandle} currentValue={userAvatarModalSituation}/>
+                <UserDrawer/>
             </div>
         </header>
     )
