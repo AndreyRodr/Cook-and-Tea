@@ -67,7 +67,7 @@ nav span {
         height: 35px;
         box-shadow: 0 5px 5px 1px rgba(0, 0, 0, 0.184);
         position: relative;
-        top: -40px;
+        top: 0px;
     }
 
     .nav-element{ 

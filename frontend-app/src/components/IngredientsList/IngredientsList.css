@@ -1,0 +1,26 @@
+.ingredients-list {
+    list-style: none;
+}
+
+.list-item {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.list-item p {
+    margin-bottom: 3px;
+}
+
+.list-item span {
+    padding: 2px;
+}
+
+.list-item span svg {
+    width: 18px;
+}
+
+.off {
+    color: rgb(92, 92, 92);
+    text-decoration: line-through;
+}

@@ -1,0 +1,36 @@
+.recipe-page main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 50px;
+    margin-top: 20px;
+}
+
+.recipe-page main h1 {
+    color: var(--primary-color)
+}
+
+.left-content, .right-content {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+    .recipe-page main {
+        flex-direction: row;
+    }
+}
+
+.title-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.list-container {
+    width: 100%;
+    justify-self: flex-start;
+    padding: 0 20px;
+}
