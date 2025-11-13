@@ -7,6 +7,7 @@ import UserAvatar from "../components/User-avatar/UserAvatar";
 import Header from "../components/Header/Header";
 import UserOptionsModal from "../components/User-options-modal/UserOptionsModal";
 import FoodBanners from "../components/food-banners/FoodBanners";
+import Navbar from "../components/Navbar/Navbar";
 
 export default function Home() {
     const [userOptionsModalIsOpened, setUserOptionsModalIsOpened] = useState(true)
@@ -17,6 +18,7 @@ export default function Home() {
     return (
         <div className="home-container">
             <Header searchSetter={setSearchText} userAvatarModalSituation={userOptionsModalIsOpened} userAvatarModalHandle={setUserOptionsModalIsOpened} />
+            <Navbar userType="chefe"/>
             <p className="text-wrapper">
                 Bem-vindo ao CookN’Tea: o maior site de receitas da América Latina com
                 muitas receitas! <br/>Aqui você encontra diversas receitas fáceis e rápidas
