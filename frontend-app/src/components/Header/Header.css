@@ -3,30 +3,21 @@
     display: flex;
     align-items: center;
     align-content: center;
-    justify-content: space-between;
+    justify-content: space-around;
     box-shadow: 2px 0 10px 5px rgba(0, 0, 0, 0.252);
     width: 100%;
+    max-height: 100px;
+    padding: 5px 50px;
 }
 
-.logo-image {
-    width: 50px;
-    height: 50px;
-    flex-shrink: 0;
+.logo-image-desktop {
+    width: 220px;
 }
-
-.left-content {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    gap: 10px;
-}
-
 .search-bar {
     max-width: none;
     height: 30px;
     width: 90%;
-    display: flex;
-    align-content: center;
+    display: none;
 }
 
 .search-bar-input {
@@ -45,7 +36,7 @@
     outline: 1px solid var(--primary-color);
     border-radius: 0 50px 50px 0;
     border: none;
-    width: 25%;
+    width: 150px;
     background-color: var(--primary-color);
     color: #fff;
     font-weight: bold;
@@ -63,8 +54,62 @@
     color: var(--primary-color);
 }
 
+.search-btn {
+    padding: 0;
+    width: 35px;
+    height: 35px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    box-shadow: 1px 1px 1px 1px rgba(33, 27, 16, 0.254);
+    transition: 0.2s;
+}
+
+.search-btn:focus {
+    background-color: var(--secondary-color);
+    transform: translate(1px, 1px);
+    box-shadow: none;
+} 
+
+.search-btn-icon {
+    fill: white;
+}
+
+.search-btn-icon svg {
+    width: 40px;
+}
+
 .desktop-user-avatar {
     display: none;
+}
+
+.right-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.home-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.347);
+}
+
+.home-icon path{
+    stroke-width: 50px;
+    stroke: white;
 }
 
 @media (min-width: 768px) {
@@ -80,9 +125,10 @@
         gap: 20px;
     }
 
-    .logo-image {
+    .logo-image-desktop {
         width: 60px;
         height: 60px;
+        display: inherit;
     }
 
     .search-bar {
@@ -102,14 +148,22 @@
 
 }
 
-@media (min-width: 1024px) {
-    .logo-image {
-        width: 75px;
-        height: 75px;
+@media (min-width: 1000px) {
+    .logo-image-desktop {
+        width: 340px;
+        height: 70px;
+        display: inherit;
+    }
+
+    .search-btn {
+        display: none;
     }
 
     .search-bar {
         max-width: 60%;
+        display: flex;
+        align-content: center;
+        align-self: center;
     }
 
     .desktop-user-avatar {
@@ -117,7 +171,6 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-
         width: 50px;
         height: 50px;
         background: #ccc;
