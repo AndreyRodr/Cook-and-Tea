@@ -6,8 +6,6 @@ import InputBox from '../components/Input/InputBox';
 import Button from '../components/Button/Button';
 import HomeButton from '../components/HomeButton/HomeButton';  
  
-// Nota: Vamos criar o componente Checkbox em breve!
-// Por enquanto, farei um placeholder simples para a funcionalidade "Sou Chefe".
 
 export default function AuthPage() {
     // 1. Estados para o formulário

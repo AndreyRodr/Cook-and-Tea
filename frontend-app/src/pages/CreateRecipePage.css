@@ -1,0 +1,124 @@
+/* CONTAINER GERAL - Define o fundo e a altura mínima */
+.create-recipe-page-container {
+    background-color: var(--bg-color);
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* NOVO WRAPPER DE CONTEÚDO - Centraliza o formulário e adiciona margem/padding */
+.content {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px; /* Padding geral para laterais */
+    margin-top: 20px; /* Adiciona um bom espaço entre o Navbar e o formulário */
+    flex-grow: 1; /* Permite que o conteúdo ocupe o espaço restante */
+}
+
+/* Card Principal do Formulário */
+.recipe-form-card {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 700px; 
+}
+
+.form-title {
+    color: #2b2520f5;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.recipe-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}
+
+/* Estilo para os grupos de Textarea e Labels */
+.form-group-textarea {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-group-textarea label,
+.form-group-image label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2b2520f5;
+    margin-bottom: 8px;
+}
+
+/* Estilização do Textarea para parecer com o InputBox */
+.custom-textarea {
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #2b2520;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical; 
+    min-height: 100px;
+}
+
+.custom-textarea:focus {
+    border-color: #cc6a00;
+    outline: none;
+    box-shadow: 0 0 5px rgba(247, 127, 0, 0.5);
+}
+
+/* Estilo para Inputs que ficam lado a lado (Tempo e Porções) */
+.time-servings-group {
+    display: flex;
+    gap: 20px;
+}
+
+.time-servings-group > div {
+    flex: 1; 
+}
+
+/* Estilo para upload de imagem */
+.form-group-image {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+}
+
+.form-group-image input[type="file"] {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+.HomeButton {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+/* Media Query para Navbar em Desktop */
+@media (max-width: 1023px) {
+    .content {
+        /* Adiciona espaço para a Navbar Fixa (bottom: 0) */
+        padding-bottom: 70px; 
+    }
+}
+@media (min-width: 1024px) {
+    /* O Navbar não é mais fixo no desktop, basta um padding-bottom normal */
+    .content {
+        padding-bottom: 40px; 
+    }
+}

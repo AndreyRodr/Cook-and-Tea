@@ -3,12 +3,13 @@ import { IoHomeOutline } from "react-icons/io5";
 import { IoIosHeart } from "react-icons/io";
 import { IconContext } from "react-icons";
 import { RiAddBoxFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 import './Navbar.css'
 
-function NavbarElement( {txt, icon} ) {
+function NavbarElement( {txt, icon, onClick} ) {
     return(
-        <button className="nav-element">
+        <button className="nav-element" onClick={onClick}>
             {icon}
             <p>
                 {txt}
@@ -19,6 +20,7 @@ function NavbarElement( {txt, icon} ) {
 
 export default function Navbar( {userType} ) {
     const [isChef, setIsChef] = useState(false)
+    const navigate = useNavigate();
 
     useEffect(() => {
         if(userType === "chefe") {
@@ -28,13 +30,22 @@ export default function Navbar( {userType} ) {
         }
     }, [userType])
 
+    const handleGoHome = () => {
+        navigate('/home'); // Ou '/' dependendo da rota principal que você usa
+    };
+    
+    const handleCreateRecipe = () => {
+        navigate('/create-recipe');
+    };
+
     return(
         <nav>
             <NavbarElement icon = {
                 <IconContext.Provider value= {{ className: 'nav-element-icon', size:"18px" }}>
                     <IoHomeOutline />
                 </IconContext.Provider>
-            } txt="Home"/>
+            } txt="Home"
+            onClick={handleGoHome} />
             <span></span>
             <NavbarElement icon = {
                 <IconContext.Provider value= {{ className: 'nav-element-icon', size:"18px" }}>
@@ -47,7 +58,8 @@ export default function Navbar( {userType} ) {
                     <IconContext.Provider value= {{ className: 'nav-element-icon add-recipe-icon', size:"20px" }}>
                         <RiAddBoxFill />
                     </IconContext.Provider>
-            } txt="Criar Receita"/>
+            } txt="Criar Receita" 
+            onClick={handleCreateRecipe}/>
             }
         </nav>
     )

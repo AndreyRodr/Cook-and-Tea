@@ -7,11 +7,13 @@ import UserAvatar from "../components/User-avatar/UserAvatar";
 import Header from "../components/Header/Header";
 import UserOptionsModal from "../components/User-options-modal/UserOptionsModal";
 import FoodBanners from "../components/Food-banners/FoodBanners";
-import InputBox from "../components/Input/InputBox";
+
 import Navbar from "../components/Navbar/Navbar";
 import MobileSearchBar from "../components/mobile-search-bar/MobileSearchBar";
 
-import booleanStateHandle from "../utils/booleanStateHandle";
+import EditProfileModal from "../components/EditProfileModal/EditProfileModal";
+
+
 
 export default function Home() {
     const [userOptionsModalIsOpened, setUserOptionsModalIsOpened] = useState(true)
@@ -19,6 +21,17 @@ export default function Home() {
 
     const [searchText, setSearchText] = useState('')
     const [loggedUserType, setLoggedUserType] = useState('chefe')
+
+    const [editProfileModalIsOpened, setEditProfileModalIsOpened] = useState(false)
+
+    const openEditProfileModal = () => {
+        setUserOptionsModalIsOpened(true);
+        setEditProfileModalIsOpened(true);
+    }
+
+    const closeEditProfileModal = () => {
+        setEditProfileModalIsOpened(false);
+    }
 
     const mobileSearchBarHandle = () => {
         setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
@@ -35,9 +48,7 @@ export default function Home() {
             <Navbar userType="chefe"/>
             <MobileSearchBar searchSetter={setSearchText} isOpened={isMobileSearchBarOpened}/>
             <p className="text-wrapper">
-                Bem-vindo ao CookN’Tea: o maior site de receitas da América Latina com
-                muitas receitas! <br/>Aqui você encontra diversas receitas fáceis e rápidas
-                para o seu dia a dia.
+                Bem-vindo ao Cook n’Tea: Uma pitada de sabor & Uma xícara de carinho! <br></br>Venha explorar receitas deliciosas e compartilhar momentos especiais conosco.
             </p>
             
             <FoodBanners />
@@ -51,7 +62,19 @@ export default function Home() {
             <div className="mobile-user-avatar">
                 <UserAvatar setter={setUserOptionsModalIsOpened} currentValue={userOptionsModalIsOpened} />
             </div>
-            {!userOptionsModalIsOpened && <UserOptionsModal type="chefe" />}
+
+            <EditProfileModal 
+                isOpen={editProfileModalIsOpened}
+                onClose={closeEditProfileModal}
+                userType={loggedUserType}
+            />
+            
+            {!userOptionsModalIsOpened && 
+                <UserOptionsModal 
+                    type={loggedUserType}
+                    onEditProfileClick={openEditProfileModal} 
+                />
+            }
         </div>
     );
 };
