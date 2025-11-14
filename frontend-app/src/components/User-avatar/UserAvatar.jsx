@@ -4,10 +4,10 @@ import './UserAvatar.css'
 
 import booleanStateHandle from "../../utils/booleanStateHandle";
 
-export default function UserAvatar( {setter, currentValue} ){ 
+export default function UserAvatar(){ 
 
     return( 
-        <button className="user-avatar" onClick={() => booleanStateHandle(setter, currentValue)}>
+        <button className="user-avatar" >
             <IconContext.Provider value={{color: "var(--secondary-color)", className:"user-avata-icon", size:'60px'}}>
                 <FaUserCircle />
             </IconContext.Provider>

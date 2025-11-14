@@ -1,0 +1,41 @@
+.recipe-list-page {
+    height: 100vh; /* (ou 100dvh se quiser ser moderno) */
+    overflow-y: auto; /* ESTA é a linha mais importante */
+    -webkit-overflow-scrolling: touch; /* Scroll suave no iOS */
+    overscroll-behavior-y: contain;
+}
+
+.recipe-list {
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.recipe-element {
+    display: flex;
+    transition: 0.1s;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.recipe-element:hover {
+    background-color: var(--header-color);
+}
+
+.recipe-element img{
+    width: 300px;
+    height: 170px;
+}
+
+.info-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 5px 20px
+}
+
+.avaliation-container {
+    display: flex;
+}

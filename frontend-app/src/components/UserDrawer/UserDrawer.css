@@ -1,9 +1,12 @@
 /* Container principal: Mantém tudo alinhado */
 .user-menu-container {
-    position: relative; /* Cria um contexto de posicionamento */
+    position: fixed;
+    bottom: 55px;
     display: flex;
     align-items: center;
     width: fit-content; /* Ocupa apenas o espaço necessário */
+    width: 100%;
+    height: 60px;
 }
 
 /* --- O AVATAR (Gatilho) --- */
@@ -15,27 +18,6 @@
     height: 60px;
 }
 
-.avatar-wrapper::after {
-    content: "";
-    background-color: #f0dcc5;
-    width: 60px;
-    height: 60px;
-}
-
-.avatar-wrapper:active {
-    transform: scale(0.95); /* Efeito de clique */
-}
-
-.avatar-circle {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    z-index: 10;
-}
-
 .avatar-img {
     width: 100%;
     height: 100%;
@@ -45,28 +27,26 @@
 /* --- A GAVETA (Menu) --- */
 .drawer-menu {
     position: absolute;
-    left: 0; /* Começa alinhado na esquerda, embaixo do avatar */
-    top: 5px; /* Pequeno ajuste vertical se necessário */
-    z-index: 1; /* IMPORTANTE: Menor que o avatar para ficar por baixo */
+    right: 0; 
+    top: 5px; 
+    z-index: 2; 
     
-    /* Estilização visual baseada na sua imagem */
-    background-color: #f0dcc5; /* Cor de fundo bege/laranja claro */
-    border: 2px solid #ff914d; /* Borda laranja */
+    background-color: #f0dcc5; 
+    border: 2px solid #ff914d; 
     border-radius: 12px;
-    padding: 10px 15px 10px 50px; /* Padding esquerdo grande para não colidir com o avatar */
+    padding: 10px 30px 10px 50px; 
     min-width: 200px;
     
-    /* Configuração da Animação */
-    opacity: 0; /* Começa invisível */
-    transform: translateX(0); /* Começa na posição zero (escondido) */
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efeito elástico suave */
-    pointer-events: none; /* Impede cliques quando fechado */
+    opacity: 0; 
+    transform: translateX(0); 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    pointer-events: none; 
 }
 
 /* O estado "Aberto" */
 .drawer-menu.open {
     opacity: 1;
-    transform: translateX(30px); /* Empurra para a direita para sair de trás */
+    transform: translateX(-50px); /* Empurra para a direita para sair de trás */
     padding-left: 40px; /* Ajuste visual */
     pointer-events: auto; /* Habilita cliques */
 }
@@ -102,4 +82,21 @@
 
 .sair {
     transform: rotate(45deg);
+}
+
+@media (min-width: 1024px) {
+    .user-menu-container {
+        position: relative;
+        bottom: 0;
+    }
+
+    .drawer-menu {
+        left: 0px;
+    }
+
+    .drawer-menu.open {
+        transform: translateX(30px);
+        padding: 10px 30px 10px 50px;
+        width: 300px;
+    }
 }

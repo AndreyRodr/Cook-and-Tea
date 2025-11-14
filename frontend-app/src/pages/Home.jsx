@@ -7,7 +7,7 @@ import UserAvatar from "../components/User-avatar/UserAvatar";
 import Header from "../components/Header/Header";
 import UserOptionsModal from "../components/User-options-modal/UserOptionsModal";
 import FoodBanners from "../components/Food-banners/FoodBanners";
-
+import UserDrawer from "../components/UserDrawer/UserDrawer";
 import Navbar from "../components/Navbar/Navbar";
 import MobileSearchBar from "../components/mobile-search-bar/MobileSearchBar";
 
@@ -41,14 +41,12 @@ export default function Home() {
         <div className="home-container">
             <Header 
                 searchSetter={setSearchText} 
-                userAvatarModalSituation={userOptionsModalIsOpened} 
-                userAvatarModalHandle={setUserOptionsModalIsOpened} 
                 searchBarHandle={mobileSearchBarHandle}
             />
             <Navbar userType="chefe"/>
             <MobileSearchBar searchSetter={setSearchText} isOpened={isMobileSearchBarOpened}/>
             <p className="text-wrapper">
-                Bem-vindo ao Cook n’Tea: Uma pitada de sabor & Uma xícara de carinho! <br></br>Venha explorar receitas deliciosas e compartilhar momentos especiais conosco.
+                Bem-vindo ao Cook n’Tea: Uma pitada de sabor & Uma xícara de carinho!
             </p>
             
             <FoodBanners />
@@ -60,7 +58,7 @@ export default function Home() {
             </div>
 
             <div className="mobile-user-avatar">
-                <UserAvatar setter={setUserOptionsModalIsOpened} currentValue={userOptionsModalIsOpened} />
+                <UserDrawer />
             </div>
 
             <EditProfileModal 

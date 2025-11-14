@@ -6,6 +6,12 @@
   font-family: "Poppins", sans-serif;
 }
 
+html, body {
+  overflow: hidden;
+  height: 100%;
+  overscroll-behavior-y: none;
+}
+
 :root {
   --header-color: #F1D0B0;
   --primary-color: #F77F00;

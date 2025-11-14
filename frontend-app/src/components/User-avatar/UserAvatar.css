@@ -1,15 +1,21 @@
 .user-avatar{
     width: 50px;
     position:fixed;
-    bottom: 10px;
+    bottom: 20px;
     right: 10px;
     border: transparent;
     outline: none;
-
+    border-radius: 50%;
 }
 
 .user-avata-icon svg{
     width: 100px;
+    border-radius: 50%;
+}
+
+.user-avatar svg path {
+    background-color: white;
+    border-radius: 50%;
 }
 
 .user-avata-icon:hover {
@@ -20,8 +26,6 @@
 @media (min-width: 1024px) {
     .user-avatar {
         position: inherit;
-        width: 50px;
-        border-radius: 50%;
     }
     
     .user-avatar svg path{
