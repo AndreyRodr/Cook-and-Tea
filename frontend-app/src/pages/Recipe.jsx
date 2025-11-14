@@ -10,6 +10,7 @@ import EditProfileModal from '../components/EditProfileModal/EditProfileModal';
 import UserOptionsModal from '../components/User-options-modal/UserOptionsModal';
 import Carousel from '../components/Carousel/Carousel'; // Importe o componente Carousel
 import ProfileAvatar from '../components/ProfileAvatar/ProfileAvatar'
+import FavoriteButton from '../components/FavoriteButton/FavoriteButton'
 
 import { useState } from 'react'
 import './Recipe.css'
@@ -40,6 +41,7 @@ export default function Recipe() {
 
     // MOCK DATA (Simulação de dados da API)
     const mockRecipe = {
+        recipeId: 101,
         name: 'Bolo de Chocolate Cremoso',
         author: 'Chef Andrey',
         rating: 4.5,
@@ -99,6 +101,10 @@ export default function Recipe() {
                          
                                 <p><strong>Tempo de Preparo:</strong> {mockRecipe.prepTime}</p>
                                 <p><strong>Porções:</strong> {mockRecipe.portions}</p>
+                            </div>
+
+                            <div className='favorite-button-wrapper'>
+                                <FavoriteButton recipeId={mockRecipe.recipeId} initialState={false}/>
                             </div>
                     
                             <div className="user-rating-section">

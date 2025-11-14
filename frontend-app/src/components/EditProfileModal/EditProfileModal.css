@@ -126,7 +126,10 @@
     cursor: pointer;
     transition: background-color 0.3s ease, opacity 0.3s ease;
     margin-top: 10px;
-    align-self: center;
+    align-self: center;       
+    width: 100%;
+    min-width: 50%;
+    white-space: nowrap;
 }
 
 .save-button:hover:not(:disabled) {
