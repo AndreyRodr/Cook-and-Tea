@@ -3,11 +3,19 @@ import { IoSearch } from "react-icons/io5";
 import { IconContext } from "react-icons";
 import './MobileSearchBar.css'
 
+import { useNavigate } from "react-router-dom";
+
 export default function MobileSearchBar( {searchSetter, isOpened} ) {
     
+    const navigate = useNavigate();
+
     const searchHandle = () => {
         let text = document.getElementById('search-bar').value
         searchSetter(text)
+
+        if (text.trim() !== "") {
+            navigate(`/recipe-list?q=${encodeURIComponent(text)}`);
+        }
     }
 
     return (

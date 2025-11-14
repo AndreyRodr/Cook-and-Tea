@@ -8,56 +8,76 @@ import IngredientsList from '../components/IngredientsList/IngredientsList'
 import { StarsRate, ReadOnlyStarsRate } from '../components/StarsRate/StarsRate'
 import EditProfileModal from '../components/EditProfileModal/EditProfileModal';
 import UserOptionsModal from '../components/User-options-modal/UserOptionsModal';
-import Carousel from '../components/Carousel/Carousel'; // Importe o componente Carousel
+import Carousel from '../components/Carousel/Carousel';
 import ProfileAvatar from '../components/ProfileAvatar/ProfileAvatar'
 import FavoriteButton from '../components/FavoriteButton/FavoriteButton'
 
-import { useState } from 'react'
+// 1. CORREÇÃO: Importar 'useEffect' do 'react' e 'useParams' do 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom';
+import { RecipeService, UserService } from '../services/apiService'; // Importar os Serviços
+
 import './Recipe.css'
 
 export default function Recipe() {
+    // Hooks
+    const { id } = useParams(); // 2. Agora 'useParams' está definido (linha 22)
+    
+    // Estados de Layout (inalterados)
     const [userOptionsModalIsOpened, setUserOptionsModalIsOpened] = useState(true)
     const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
     const [editProfileModalIsOpened, setEditProfileModalIsOpened] = useState(false)
     const [searchText, setSearchText] = useState('')
-    const [loggedUserType, setLoggedUserType] = useState('comum') // 'chefe' ou 'usuario'
+    const [loggedUserType, setLoggedUserType] = useState('comum') 
 
+    // 3. Estados para os dados da API (Substituindo o mockRecipe)
+    const [recipe, setRecipe] = useState(null);
+    const [author, setAuthor] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // Handlers de Modal (inalterados)
     const openEditProfileModal = () => {
         setUserOptionsModalIsOpened(true);
         setEditProfileModalIsOpened(true);
     }
-
     const closeEditProfileModal = () => {
         setEditProfileModalIsOpened(false);
     }
-
-    // NOVAS IMAGENS DE EXEMPLO para o carrossel
-    const recipeImages = [
-        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // Imagem de exemplo 1
-        'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1981&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // Imagem de exemplo 2
-        'https://images.unsplash.com/photo-1512621776951-a5739858f2fc?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'  // Imagem de exemplo 3
-    ];
-
-
-    // MOCK DATA (Simulação de dados da API)
-    const mockRecipe = {
-        recipeId: 101,
-        name: 'Bolo de Chocolate Cremoso',
-        author: 'Chef Andrey',
-        rating: 4.5,
-        avaliationCount: 42,
-        description: 'Um bolo de chocolate incrivelmente úmido e cremoso, perfeito para qualquer ocasião. Fácil de fazer e irresistível! A receita utiliza ingredientes simples e pode ser adaptada com coberturas diversas.',
-        prepTime: '30 min',
-        portions: 8,
-        ingredients: ['1 xícara de farinha', '1/2 xícara de cacau em pó', '1 xícara de açúcar', '2 ovos grandes', '1/2 xícara de leite', '1/4 xícara de óleo', '1 colher de chá de fermento'],
-        instructions: ['Pré-aqueça o forno a 180°C.', 'Misture os ingredientes secos.', 'Adicione os ingredientes líquidos e bata bem.', 'Despeje a massa em uma forma untada.', 'Asse por 25 minutos ou até passar no teste do palito.'],
-        images: recipeImages, // Usando o array de imagens para o carrossel
-    };
-
     const mobileSearchBarHandle = () => {
         setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
     }
 
+    // 4. useEffect para buscar os dados da receita e do autor
+    useEffect(() => {
+        const fetchRecipeData = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                // 1. Busca a receita principal
+                const recipeData = await RecipeService.getRecipeById(id);
+                setRecipe(recipeData);
+
+                // 2. Busca o autor da receita
+                if (recipeData.authorId) {
+                    const authorData = await UserService.getUserById(recipeData.authorId);
+                    setAuthor(authorData);
+                } else {
+                    setAuthor({ name: 'Autor Desconhecido' }); // Fallback
+                }
+                
+            } catch (err) {
+                console.error("Erro ao buscar dados da receita:", err);
+                setError(err.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchRecipeData();
+    }, [id]); // Executa sempre que o ID na URL mudar
+
+    // Função de formatação (inalterada)
     const formatInstructions = (steps) => (
         <ol>
             {steps.map((step, index) => (
@@ -66,97 +86,111 @@ export default function Recipe() {
         </ol>
     );
     
+    // 5. Renderização condicional para Loading e Erro
+    if (isLoading) {
+        return (
+            <div className="recipe-page">
+                <Header searchSetter={setSearchText} searchBarHandle={mobileSearchBarHandle} />
+                <Navbar userType={loggedUserType}/>
+                <p style={{textAlign: 'center', fontSize: '1.5rem', padding: '50px', color: 'var(--primary-color)'}}>
+                    Carregando receita... 🍳
+                </p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+             <div className="recipe-page">
+                <Header searchSetter={setSearchText} searchBarHandle={mobileSearchBarHandle} />
+                <Navbar userType={loggedUserType}/>
+                <p style={{textAlign: 'center', fontSize: '1.5rem', padding: '50px', color: 'red'}}>
+                    Erro ao carregar receita: {error}
+                </p>
+            </div>
+        );
+    }
+
+    // 6. Renderização principal (quando 'recipe' não é nulo)
     return(
-        <div className="recipe-page">
-            <Header 
-                searchSetter={setSearchText} 
-                userAvatarModalSituation={userOptionsModalIsOpened} 
-                userAvatarModalHandle={setUserOptionsModalIsOpened} 
-                searchBarHandle={mobileSearchBarHandle}
-            />
-            <Navbar userType={loggedUserType}/>
-            <MobileSearchBar searchSetter={setSearchText} isOpened={isMobileSearchBarOpened}/>
-            
-            <main>
-                <div className="left-content">
-                    <div className="title-content">
-                        <h1>{mockRecipe.name}</h1>
-                        <div className="rating-display">
-                            <ReadOnlyStarsRate rate={mockRecipe.rating} />
-                            <p>({mockRecipe.avaliationCount} avaliações)</p>
-                        </div>
-                    </div>
-
-                    <div className="recipe-details">
-                        <div className='metadata-and-rating-column'>
-                            <div className="metadata">
-                                <div className="author-info">
-                                    <ProfileAvatar 
-                                        imageUrl={mockRecipe.authorImageUrl} 
-                                        altText={`Foto de ${mockRecipe.author}`} 
-                                        size="40px" 
-                                    />
-                                    <p><strong>Autor:</strong> {mockRecipe.author}</p>
-                                </div>                           
-                         
-                                <p><strong>Tempo de Preparo:</strong> {mockRecipe.prepTime}</p>
-                                <p><strong>Porções:</strong> {mockRecipe.portions}</p>
-                            </div>
-
-                            <div className='favorite-button-wrapper'>
-                                <FavoriteButton recipeId={mockRecipe.recipeId} initialState={false}/>
-                            </div>
-                    
-                            <div className="user-rating-section">
-                                <h3>Avalie esta receita!</h3>
-                                <StarsRate />
+        recipe && (
+            <div className="recipe-page">
+                <Header 
+                    searchSetter={setSearchText} 
+                    userAvatarModalSituation={userOptionsModalIsOpened} 
+                    userAvatarModalHandle={setUserOptionsModalIsOpened} 
+                    searchBarHandle={mobileSearchBarHandle}
+                />
+                <Navbar userType={loggedUserType}/>
+                <MobileSearchBar searchSetter={setSearchText} isOpened={isMobileSearchBarOpened}/>
+                
+                <main>
+                    <div className="left-content">
+                        <div className="title-content">
+                            <h1>{recipe.name}</h1>
+                            <div className="rating-display">
+                                <ReadOnlyStarsRate rate={recipe.starsAvg} />
+                                <p>({recipe.avaliationsAmount} avaliações)</p>
                             </div>
                         </div>
 
-                        {/* Substitui a imagem estática pelo Carrossel */}
-                        <Carousel images={mockRecipe.images} />     
-                    </div>
+                        <div className="recipe-details">
+                            <div className='metadata-and-rating-column'>
+                                <div className="metadata">
+                                    <div className="author-info">
+                                        <ProfileAvatar 
+                                            imageUrl={author?.imageUrl} 
+                                            altText={`Foto de ${author?.name}`} 
+                                            size="40px" 
+                                        />
+                                        <p><strong>Autor:</strong> {author?.name || 'Carregando...'}</p>
+                                    </div>                           
+                            
+                                    <p><strong>Tempo de Preparo:</strong> {recipe.prepTime}</p>
+                                    <p><strong>Porções:</strong> {recipe.portions}</p>
+                                </div>
 
-                    <article className="description">
-                        <p>{mockRecipe.description}</p>
-                    </article>
+                                <div className='favorite-button-wrapper'>
+                                    <FavoriteButton recipeId={recipe.recipeId} initialState={false}/>
+                                </div>
+                        
+                                <div className="user-rating-section">
+                                    <h3>Avalie esta receita!</h3>
+                                    <StarsRate />
+                                </div>
+                            </div>
 
-
-                </div>
-
-                <div className="right-content">
-                    <div className="section-ingredients-section">
-                        <h2>Ingredientes</h2>
-                        <div className="list-container">
-                            <IngredientsList ingredients={mockRecipe.ingredients}/>
+                            <Carousel images={recipe.images} />     
                         </div>
-                    </div>
-                    
-                    <div className="section instructions-section">
-                        <h2>Modo de preparo</h2>
-                        <article className="instructions-text">
-                            {formatInstructions(mockRecipe.instructions)}
+
+                        <article className="description">
+                            <p>{recipe.description}</p>
                         </article>
                     </div>
+
+                    <div className="right-content">
+                        <div className="section-ingredients-section">
+                            <h2>Ingredientes</h2>
+                            <div className="list-container">
+                                <IngredientsList ingredients={recipe.ingredients}/>
+                            </div>
+                        </div>
+                        
+                        <div className="section instructions-section">
+                            <h2>Modo de preparo</h2>
+                            <article className="instructions-text">
+                                {formatInstructions(recipe.instructions)}
+                            </article>
+                        </div>
+                    </div>
+                </main>
+
+                <div className="mobile-user-avatar">
+                    <UserAvatar setter={setUserOptionsModalIsOpened} currentValue={userOptionsModalIsOpened} />
                 </div>
-            </main>
-
-            <div className="mobile-user-avatar">
-                <UserAvatar setter={setUserOptionsModalIsOpened} currentValue={userOptionsModalIsOpened} />
+                <EditProfileModal isOpen={editProfileModalIsOpened} onClose={closeEditProfileModal} userType={loggedUserType} />
+                {!userOptionsModalIsOpened && <UserOptionsModal type={loggedUserType} onEditProfileClick={openEditProfileModal} />}
             </div>
-
-            <EditProfileModal 
-                isOpen={editProfileModalIsOpened}
-                onClose={closeEditProfileModal}
-                userType={loggedUserType}
-            />
-
-            {!userOptionsModalIsOpened && 
-                <UserOptionsModal 
-                    type={loggedUserType}
-                    onEditProfileClick={openEditProfileModal} 
-                />
-            }
-        </div>
+        )
     )
 }
