@@ -9,9 +9,13 @@ import { Recipe, User, Avaliation, sequelize, RecipeImage } from '../models/inde
  */
 export const createRecipe = async (req, res) => {
     try {
-        const { name, description, ingredients, instructions, tags, images, prepTime, portions } = req.body;
+        const { name, description, prepTime, portions } = req.body;
 
         const authorId = req.user.userId;
+
+        const ingredients = Array.isArray(req.body.ingredients) ? req.body.ingredients : [req.body.ingredients];
+        const instructions = Array.isArray(req.body.instructions) ? req.body.instructions : [req.body.instructions];
+        const tags = Array.isArray(req.body.tags) ? req.body.tags : [req.body.tags];
 
         if(req.user.type !== "chefe") {
             return res.status(403).json({message: "Usuário não autorizado"});
@@ -33,6 +37,8 @@ export const createRecipe = async (req, res) => {
                 portions
             }
         );
+        console.log(newRecipe);
+        
 
         if (req.files && req.files.length > 0) {
             const imagesData = req.files.map(file => ({
@@ -40,6 +46,7 @@ export const createRecipe = async (req, res) => {
                 mimetype: file.mimetype,
                 imageData: file.buffer
             }));
+            
             await RecipeImage.bulkCreate(imagesData);
         }
 
