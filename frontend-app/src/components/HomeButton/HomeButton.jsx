@@ -2,7 +2,6 @@ import React from 'react';
 import './HomeButton.css';
 import { useNavigate } from 'react-router-dom';
 // Nota: Em um projeto real com React Router, você usaria:
-// import { useNavigate } from 'react-router-dom';
 
 /**
  * Botão flutuante que simula o retorno à página Home.
