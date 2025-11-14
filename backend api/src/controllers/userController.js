@@ -184,3 +184,65 @@ export const getUserById = async (req, res) => {
         res.status(500).json({ message: 'Erro no servidor.' });
     }
 };
+
+/**
+ * @desc    Fazer upload da foto de perfil do usuário logado
+ * @route   POST /api/users/current/profile-pic
+ * @access  Privado
+ */
+export const uploadProfilePic = async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('Nenhum arquivo enviado.');
+    }
+
+    try {
+        // req.user.userId é fornecido pelo middleware 'protect'
+        const userId = req.user.userId; 
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        // Salva os dados binários e o mimetype no banco
+        user.profilePicMimetype = req.file.mimetype;
+        user.profilePicData = req.file.buffer; // O buffer de bytes do multer
+
+        await user.save();
+
+        res.status(200).json({ message: 'Imagem de perfil atualizada com sucesso.' });
+
+    } catch (error) {
+        console.error('Erro ao salvar imagem de perfil:', error);
+        res.status(500).json({ message: 'Erro no servidor.' });
+    }
+};
+
+/**
+ * @desc    Buscar a foto de perfil de um usuário por ID
+ * @route   GET /api/users/:userId/profile-pic
+ * @access  Público
+ */
+export const getProfilePic = async (req, res) => {
+    try {
+        const { userId } = req.params; // Pega o ID da URL
+        const user = await User.findByPk(userId, {
+            // Seleciona apenas os campos que precisamos
+            attributes: ['profilePicMimetype', 'profilePicData'] 
+        });
+
+        if (!user || !user.profilePicData) {
+            return res.status(404).send('Imagem não encontrada.');
+        }
+
+        // Define o 'Content-Type' da resposta (ex: 'image/jpeg')
+        res.setHeader('Content-Type', user.profilePicMimetype);
+        
+        // Envia os dados binários (bytea) como resposta
+        res.send(user.profilePicData);
+
+    } catch (error) {
+        console.error('Erro ao buscar imagem de perfil:', error);
+        res.status(500).json({ message: 'Erro no servidor.' });
+    }
+};

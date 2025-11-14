@@ -19,7 +19,7 @@ const Avaliation = sequelize.define(
         indexes: [
             {
                 unique: true,
-                fields: ['UserId', 'RecipeId'],
+                fields: ['userId', 'recipeId'],
             },
         ],
     }

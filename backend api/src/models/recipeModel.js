@@ -29,9 +29,6 @@ const Recipe = sequelize.define(
         tags: {
             type: DataTypes.ARRAY(DataTypes.TEXT),
         },
-        images: {
-            type: DataTypes.ARRAY(DataTypes.TEXT),
-        },
         prepTime: {
             type: DataTypes.STRING,
         },
