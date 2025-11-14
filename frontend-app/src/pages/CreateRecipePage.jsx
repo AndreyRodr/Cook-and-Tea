@@ -8,6 +8,9 @@ import Navbar from '../components/Navbar/Navbar';
 import UserOptionsModal from '../components/User-options-modal/UserOptionsModal';
 import EditProfileModal from '../components/EditProfileModal/EditProfileModal'; 
 
+import { RecipeService } from '../services/apiService';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function CreateRecipePage() {
     // ESTADOS DE LAYOUT E PESQUISA (mantidos)
@@ -15,9 +18,8 @@ export default function CreateRecipePage() {
     const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [loggedUserType, setLoggedUserType] = useState('chefe') // Usado para modais e Navbar
-    
-    // 2. ESTADOS E HANDLERS PARA O MODAL DE EDIÇÃO (Adicionado)
     const [editProfileModalIsOpened, setEditProfileModalIsOpened] = useState(false)
+    const navigate = useNavigate(); // Hook de navegação
 
     const openEditProfileModal = () => { 
         setUserOptionsModalIsOpened(true); // Fecha o menu de opções
@@ -32,6 +34,7 @@ export default function CreateRecipePage() {
         setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
     }
 
+
     // 3. Estados do Formulário (mantidos)
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -43,38 +46,36 @@ export default function CreateRecipePage() {
     const [isLoading, setIsLoading] = useState(false);
 
     // 4. Função de Submissão (mantida)
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
 
         const recipeData = {
-            title,
-            description,
-            category,
-            // Divide ingredientes e passos por linha para simular listas
+            name: title,
+            description: description,
+            // O backend espera Arrays de Texto
             ingredients: ingredients.split('\n').filter(i => i.trim() !== ''), 
-            steps: steps.split('\n').filter(s => s.trim() !== ''),
-            prepTime,
-            servings
+            instructions: steps.split('\n').filter(s => s.trim() !== ''),
+            prepTime: prepTime,
+            portions: parseInt(servings), // Garante que 'portions' seja um número
+            tags: [category.trim()], // O backend espera um Array para 'tags'
         };
 
-        console.log('Dados da Receita para Submissão:', recipeData);
+        // console.log(recipeData);
+        try {
+            const newRecipe = await RecipeService.createRecipe(recipeData);
 
-        // Simulação de envio
-        setTimeout(() => {
-            alert(`Receita "${title}" enviada para moderação com sucesso!`);
+            console.log('Receita criada com sucesso:', newRecipe);
+            alert(`Receita "${newRecipe.name}" enviada com sucesso!`)
+
+            navigate(`/recipe/${newRecipe.recipeId}`);
+        } catch (error) {
+            console.error('Erro ao criar receita:', error.message);
+            alert(`Falha ao criar receita: ${error.message}`);
+        } finally {
             setIsLoading(false);
-            // Opcional: Resetar o formulário
-            setTitle('');
-            setDescription('');
-            setCategory('');
-            setIngredients('');
-            setSteps('');
-            setPrepTime('');
-            setServings('');
-        }, 2000);
+        }
     };
-
 
     return (
         <div className="create-recipe-page-container">

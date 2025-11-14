@@ -5,10 +5,18 @@ import UserAvatar from "../User-avatar/UserAvatar";
 import UserDrawer from "../UserDrawer/UserDrawer";
 import './Header.css'
 
+import { useNavigate } from "react-router-dom";
+
 function SearchBar( {searchSetter} ) {
+    const navigate = useNavigate();
+
     const searchHandle = () => {
         let text = document.getElementById('search-bar').value
         searchSetter(text)
+
+        if (text.trim() !== "") {
+            navigate(`/recipe-list?q=${encodeURIComponent(text)}`);
+        }
     }
 
     return(
