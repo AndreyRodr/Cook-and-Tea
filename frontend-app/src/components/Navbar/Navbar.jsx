@@ -4,6 +4,7 @@ import { IoIosHeart } from "react-icons/io";
 import { IconContext } from "react-icons";
 import { RiAddBoxFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { UserService } from "../../services/apiService";
 
 import './Navbar.css'
 
@@ -18,20 +19,26 @@ function NavbarElement( {txt, icon, onClick} ) {
     )
 }
 
-export default function Navbar( {userType} ) {
+export default function Navbar( {currentUser} ) {
     const [isChef, setIsChef] = useState(false)
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(userType === "chefe") {
-            setIsChef(true)
-        } else { 
-            setIsChef(false)
+        if(currentUser){
+            if(currentUser.type === 'chefe') {
+                setIsChef(true)
+            } else {
+                setIsChef(false)
+            }
         }
-    }, [userType])
+    }, [currentUser])
+
+    const handleGoFavorites = () => {
+        navigate(`/recipe-list?favorites=true`);
+    }
 
     const handleGoHome = () => {
-        navigate('/home'); // Ou '/' dependendo da rota principal que você usa
+        navigate('/home'); 
     };
     
     const handleCreateRecipe = () => {
@@ -51,7 +58,8 @@ export default function Navbar( {userType} ) {
                 <IconContext.Provider value= {{ className: 'nav-element-icon', size:"18px" }}>
                     <IoIosHeart />
                 </IconContext.Provider>
-            } txt="Favoritos"/>
+            } txt="Favoritos"
+            onClick={handleGoFavorites}/>
             <span></span>
             {isChef &&
                 <NavbarElement icon = {

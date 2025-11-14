@@ -39,9 +39,9 @@ function ListItem( {text} ) {
 export default function IngredientsList( {ingredients} ) {
     return (
         <ul className='ingredients-list'>
-            {ingredients.map((ing) => {
+            {ingredients.map((ing, index) => {
                 return(
-                    <ListItem key={Math.random()*10000} text={ing}/>
+                    <ListItem key={index} text={ing}/>
                 )
             })}
         </ul>
