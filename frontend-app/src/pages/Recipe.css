@@ -92,11 +92,11 @@
 /* Seção de Avaliação do Usuário */
 .user-rating-section {
     background-color: var(--header-color);
-    padding: 50px;
+    padding: 34px;
     border-radius: 8px;
     text-align: center;
     margin-bottom: 40px;
-    height: 180px;
+    height: 135px;
 }
 .user-rating-section h3 {
     color: #2b2520;
@@ -107,7 +107,9 @@
 .section {
     margin-bottom: 30px;
 }
-
+.section-ingredients-section {
+    width: 100%;
+}
 /* Modo de Preparo em lista ordenada */
 .instructions-text ol {
     padding-left: 20px;
@@ -128,7 +130,29 @@
     font-size: 1.1rem;
     margin: 0;
 }
+.favorite-button-wrapper {
+    padding: 5px 0; /* Adiciona um pouco de espaço acima e abaixo do botão na coluna */
+}
 
+/* METADADOS (ESQUERDA) */
+.metadata-and-rating-column {
+    flex: 2;
+    order: 2; /* Força a ficar na ESQUERDA */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 100%; 
+    
+}
+/* CARROSSEL (DIREITA) */
+.carousel-container { 
+    flex: 1;
+    order: 1; /* Força a ficar na DIREITA */
+    max-width: 100%;
+    height: 400px;
+    margin-left: 0; /* CORREÇÃO: Remove a margem incorreta */
+    margin-bottom: 0;
+}
 /* DESKTOP LAYOUT (A partir de 1024px) */
 @media (min-width: 1024px) {
     .recipe-page main {
@@ -146,25 +170,25 @@
     .right-content {
         flex: 1;
         order: 2;
-        padding-top: 100px;
+        padding-top: 75px;
     }
 
     .section-ingredients-section{
-        margin-right: 30px;
+        margin-right: 0px;
     }
     .title-content {
         flex-direction: row; 
         align-items: center;
-        margin-bottom: 30px;
+        margin-bottom: 0px;
     }
 
     /* Container dos detalhes: Metadados + Carrossel */
     .recipe-details {
         display: flex; /* CHAVE: Permite side-by-side */
         flex-direction: row; 
-        gap: 30px;
+        gap: 20px;
         align-items: flex-start;
-        margin-bottom: 30px; /* Espaçamento abaixo do bloco inteiro */
+        margin-bottom: 20px; /* Espaçamento abaixo do bloco inteiro */
     }
 
     /* METADADOS (ESQUERDA) */
@@ -173,8 +197,8 @@
         order: 1; /* Força a ficar na ESQUERDA */
         display: flex;
         flex-direction: column;
-        gap: 40px;
-        max-width: 40%; 
+        gap: 15px;
+        max-width: 35%; 
         
     }
     

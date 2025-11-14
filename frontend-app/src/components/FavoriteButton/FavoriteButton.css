@@ -1,0 +1,38 @@
+.favorite-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    color: var(--primary-color);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%; /* Botão de bloco por padrão */
+    justify-content: center;
+}
+
+.favorite-button:hover:not(.favorited) {
+    background-color: var(--primary-hover-color);
+    color: #fff;
+    border-color: var(--primary-hover-color);
+}
+
+/* Estilo para o estado 'favorited' (coração preenchido) */
+.favorite-button.favorited {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+.favorite-button.favorited:hover {
+    background-color: #cc6a00; /* Laranja um pouco mais escuro */
+    border-color: #cc6a00;
+}
+
+.favorite-button svg {
+    transition: fill 0.3s ease, color 0.3s ease;
+}

@@ -10,10 +10,10 @@ import './Button.css';
  * @param {boolean} [props.disabled=false] - Se o botão deve estar desabilitado.
  * @param {string} [props.type='button'] - O tipo do botão (e.g., 'submit', 'button').
  */
-export default function Button({ children, onClick, disabled = false, type = 'button' }) {
+export default function Button({ children, onClick, disabled = false, type = 'button', className = '' }) {
     return (
         <button
-            className="custom-button"
+            className={`custom-button ${className}`}
             onClick={onClick}
             disabled={disabled}
             type={type}

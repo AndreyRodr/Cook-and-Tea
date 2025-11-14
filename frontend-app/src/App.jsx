@@ -13,9 +13,14 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/auth" element={<AuthPage />} />
+<<<<<<< Updated upstream
         <Route path='/recipe' element={<Recipe />} />
         <Route path='/create-recipe' element={<CreateRecipePage />} />
         <Route path='/recipe-list' element={<RecipeListPage />} />
+=======
+        <Route path="/create-recipe" element={<CreateRecipePage />} />
+        <Route path="/recipe/:id" element={<Recipe />} />
+>>>>>>> Stashed changes
         {/* Defina outras rotas aqui */}
       </Routes>
     </Router>
