@@ -60,12 +60,15 @@ export default function CreateRecipePage() {
         formData.append('portions', parseInt(servings));
         formData.append('tags', JSON.stringify([category.trim()]));
 
+
+
         if (imageFiles && imageFiles.length > 0) {
             for (let i = 0; i < imageFiles.length; i++) {
                 formData.append('recipeImages', imageFiles[i]);
             }
         }
 
+        console.log(formData.values());
         try {
             const newRecipe = await RecipeService.createRecipe(formData);
 

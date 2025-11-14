@@ -7,8 +7,8 @@
 }
 
 html, body {
-  overflow: hidden;
   height: 100%;
+  /* overflow: hidden; */
   overscroll-behavior-y: none;
 }
 
