@@ -19,6 +19,7 @@ export default function CreateRecipePage() {
     const [searchText, setSearchText] = useState('')
     const [loggedUserType, setLoggedUserType] = useState('chefe') // Usado para modais e Navbar
     const [editProfileModalIsOpened, setEditProfileModalIsOpened] = useState(false)
+    const [imageFiles, setImageFiles] = useState(null);
     const navigate = useNavigate(); // Hook de navegação
 
     const openEditProfileModal = () => { 
@@ -49,21 +50,24 @@ export default function CreateRecipePage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        const formData = new FormData();
 
-        const recipeData = {
-            name: title,
-            description: description,
-            // O backend espera Arrays de Texto
-            ingredients: ingredients.split('\n').filter(i => i.trim() !== ''), 
-            instructions: steps.split('\n').filter(s => s.trim() !== ''),
-            prepTime: prepTime,
-            portions: parseInt(servings), // Garante que 'portions' seja um número
-            tags: [category.trim()], // O backend espera um Array para 'tags'
-        };
+        formData.append('name', title);
+        formData.append('description', description);
+        formData.append('ingredients', JSON.stringify(ingredients.split('\n').filter(i => i.trim() !== '')));
+        formData.append('instructions', JSON.stringify(steps.split('\n').filter(s => s.trim() !== ''))); 
+        formData.append('prepTime', prepTime);
+        formData.append('portions', parseInt(servings));
+        formData.append('tags', JSON.stringify([category.trim()]));
 
-        // console.log(recipeData);
+        if (imageFiles && imageFiles.length > 0) {
+            for (let i = 0; i < imageFiles.length; i++) {
+                formData.append('recipeImages', imageFiles[i]);
+            }
+        }
+
         try {
-            const newRecipe = await RecipeService.createRecipe(recipeData);
+            const newRecipe = await RecipeService.createRecipe(formData);
 
             console.log('Receita criada com sucesso:', newRecipe);
             alert(`Receita "${newRecipe.name}" enviada com sucesso!`)
@@ -181,7 +185,13 @@ export default function CreateRecipePage() {
                         {/* Campo para Upload de Imagem (Placeholder) */}
                         <div className="form-group-image">
                             <label htmlFor="image-upload">Imagem Principal da Receita</label>
-                            <input type="file" id="image-upload" accept="image/*" />
+                            <input 
+                                type="file" 
+                                id="image-upload" 
+                                accept="image/*" 
+                                multiple 
+                                onChange={(e) => setImageFiles(e.target.files)} 
+                            />
                         </div>
 
 

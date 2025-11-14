@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaUserCircle } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import './ProfileAvatar.css';
@@ -12,18 +12,34 @@ import './ProfileAvatar.css';
  * @param {string} [props.altText='Foto de Perfil'] - Texto alternativo para a imagem.
  */
 export default function ProfileAvatar({ imageUrl, size = '40px', altText = 'Foto de Perfil' }) {
+    const [hasError, setHasError] = useState(false);
+    
     const style = {
         width: size,
         height: size,
     };
 
+    useEffect(() => {
+        setHasError(false);
+    }, [imageUrl]);
+
+    const handleImageError = () => {
+        setHasError(true);
+    };
+
     return (
         <div className="profile-avatar-container" style={style}>
-            {imageUrl ? (
-                <img src={imageUrl} alt={altText} className="profile-avatar-image" />
+            {/* 5. Renderização condicional: Mostra imagem SÓ se a URL existir E não tiver dado erro */}
+            {imageUrl && !hasError ? (
+                <img 
+                    src={imageUrl} 
+                    alt={altText} 
+                    className="profile-avatar-image" 
+                    onError={handleImageError} // Chama o handler em caso de 404
+                />
             ) : (
                 // Fallback: Ícone de usuário
-                <IconContext.Provider value={{ className: 'profile-avatar-fallback-icon', size: size }}>
+                <IconContext.Provider value={{ className: 'profile-avatar-fallback-icon', size: `calc(${size} * 0.8)` }}>
                     <FaUserCircle />
                 </IconContext.Provider>
             )}

@@ -12,16 +12,15 @@ import { UserService } from '../../services/apiService';
 /**
  * Modal centralizado para Edição do Perfil do Usuário.
  */
-export default function EditProfileModal({ isOpen, onClose, userType: initialUserType }) {
-    // 1. Estados para os dados do perfil
+export default function EditProfileModal({ isOpen, onClose }) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState(''); // Usamos 'password' para a nova senha
     const [isChef, setIsChef] = useState(false); // Reflete o campo 'type' do backend
     const [isLoading, setIsLoading] = useState(false);
     const [fetchError, setFetchError] = useState(null); 
-    
-    // 2. Efeito para carregar dados do usuário ao abrir o modal
+    const [profilePicFile, setProfilePicFile] = useState(null);
+
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
@@ -63,7 +62,6 @@ export default function EditProfileModal({ isOpen, onClose, userType: initialUse
         return null;
     }
 
-    // 3. Função de submissão (Salvar)
     const handleSave = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -81,9 +79,16 @@ export default function EditProfileModal({ isOpen, onClose, userType: initialUse
 
         try {
             // Rota: PUT /api/users/current
-            const response = await UserService.updateProfile(dataToUpdate);
+            await UserService.updateProfile(dataToUpdate);
             
-            console.log('Perfil atualizado:', response);
+            if (profilePicFile) {
+                const formData = new FormData();
+                formData.append('profilePic', profilePicFile); 
+                
+                // Rota: POST /api/users/current/profile-pic (Salva imagem)
+                await UserService.uploadProfilePic(formData);
+                window.location.reload();
+            }
 
             alert('Perfil atualizado com sucesso!');
             onClose(); // Fecha o modal após o sucesso
@@ -164,6 +169,16 @@ export default function EditProfileModal({ isOpen, onClose, userType: initialUse
                                 onChange={() => setIsChef(!isChef)}
                             />
                             <label htmlFor="editIsChef">Sou Chef (Permitir postagem de receitas)</label>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="editProfilePic">Foto de Perfil (Opcional)</label>
+                            <input 
+                                type="file" 
+                                id="editProfilePic" 
+                                accept="image/*"
+                                onChange={(e) => setProfilePicFile(e.target.files[0])}
+                            />
                         </div>
 
                         {/* Botão de Ação */}
