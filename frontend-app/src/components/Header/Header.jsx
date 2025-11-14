@@ -15,7 +15,7 @@ function SearchBar( {searchSetter} ) {
         searchSetter(text)
 
         if (text.trim() !== "") {
-            navigate(`/recipe-list?q=${encodeURIComponent(text)}`);
+            navigate(`/recipe-list?favorites=false&?q=${encodeURIComponent(text)}`);
         }
     }
 
@@ -38,14 +38,14 @@ function SearchButton( {func} ) {
     )
 }
 
-export default function Header( {searchSetter, searchBarHandle} ) {
+export default function Header( {searchSetter, searchBarHandle, currentUser} ) {
     return (
         <header className="header">
             <img className="logo-image-desktop" alt="Logo Image" src={logo} />
             <SearchBar searchSetter={searchSetter} />
             <SearchButton func={searchBarHandle}/>
             <div className="desktop-user-avatar">
-                <UserDrawer/>
+                <UserDrawer currentUser={currentUser} />
             </div>
         </header>
     )

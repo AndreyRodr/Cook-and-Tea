@@ -44,8 +44,6 @@ const apiFetchFormData = async (endpoint, options = {}) => {
 
     const response = await fetch(url, {
         ...options,
-        // O body já é um FormData, não precisa de JSON.stringify
-        // As headers são omitidas de propósito
         credentials: 'include', 
     });
 
@@ -93,6 +91,12 @@ export const UserService = {
             body: JSON.stringify(data),
         });
     },
+    uploadProfilePic: (formData) => { // ADICIONE ISSO
+        return apiFetchFormData('/users/current/profile-pic', {
+            method: 'POST',
+            body: formData,
+        });
+    },
 
     getUserById: (userId) => {
         return apiFetch(`/users/${userId}`, {
@@ -133,7 +137,7 @@ export const RecipeService = {
     /**
      * @param {FormData} formData - O FormData com os dados da receita E os arquivos.
      */
-    createRecipe: (recipeData) => {
+    createRecipe: (formData) => {
         return apiFetchFormData('/recipes', {
             method: 'POST',
             body: formData,
