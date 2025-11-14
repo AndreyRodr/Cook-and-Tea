@@ -37,7 +37,8 @@ export default function Recipe() {
     const [error, setError] = useState(null);
     const [imageUrls, setImageUrls] = useState([]);
 
-
+    const BASE_URL = 'http://localhost:3001/api'; 
+    
     // Handlers de Modal (inalterados)
     const openEditProfileModal = () => {
         setUserOptionsModalIsOpened(true);

@@ -1,17 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import UserAvatar from "../User-avatar/UserAvatar";
 import { FaUserEdit, FaPlus } from 'react-icons/fa'; // Exemplo de ícones
 import './UserDrawer.css'; // Importando o CSS abaixo
 import { Navigate, useNavigate } from 'react-router-dom';
 import EditProfileModal from '../EditProfileModal/EditProfileModal';
+import { UserService } from "../../services/apiService";
 
-export default function UserDrawer() {
+const BASE_URL = 'http://localhost:3001/api'; 
+
+export default function UserDrawer( {currentUser} ) {
     const [isOpen, setIsOpen] = useState(false);
     const [isLogged, setIsLogged] = useState(true)
-
+    const [userPic, setUserPic] = useState('')
     const [loggedUserType, setLoggedUserType] = useState('chefe')
 
     const [editProfileModalIsOpened, setEditProfileModalIsOpened] = useState(false)
+
+    useEffect(() => {
+        if(currentUser) {
+            setIsLogged(true)
+        } else{
+            setIsLogged(false)
+        }
+    }, [currentUser])
 
     const openEditProfileModal = () => {
         setEditProfileModalIsOpened(true);
@@ -34,7 +45,7 @@ export default function UserDrawer() {
     return (
         <div className="user-menu-container">
             <div className="avatar-wrapper" onClick={toggleMenu}>
-                <UserAvatar />
+                <UserAvatar profileImage={currentUser ? `${BASE_URL}/users/${currentUser.userId}/profile-pic` : null} />
             </div>
 
             {isLogged &&
