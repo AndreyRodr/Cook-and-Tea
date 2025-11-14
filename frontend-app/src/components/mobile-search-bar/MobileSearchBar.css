@@ -25,4 +25,12 @@
     border: none;
     width: 50px;
     border-radius: 0 20px 20px 0;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    transition: 0.1s;
+}
+
+.mobile-search-bar-btn:focus {
+    background-color: var(--secondary-color);
 }

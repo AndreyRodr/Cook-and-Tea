@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import AuthPage from './pages/AuthPage';
 import CreateRecipePage from './pages/CreateRecipePage';
 import Recipe from './pages/Recipe';
+import RecipeListPage from './pages/RecipeListPage';
 
 function App() {
   return (
@@ -12,6 +13,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path='/recipe' element={<Recipe />} />
+        <Route path='/create-recipe' element={<CreateRecipePage />} />
+        <Route path='/recipe-list' element={<RecipeListPage />} />
         {/* Defina outras rotas aqui */}
       </Routes>
     </Router>

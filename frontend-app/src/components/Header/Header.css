@@ -8,6 +8,7 @@
     width: 100%;
     max-height: 100px;
     padding: 5px 50px;
+    gap: 10px;
 }
 
 .logo-image-desktop {

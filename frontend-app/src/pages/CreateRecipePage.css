@@ -6,6 +6,10 @@
     display: flex;
     flex-direction: column;
     position: relative;
+    height: 100vh; /* (ou 100dvh se quiser ser moderno) */
+    overflow-y: auto; /* ESTA é a linha mais importante */
+    -webkit-overflow-scrolling: touch; /* Scroll suave no iOS */
+    overscroll-behavior-y: contain;
 }
 
 /* NOVO WRAPPER DE CONTEÚDO - Centraliza o formulário e adiciona margem/padding */

@@ -2,7 +2,10 @@
 .home-container {
     background-color: #faf3e0;
     width: 100%;
-    height: 100vh;
+    height: 100vh; /* (ou 100dvh se quiser ser moderno) */
+    overflow-y: auto; /* ESTA é a linha mais importante */
+    -webkit-overflow-scrolling: touch; /* Scroll suave no iOS */
+    overscroll-behavior-y: contain;
 }
 
 .home-container .text-wrapper {
@@ -17,6 +20,12 @@
     text-align: center;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.mobile-user-avatar .user-avatar{
+    margin-bottom: 35px;
+    width: 60px;
+    height: 60px;
 }
 
 .surprise-banner-container {
