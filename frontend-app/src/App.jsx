@@ -21,6 +21,9 @@ function App() {
         <Route path="/create-recipe" element={<CreateRecipePage />} />
         <Route path="/recipe/:id" element={<Recipe />} />
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
