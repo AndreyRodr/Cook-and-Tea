@@ -1,11 +1,5 @@
 export const BASE_URL = 'http://localhost:3001/api'; 
 
-
-
-
-
-
-
 /**
  * Função utilitária para chamadas fetch.
  * 'credentials: "include"' é essencial para enviar e receber cookies (JWT).
@@ -36,24 +30,6 @@ const apiFetch = async (endpoint, options = {}) => {
         return null;
     }
 
-    return response.json();
-};
-
-const apiFetchFormData = async (endpoint, options = {}) => {
-    const url = `${BASE_URL}${endpoint}`;
-
-    const response = await fetch(url, {
-        ...options,
-        credentials: 'include', 
-    });
-
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: 'Erro desconhecido no servidor.' }));
-        throw new Error(errorData.message || 'Falha na requisição de upload.');
-    }
-    if (response.status === 204) {
-        return null;
-    }
     return response.json();
 };
 
@@ -91,12 +67,6 @@ export const UserService = {
             body: JSON.stringify(data),
         });
     },
-    uploadProfilePic: (formData) => { // ADICIONE ISSO
-        return apiFetchFormData('/users/current/profile-pic', {
-            method: 'POST',
-            body: formData,
-        });
-    },
 
     getUserById: (userId) => {
         return apiFetch(`/users/${userId}`, {
@@ -104,12 +74,7 @@ export const UserService = {
         });
     },
     
-    uploadProfilePic: (formData) => {
-        return apiFetchFormData('/users/current/profile-pic', {
-            method: 'POST',
-            body: formData,
-        });
-    }
+
 };
 
 export const RecipeService = {
