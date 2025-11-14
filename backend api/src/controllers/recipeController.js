@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { Recipe, User, Avaliation, sequelize } from '../models/index.js' 
+import { Recipe, User, Avaliation, sequelize, RecipeImage } from '../models/index.js' 
 
 /**
  * 
@@ -29,12 +29,19 @@ export const createRecipe = async (req, res) => {
                 ingredients,
                 instructions,
                 tags,
-                images,
                 prepTime,
                 portions
             }
         );
 
+        if (req.files && req.files.length > 0) {
+            const imagesData = req.files.map(file => ({
+                recipeId: newRecipe.recipeId, 
+                mimetype: file.mimetype,
+                imageData: file.buffer
+            }));
+            await RecipeImage.bulkCreate(imagesData);
+        }
 
         res.status(201).json(newRecipe);
     } catch (err) {
@@ -76,7 +83,8 @@ export const getRecipeById = async (req, res) => {
         const recipe = await Recipe.findByPk(req.params.id, {
             include: [
                 { model: User, as: 'user', attributes: ['userId'] },
-                { model: Avaliation, as: 'avaliations', include: { model: User, attributes: ['userId', 'name'] } } 
+                { model: Avaliation, as: 'avaliations', include: { model: User, attributes: ['userId', 'name'] } },
+                { model: RecipeImage, as: 'recipeImages', attributes: ['imageId'] }
             ]
         });
 
@@ -208,6 +216,10 @@ export const deleteRecipe = async (req, res) => {
         if (recipe.authorId !== req.user.userId) {
             return res.status(403).json({ message: "Acesso negado. Você não é o autor." });
         }
+
+        await RecipeImage.destroy({ 
+            where: { recipeId: id }
+        });
 
         await Avaliation.destroy({
             where: { recipeId: id }

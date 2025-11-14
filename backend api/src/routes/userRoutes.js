@@ -2,7 +2,10 @@ import { Router } from "express";
 const router = Router();
 import * as userController from '../controllers/userController.js';
 import { protect } from '../middleware/authMiddleware.js'
+import multer from 'multer';
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // GET /api/users
 router.get('/', userController.getAllUsers)
@@ -18,6 +21,18 @@ router.put('/current', protect, userController.updateCurrentUser)
 
 // DELETE /api/users/current
 router.delete('/current', protect, userController.deleteCurrentUser)
+
+// POST /api/users/current/profile-pic (Upload da foto do usuário logado)
+router.post(
+    '/current/profile-pic',
+    protect, // Garante que o usuário está logado (pega req.user)
+    upload.single('profilePic'), // Processa o arquivo ('profilePic' é o nome do campo do form)
+    userController.uploadProfilePic
+);
+
+// GET /api/users/:userId/profile-pic (Ver a foto de qualquer usuário)
+// IMPORTANTE: Esta rota deve vir ANTES de '/:userId'
+router.get('/:userId/profile-pic', userController.getProfilePic);
 
 // GET /api/users/:id
 router.get('/:userId', userController.getUserById)
