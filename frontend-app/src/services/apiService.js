@@ -66,5 +66,47 @@ export const UserService = {
             method: 'PUT',
             body: JSON.stringify(data),
         });
+    },
+
+    getUserById: (userId) => {
+        return apiFetch(`/users/${userId}`, {
+            method: 'GET',
+        });
+    }
+};
+
+export const RecipeService = {
+    
+    /**
+     * Busca receitas pelo nome (query).
+     * Rota: GET /api/recipes/search?q=...
+     */
+    searchRecipes: (query) => {
+        return apiFetch(`/recipes/search?q=${encodeURIComponent(query)}`, {
+            method: 'GET',
+        });
+    },
+
+    /**
+     * Busca todas as receitas.
+     * Rota: GET /api/recipes
+     */
+    getAllRecipes: () => {
+        return apiFetch('/recipes', {
+            method: 'GET',
+        });
+    },
+
+    createRecipe: (recipeData) => {
+        return apiFetch('/recipes', {
+            method: 'POST',
+            body: JSON.stringify(recipeData),
+        });
+    },
+    
+    getRecipeById: (id) => {
+        return apiFetch(`/recipes/${id}`, {
+            method: 'GET',
+        });
     }
 };

@@ -5,27 +5,23 @@ import EditProfileModal from '../components/EditProfileModal/EditProfileModal'
 import UserAvatar from '../components/User-avatar/UserAvatar'
 import { ReadOnlyStarsRate } from '../components/StarsRate/StarsRate'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import noImg from '../assets/images/noImg.jpg'
-import { useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom';
+
+import { RecipeService } from '../services/apiService'
 
 import './RecipeListPage.css'
 
+// 1. CORREÇÃO NO RecipeElement (Removemos useState e useEffect)
 function RecipeElement( {recipe} ){
-    const [recipeImage, setRecipeImage] = useState('')
-
-    useEffect(()=> {
-        if(!recipe.images[0]) {
-            setRecipeImage(noImg)
-        }
-        else {
-            setRecipeImage(recipe.images[0])
-        }
-    }, [recipe])
+    
+    // Define a imagem diretamente. Se recipe.images[0] for "" (falsy), usa noImg.
+    const recipeImage = (recipe.images && recipe.images[0]) ? recipe.images[0] : noImg;
 
     return(
         <div className="recipe-element">
-            <img src={recipeImage} alt="" />
+            <img src={recipeImage} alt={recipe.name} /> {/* Usamos recipeImage diretamente */}
             <div className="info-content">
                 <h3>{recipe.name}</h3>
                 <p>{recipe.description}</p>
@@ -39,7 +35,6 @@ function RecipeElement( {recipe} ){
 }
 
 function RecipeList( {recipes} ) {
-
     return(
         <div className="recipe-list">
             {recipes.map((recipe, index) => {
@@ -49,12 +44,21 @@ function RecipeList( {recipes} ) {
             })}
         </div>
     )
-
 }
 
 export default function RecipeListPage() {
+        const [searchParams] = useSearchParams(); 
+        const searchTerm = searchParams.get('q'); 
+    
         const [editProfileModalIsOpened, setEditProfileModalIsOpened] = useState(false)
         const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
+        const [searchText, setSearchText] = useState('')
+        const [loggedUserType, setLoggedUserType] = useState('chefe')
+
+        const [recipes, setRecipes] = useState([]);
+        const [isLoading, setIsLoading] = useState(true);
+        const [error, setError] = useState(null);
+
 
         const openEditProfileModal = () => {
             setUserOptionsModalIsOpened(true);
@@ -69,40 +73,58 @@ export default function RecipeListPage() {
             setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
         }
 
-        const [searchText, setSearchText] = useState('')
+        useEffect(() => {
+            const fetchRecipes = async () => {
+                setIsLoading(true);
+                setError(null);
+                try {
+                    let fetchedRecipes;
+                    if (searchTerm) {
+                        console.log(`Buscando receitas com o termo: ${searchTerm}`);
+                        fetchedRecipes = await RecipeService.searchRecipes(searchTerm);
+                    } else {
+                        console.log('Buscando todas as receitas');
+                        fetchedRecipes = await RecipeService.searchRecipes('');
+                    }
+                    setRecipes(fetchedRecipes);
+                } catch (err) {
+                    console.error('Erro ao buscar receitas:', err.message);
+                    setError(err.message);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
 
-        const [loggedUserType, setLoggedUserType] = useState('chefe')
+            fetchRecipes();
+        }, [searchTerm]);
 
-
-        const recipesExemple = [
-            {
-                recipeId: 1,
-                name: 'bolo',
-                description: 'asdasda',
-                tags: ['doce'],
-                images: [""],
-                avaliationsAmount: 22,
-                starsAvg: 3,
-            },
-            {
-                recipeId: 2,
-                name: 'bolo',
-                description: 'asdasda',
-                tags: ['doce'],
-                images: [""],
-                avaliationsAmount: 22,
-                starsAvg: 3,
-            },
-        ]
     return (
         <div className="recipe-list-page">
             <Header
-                searchSetter={setSearchText}
+                searchSetter={setSearchText} 
                 searchBarHandle={mobileSearchBarHandle}
             />
             <Navbar userType="chefe" />
             <MobileSearchBar searchSetter={setSearchText} isOpened={isMobileSearchBarOpened} />
-            <RecipeList recipes={recipesExemple}/>
+            
+            <h1 style={{padding: '20px', color: 'var(--primary-color)'}}>
+                Resultados para: "{searchTerm || 'Todas as Receitas'}"
+            </h1>
+
+            {/* 4. RENDERIZAÇÃO CONDICIONAL */}
+            {isLoading && <p style={{textAlign: 'center', fontSize: '1.2rem'}}>Carregando receitas...</p>}
+            {error && <p style={{textAlign: 'center', color: 'red'}}>Erro: {error}</p>}
+
+            {!isLoading && !error && (
+                <>
+                    {recipes.length > 0 ? (
+                        <RecipeList recipes={recipes}/>
+                    ) : (
+                        <p style={{textAlign: 'center', fontSize: '1.2rem'}}>Nenhuma receita encontrada.</p>
+                    )}
+                </>
+            )}
+
             <div className="mobile-user-avatar">
                 <UserAvatar/>
             </div>
