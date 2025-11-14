@@ -35,6 +35,8 @@ export default function Recipe() {
     const [author, setAuthor] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [imageUrls, setImageUrls] = useState([]);
+
 
     // Handlers de Modal (inalterados)
     const openEditProfileModal = () => {
@@ -48,17 +50,21 @@ export default function Recipe() {
         setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
     }
 
-    // 4. useEffect para buscar os dados da receita e do autor
     useEffect(() => {
         const fetchRecipeData = async () => {
             setIsLoading(true);
             setError(null);
             try {
-                // 1. Busca a receita principal
                 const recipeData = await RecipeService.getRecipeById(id);
                 setRecipe(recipeData);
 
-                // 2. Busca o autor da receita
+                if (recipeData.recipeImages && recipeData.recipeImages.length > 0) {
+                    const urls = recipeData.recipeImages.map(
+                        img => `${BASE_URL}/recipe-images/${img.imageId}`
+                    );
+                    setImageUrls(urls);
+                }
+
                 if (recipeData.authorId) {
                     const authorData = await UserService.getUserById(recipeData.authorId);
                     setAuthor(authorData);
@@ -101,7 +107,7 @@ export default function Recipe() {
 
     if (error) {
         return (
-             <div className="recipe-page">
+            <div className="recipe-page">
                 <Header searchSetter={setSearchText} searchBarHandle={mobileSearchBarHandle} />
                 <Navbar userType={loggedUserType}/>
                 <p style={{textAlign: 'center', fontSize: '1.5rem', padding: '50px', color: 'red'}}>
@@ -139,7 +145,7 @@ export default function Recipe() {
                                 <div className="metadata">
                                     <div className="author-info">
                                         <ProfileAvatar 
-                                            imageUrl={author?.imageUrl} 
+                                            imageUrl={author ? `${BASE_URL}/users/${author.userId}/profile-pic` : null}
                                             altText={`Foto de ${author?.name}`} 
                                             size="40px" 
                                         />
@@ -160,7 +166,7 @@ export default function Recipe() {
                                 </div>
                             </div>
 
-                            <Carousel images={recipe.images} />     
+                            <Carousel images={imageUrls} />     
                         </div>
 
                         <article className="description">

@@ -33,6 +33,26 @@ const apiFetch = async (endpoint, options = {}) => {
     return response.json();
 };
 
+const apiFetchFormData = async (endpoint, options = {}) => {
+    const url = `${BASE_URL}${endpoint}`;
+
+    const response = await fetch(url, {
+        ...options,
+        // O body já é um FormData, não precisa de JSON.stringify
+        // As headers são omitidas de propósito
+        credentials: 'include', 
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Erro desconhecido no servidor.' }));
+        throw new Error(errorData.message || 'Falha na requisição de upload.');
+    }
+    if (response.status === 204) {
+        return null;
+    }
+    return response.json();
+};
+
 export const AuthService = {
     // POST /api/auth/login
     login: (email, password) => {
@@ -72,6 +92,13 @@ export const UserService = {
         return apiFetch(`/users/${userId}`, {
             method: 'GET',
         });
+    },
+    
+    uploadProfilePic: (formData) => {
+        return apiFetchFormData('/users/current/profile-pic', {
+            method: 'POST',
+            body: formData,
+        });
     }
 };
 
@@ -97,10 +124,13 @@ export const RecipeService = {
         });
     },
 
+    /**
+     * @param {FormData} formData - O FormData com os dados da receita E os arquivos.
+     */
     createRecipe: (recipeData) => {
-        return apiFetch('/recipes', {
+        return apiFetchFormData('/recipes', {
             method: 'POST',
-            body: JSON.stringify(recipeData),
+            body: formData,
         });
     },
     
