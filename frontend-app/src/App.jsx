@@ -12,6 +12,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/create-recipe" element={<CreateRecipePage />} />
+        <Route path="/recipe" element={<Recipe />} />
         {/* Defina outras rotas aqui */}
       </Routes>
     </Router>
