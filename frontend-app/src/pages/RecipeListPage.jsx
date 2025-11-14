@@ -49,6 +49,7 @@ function RecipeList( {recipes} ) {
 export default function RecipeListPage() {
         const [searchParams] = useSearchParams(); 
         const searchTerm = searchParams.get('q'); 
+        const favorites = searchParams.get('favorites'); 
     
         const [editProfileModalIsOpened, setEditProfileModalIsOpened] = useState(false)
         const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
@@ -75,6 +76,8 @@ export default function RecipeListPage() {
 
         useEffect(() => {
             const fetchRecipes = async () => {
+                console.log(favorites);
+                
                 setIsLoading(true);
                 setError(null);
                 try {
@@ -96,7 +99,7 @@ export default function RecipeListPage() {
             };
 
             fetchRecipes();
-        }, [searchTerm]);
+        }, [searchTerm, favorites]);
 
     return (
         <div className="recipe-list-page">
