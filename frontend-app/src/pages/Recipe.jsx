@@ -15,7 +15,7 @@ import FavoriteButton from '../components/FavoriteButton/FavoriteButton'
 // 1. CORREÇÃO: Importar 'useEffect' do 'react' e 'useParams' do 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
-import { RecipeService, UserService } from '../services/apiService'; // Importar os Serviços
+import { RecipeService, UserService, BASE_URL } from '../services/apiService'; // Importar os Serviços
 
 import './Recipe.css'
 
@@ -143,18 +143,21 @@ export default function Recipe() {
 
                         <div className="recipe-details">
                             <div className='metadata-and-rating-column'>
+
                                 <div className="metadata">
-                                    <div className="author-info">
+                                    <div className="author-pic">
                                         <ProfileAvatar 
                                             imageUrl={author ? `${BASE_URL}/users/${author.userId}/profile-pic` : null}
                                             altText={`Foto de ${author?.name}`} 
-                                            size="40px" 
+                                            size="100px" 
                                         />
+                                    </div>
+                                    <div className="author-info">
                                         <p><strong>Autor:</strong> {author?.name || 'Carregando...'}</p>
+                                        <p><strong>Tempo de Preparo:</strong> {recipe.prepTime}</p>
+                                        <p><strong>Porções:</strong> {recipe.portions}</p>
                                     </div>                           
                             
-                                    <p><strong>Tempo de Preparo:</strong> {recipe.prepTime}</p>
-                                    <p><strong>Porções:</strong> {recipe.portions}</p>
                                 </div>
 
                                 <div className='favorite-button-wrapper'>

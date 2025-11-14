@@ -71,6 +71,7 @@ export default function CreateRecipePage() {
             }
         }
 
+        console.log(formData.values());
         try {
             const newRecipe = await RecipeService.createRecipe(formData);
 
