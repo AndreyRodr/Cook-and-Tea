@@ -2,10 +2,6 @@ import { Router } from "express";
 const recipeRoutes = Router();
 import * as recipeController from '../controllers/recipeController.js';
 import { protect } from '../middleware/authMiddleware.js'
-import multer from 'multer';
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 //GET /api/recipes/
 recipeRoutes.get('/', recipeController.getAllRecipes);
@@ -26,7 +22,6 @@ recipeRoutes.get('/:id', recipeController.getRecipeById);
 recipeRoutes.post(
     '/',
     protect,
-    upload.array('recipeImages', 10),
     recipeController.createRecipe);
 
 //PUT /api/recipes/:id
