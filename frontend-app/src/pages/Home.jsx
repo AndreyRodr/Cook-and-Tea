@@ -14,35 +14,10 @@ import MobileSearchBar from "../components/mobile-search-bar/MobileSearchBar";
 import EditProfileModal from "../components/EditProfileModal/EditProfileModal";
 import { UserService } from "../services/apiService";
 
-export default function Home() {
+export default function Home({ currentUser }) {
     const [userOptionsModalIsOpened, setUserOptionsModalIsOpened] = useState(true)
     const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
-
-    const [loggedUser, setLoggedUser] = useState()
-
     const [searchText, setSearchText] = useState('')
-    const [loggedUserType, setLoggedUserType] = useState('chefe')
-
-    const [editProfileModalIsOpened, setEditProfileModalIsOpened] = useState(false)
-
-    const [currentUser, setCurrentUser] = useState()
-
-    useEffect(() => {
-        const fetchCurrentUser = async () => {
-            const user = await UserService.getCurrentUser()
-            setCurrentUser(user)
-        }
-        fetchCurrentUser()
-    }, [])
-
-    const openEditProfileModal = () => {
-        setUserOptionsModalIsOpened(true);
-        setEditProfileModalIsOpened(true);
-    }
-
-    const closeEditProfileModal = () => {
-        setEditProfileModalIsOpened(false);
-    }
 
     const mobileSearchBarHandle = () => {
         setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
@@ -55,7 +30,8 @@ export default function Home() {
                 searchBarHandle={mobileSearchBarHandle}
                 currentUser = {currentUser}
             />
-            <Navbar userType="chefe" currentUser={currentUser} />
+            <Navbar currentUser={currentUser} />
+
             <MobileSearchBar searchSetter={setSearchText} isOpened={isMobileSearchBarOpened} />
             <p className="text-wrapper">
                 Bem-vindo ao Cook n’Tea: Uma pitada de sabor & Uma xícara de carinho!
@@ -73,18 +49,6 @@ export default function Home() {
                 <UserDrawer currentUser={currentUser}/>
             </div>
 
-            <EditProfileModal
-                isOpen={editProfileModalIsOpened}
-                onClose={closeEditProfileModal}
-                userType={loggedUserType}
-            />
-
-            {!userOptionsModalIsOpened &&
-                <UserOptionsModal
-                    type={loggedUserType}
-                    onEditProfileClick={openEditProfileModal}
-                />
-            }
         </div>
     );
 };
