@@ -1,6 +1,6 @@
 import { Recipe, User, Avaliation, sequelize } from '../models/index.js' 
 import RecipeImage from '../models/recipeImageModel.js';
-import { uploadFileToS3 } from '../utils/s3Service.js';
+import { uploadFileToS3, deleteFileFromS3 } from '../utils/s3Service.js';
 
 /**
  * 
@@ -31,9 +31,9 @@ export const createRecipe = async (req, res) => {
                 name,
                 authorId,
                 description,
-                ingredients: JSON.parse(ingredients),
-                instructions: JSON.parse(instructions),
-                tags: JSON.parse(tags),
+                ingredients: ingredients,
+                instructions: instructions,
+                tags: tags,
                 prepTime,
                 portions
             }
@@ -223,6 +223,19 @@ export const deleteRecipe = async (req, res) => {
 
         if (recipe.authorId !== req.user.userId) {
             return res.status(403).json({ message: "Acesso negado. Você não é o autor." });
+        }
+        const imagesToDelete = await RecipeImage.findAll({
+            where: { recipeId: id }
+        });
+
+        // Cria uma lista de promessas para deletar cada imagem do S3
+        if (imagesToDelete && imagesToDelete.length > 0) {
+            const deletePromises = imagesToDelete.map(image => 
+                deleteFileFromS3(image.imageUrl) 
+            );
+            
+            // Aguarda todas as exclusões do S3 terminarem
+            await Promise.all(deletePromises);
         }
 
         await RecipeImage.destroy({ 

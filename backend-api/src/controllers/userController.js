@@ -2,7 +2,7 @@ import User from '../models/userModel.js';
 import Recipe from '../models/recipeModel.js'
 import Avaliation from '../models/avaliationModel.js'
 import generateToken from '../utils/generateToken.js';
-import { uploadFileToS3 } from '../utils/s3Service.js';
+import { uploadFileToS3, deleteFileFromS3 } from '../utils/s3Service.js';
 
 /**
  * @desc Cria um usuário
@@ -19,8 +19,8 @@ export const createUser = async (req, res) => {
             return res.status(400).json({ message: 'A senha deve ter pelo menos 6 caracteres.' });
         }
 
-        const userAlreadyExists = await User.findOne({ 
-            where: {email: email}, 
+        const userAlreadyExists = await User.findOne({
+            where: { email: email },
         });
 
         if (userAlreadyExists) {
@@ -59,7 +59,7 @@ export const createUser = async (req, res) => {
 export const getAllUsers = async (req, res) => {
     try {
         const users = await User.findAll({
-            attributes: {exclude: ['password']}
+            attributes: { exclude: ['password'] }
         })
         res.status(200).json(users);
     } catch (err) {
@@ -75,7 +75,7 @@ export const getAllUsers = async (req, res) => {
 export const getCurrentUser = async (req, res) => {
     try {
         const user = await User.findByPk(req.user.userId, {
-            attributes: {exclude: ['password']},
+            attributes: { exclude: ['password'] },
         })
 
         if (!user) {
@@ -122,8 +122,8 @@ export const updateCurrentUser = async (req, res) => {
 
     } catch (error) {
         console.error('Erro ao atualizar perfil:', error);
-        if(error.name === 'SequelizeUniqueConstraintError') {
-            return res.status(400).json({message: 'Este email já está em uso.'})
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({ message: 'Este email já está em uso.' })
         }
         res.status(500).json({ message: 'Erro no servidor.' });
     }
@@ -142,16 +142,20 @@ export const deleteCurrentUser = async (req, res) => {
             return res.status(404).json({ message: 'Usuário não encontrado.' });
         }
 
+        if (user.profilePicUrl) {
+            await deleteFileFromS3(user.profilePicUrl);
+        }
+
         await Recipe.destroy({
-            where: {authorId: userId}
+            where: { authorId: userId }
         })
 
         await Avaliation.destroy({
-            where: {userId: userId}
+            where: { userId: userId }
         });
 
         await User.destroy({
-            where: {userId: userId}
+            where: { userId: userId }
         });
 
         res.cookie('jwt', '', { httpOnly: true, expires: new Date(0) });
@@ -171,7 +175,16 @@ export const deleteCurrentUser = async (req, res) => {
 export const getUserById = async (req, res) => {
     try {
         const user = await User.findByPk(req.params.userId, {
-            attributes: ['userId', 'name', 'email', 'createdAt'],
+            attributes: [
+                "userId",
+                "name",
+                "type",
+                "email",
+                "password",
+                "createdAt",
+                "updatedAt",
+                "profilePicUrl"
+            ],
         });
 
         if (!user) {
@@ -198,19 +211,27 @@ export const uploadProfilePic = async (req, res) => {
 
     try {
         // req.user.userId é fornecido pelo middleware 'protect'
-        const userId = req.user.userId; 
+        const userId = req.user.userId;
         const user = await User.findByPk(userId);
 
         if (!user) {
             return res.status(404).json({ message: 'Usuário não encontrado.' });
         }
 
-        // 1. Faz o upload para o S3 e recebe a URL
-        const imageUrl = await uploadFileToS3(req.file);
+        // Salva a URL da imagem antiga ANTES de fazer o upload da nova
+        const oldImageUrl = user.profilePicUrl;
 
-        // 2. Salva a URL no banco de dados (no campo 'profilePicUrl')
-        user.profilePicUrl = imageUrl;
+        // Faz o upload da NOVA imagem para o S3
+        const newImageUrl = await uploadFileToS3(req.file);
+
+        // Atualiza o banco de dados com a NOVA URL
+        user.profilePicUrl = newImageUrl;
         await user.save();
+
+        // Se existia uma imagem antiga, deleta ela do S3
+        if (oldImageUrl) {
+            await deleteFileFromS3(oldImageUrl);
+        }
 
         res.status(200).json({ message: 'Imagem de perfil atualizada com sucesso.', imageUrl: imageUrl });
 
@@ -230,7 +251,7 @@ export const getProfilePic = async (req, res) => {
         const { userId } = req.params; // Pega o ID da URL
         const user = await User.findByPk(userId, {
             // Seleciona apenas os campos que precisamos
-            attributes: ['profilePicUrl'] 
+            attributes: ['profilePicUrl']
         });
 
         if (!user || !user.profilePicUrl) {

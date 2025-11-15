@@ -1,10 +1,15 @@
 import { Sequelize } from 'sequelize';
 import 'dotenv/config';
 
-const { PG_DB, PG_USER, PG_PASSWORD, PG_HOST } = process.env;
+const { 
+    PGDATABASE,
+    PGUSER,
+    PGPASSWORD,
+    PGHOST 
+} = process.env;
 
-const sequelize = new Sequelize(PG_DB, PG_USER, PG_PASSWORD, {
-    host: PG_HOST,
+const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
+    host: PGHOST,
     dialect: 'postgres',
     logging: false,
 });
@@ -15,7 +20,14 @@ const connectDB = async () => {
         console.log("Conexão com o banco estabelecida.");
 
     } catch (err) {
-        console.error("Erro ao conectar com o banco: ", err.message);
+        console.log(
+                PGDATABASE,
+    PGUSER,
+    PGPASSWORD,
+    PGHOST 
+        );
+        
+        console.error("Erro ao conectar com o banco: ", err);
         process.exit(1);
     }
 };
