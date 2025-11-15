@@ -1,77 +1,70 @@
-// src/pages/Recipe.jsx (MODIFICADO)
+// src/pages/Recipe.jsx (ATUALIZADO)
 
 import Header from '../components/Header/Header'
 import Navbar from '../components/Navbar/Navbar'
-import UserAvatar from '../components/User-avatar/UserAvatar'
+import UserAvatar from '../components/User-avatar/UserAvatar' // Para o UserDrawer mobile
 import MobileSearchBar from '../components/mobile-search-bar/MobileSearchBar'
 import IngredientsList from '../components/IngredientsList/IngredientsList'
 import { StarsRate, ReadOnlyStarsRate } from '../components/StarsRate/StarsRate'
 import EditProfileModal from '../components/EditProfileModal/EditProfileModal';
-import UserOptionsModal from '../components/User-options-modal/UserOptionsModal';
+import UserDrawer from '../components/UserDrawer/UserDrawer' // Para o mobile
 import Carousel from '../components/Carousel/Carousel';
 import ProfileAvatar from '../components/ProfileAvatar/ProfileAvatar'
 import FavoriteButton from '../components/FavoriteButton/FavoriteButton'
 
-// 1. CORREÇÃO: Importar 'useEffect' do 'react' e 'useParams' do 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
-import { RecipeService, UserService, BASE_URL } from '../services/apiService'; // Importar os Serviços
+import { useParams } from 'react-router-dom'; // Hook para ler o :id da URL
+import { RecipeService, UserService } from '../services/apiService'; // Serviços de API
 
 import './Recipe.css'
 
-export default function Recipe() {
+// 1. Recebe 'currentUser' do App.jsx
+export default function Recipe({ currentUser }) {
     // Hooks
-    const { id } = useParams(); // 2. Agora 'useParams' está definido (linha 22)
+    const { id } = useParams(); // Pega o ID da receita (ex: /recipe/1)
     
-    // Estados de Layout (inalterados)
-    const [userOptionsModalIsOpened, setUserOptionsModalIsOpened] = useState(true)
+    // Estados de Layout (O UserDrawer mobile controla seus próprios modais)
     const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
-    const [editProfileModalIsOpened, setEditProfileModalIsOpened] = useState(false)
     const [searchText, setSearchText] = useState('')
-    const [loggedUserType, setLoggedUserType] = useState('comum') 
 
-    // 3. Estados para os dados da API (Substituindo o mockRecipe)
+    // Estados para os dados da API
     const [recipe, setRecipe] = useState(null);
     const [author, setAuthor] = useState(null);
+    const [imageUrls, setImageUrls] = useState([]); // Para o Carrossel
+    const [authorImageUrl, setAuthorImageUrl] = useState(null); // Para o Avatar do Autor
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [imageUrls, setImageUrls] = useState([]);
-    const [authorImageUrl, setAuthorImageUrl] = useState(null);
-
-    const BASE_URL = 'http://localhost:3001/api'; 
     
-    // Handlers de Modal (inalterados)
-    const openEditProfileModal = () => {
-        setUserOptionsModalIsOpened(true);
-        setEditProfileModalIsOpened(true);
-    }
-    const closeEditProfileModal = () => {
-        setEditProfileModalIsOpened(false);
-    }
+    // Handler da barra de pesquisa mobile
     const mobileSearchBarHandle = () => {
         setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
     }
 
-
-
+    // 2. useEffect para buscar dados da API quando o 'id' mudar
     useEffect(() => {
         const fetchRecipeData = async () => {
+            if (!id) return; // Não faz nada se não houver ID
+
             setIsLoading(true);
             setError(null);
             try {
+                // 1. Busca a receita principal
                 const recipeData = await RecipeService.getRecipeById(id);
                 setRecipe(recipeData);
 
+                // 2. Processa as imagens do S3 para o Carrossel
+                // (O backend envia 'recipeImages' com a URL)
                 if (recipeData.recipeImages && recipeData.recipeImages.length > 0) {
-                    const urls = recipeData.recipeImages.map(
-                        img => img.imageUrl);
-                        setImageUrls(urls);
+                    const urls = recipeData.recipeImages.map(img => img.imageUrl);
+                    setImageUrls(urls);
                 }
 
+                // 3. Busca o autor da receita
                 if (recipeData.authorId) {
                     const authorData = await UserService.getUserById(recipeData.authorId);
                     setAuthor(authorData);
-                    setAuthorImageUrl(authorData.profilePicUrl);
+                    // Define a URL da foto de perfil do autor (vinda do S3)
+                    setAuthorImageUrl(authorData.profilePicUrl); 
                 } else {
                     setAuthor({ name: 'Autor Desconhecido' }); // Fallback
                 }
@@ -85,7 +78,7 @@ export default function Recipe() {
         };
 
         fetchRecipeData();
-    }, [id]); // Executa sempre que o ID na URL mudar
+    }, [id]); 
 
     // Função de formatação (inalterada)
     const formatInstructions = (steps) => (
@@ -96,12 +89,16 @@ export default function Recipe() {
         </ol>
     );
     
-    // 5. Renderização condicional para Loading e Erro
+    // 3. Renderização de Loading
     if (isLoading) {
         return (
             <div className="recipe-page">
-                <Header searchSetter={setSearchText} searchBarHandle={mobileSearchBarHandle} />
-                <Navbar userType={loggedUserType}/>
+                <Header 
+                    searchSetter={setSearchText} 
+                    searchBarHandle={mobileSearchBarHandle} 
+                    currentUser={currentUser} // Passa o usuário para o Header
+                />
+                <Navbar currentUser={currentUser}/>
                 <p style={{textAlign: 'center', fontSize: '1.5rem', padding: '50px', color: 'var(--primary-color)'}}>
                     Carregando receita... 🍳
                 </p>
@@ -109,11 +106,16 @@ export default function Recipe() {
         );
     }
 
+    // 4. Renderização de Erro
     if (error) {
         return (
-            <div className="recipe-page">
-                <Header searchSetter={setSearchText} searchBarHandle={mobileSearchBarHandle} />
-                <Navbar userType={loggedUserType}/>
+             <div className="recipe-page">
+                <Header 
+                    searchSetter={setSearchText} 
+                    searchBarHandle={mobileSearchBarHandle} 
+                    currentUser={currentUser}
+                />
+                <Navbar currentUser={currentUser}/>
                 <p style={{textAlign: 'center', fontSize: '1.5rem', padding: '50px', color: 'red'}}>
                     Erro ao carregar receita: {error}
                 </p>
@@ -121,17 +123,16 @@ export default function Recipe() {
         );
     }
 
-    // 6. Renderização principal (quando 'recipe' não é nulo)
+    // 5. Renderização Principal (quando 'recipe' existe)
     return(
         recipe && (
             <div className="recipe-page">
                 <Header 
                     searchSetter={setSearchText} 
-                    userAvatarModalSituation={userOptionsModalIsOpened} 
-                    userAvatarModalHandle={setUserOptionsModalIsOpened} 
                     searchBarHandle={mobileSearchBarHandle}
+                    currentUser={currentUser} // Passa o usuário para o Header
                 />
-                <Navbar userType={loggedUserType}/>
+                <Navbar currentUser={currentUser} />
                 <MobileSearchBar searchSetter={setSearchText} isOpened={isMobileSearchBarOpened}/>
                 
                 <main>
@@ -146,11 +147,10 @@ export default function Recipe() {
 
                         <div className="recipe-details">
                             <div className='metadata-and-rating-column'>
-
                                 <div className="metadata">
                                     <div className="author-pic">
                                         <ProfileAvatar 
-                                            imageUrl={authorImageUrl} // Usa a URL da imagem do autor
+                                            imageUrl={authorImageUrl} // Usa a URL do S3
                                             altText={`Foto de ${author?.name}`} 
                                             size="100px" 
                                         />
@@ -160,7 +160,6 @@ export default function Recipe() {
                                         <p><strong>Tempo de Preparo:</strong> {recipe.prepTime}</p>
                                         <p><strong>Porções:</strong> {recipe.portions}</p>
                                     </div>                           
-                            
                                 </div>
 
                                 <div className='favorite-button-wrapper'>
@@ -173,7 +172,7 @@ export default function Recipe() {
                                 </div>
                             </div>
 
-                            <Carousel images={imageUrls} />     
+                            <Carousel images={imageUrls} /> {/* Passa as URLs do S3 */}
                         </div>
 
                         <article className="description">
@@ -198,11 +197,10 @@ export default function Recipe() {
                     </div>
                 </main>
 
+                {/* Renderiza o drawer/avatar mobile (que controla seus próprios modais) */}
                 <div className="mobile-user-avatar">
-                    <UserAvatar setter={setUserOptionsModalIsOpened} currentValue={userOptionsModalIsOpened} />
+                    <UserDrawer currentUser={currentUser} />
                 </div>
-                <EditProfileModal isOpen={editProfileModalIsOpened} onClose={closeEditProfileModal} userType={loggedUserType} />
-                {!userOptionsModalIsOpened && <UserOptionsModal type={loggedUserType} onEditProfileClick={openEditProfileModal} />}
             </div>
         )
     )

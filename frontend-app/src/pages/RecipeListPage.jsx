@@ -1,27 +1,36 @@
+// src/pages/RecipeListPage.jsx (ATUALIZADO)
+
 import Header from '../components/Header/Header'
 import Navbar from '../components/Navbar/Navbar'
 import MobileSearchBar from '../components/mobile-search-bar/MobileSearchBar'
-import EditProfileModal from '../components/EditProfileModal/EditProfileModal'
-import UserAvatar from '../components/User-avatar/UserAvatar'
+import UserAvatar from '../components/User-avatar/UserAvatar' // Para o UserDrawer mobile
+import UserDrawer from '../components/UserDrawer/UserDrawer' // Para o mobile
 import { ReadOnlyStarsRate } from '../components/StarsRate/StarsRate'
 
 import { useState, useEffect } from 'react'
 import noImg from '../assets/images/noImg.jpg'
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom'; // Adicionado useNavigate
 
 import { RecipeService } from '../services/apiService'
 
 import './RecipeListPage.css'
 
-// 1. CORREÇÃO NO RecipeElement (Removemos useState e useEffect)
+// 1. Componente RecipeElement (Lógica de navegação adicionada)
 function RecipeElement( {recipe} ){
+    const navigate = useNavigate();
     
-    // Define a imagem diretamente. Se recipe.images[0] for "" (falsy), usa noImg.
+    // Define a imagem (se houver) ou usa a imagem padrão
+    // (O backend não retorna imagens na busca geral, então usará noImg)
     const recipeImage = (recipe.images && recipe.images[0]) ? recipe.images[0] : noImg;
 
+    // Handler para navegar para a página da receita
+    const handleRecipeClick = () => {
+        navigate(`/recipe/${recipe.recipeId}`);
+    };
+
     return(
-        <div className="recipe-element">
-            <img src={recipeImage} alt={recipe.name} /> {/* Usamos recipeImage diretamente */}
+        <div className="recipe-element" onClick={handleRecipeClick}> {/* Adicionado onClick */}
+            <img src={recipeImage} alt={recipe.name} /> 
             <div className="info-content">
                 <h3>{recipe.name}</h3>
                 <p>{recipe.description}</p>
@@ -37,58 +46,61 @@ function RecipeElement( {recipe} ){
 function RecipeList( {recipes} ) {
     return(
         <div className="recipe-list">
-            {recipes.map((recipe, index) => {
+            {recipes.map((recipe) => { // Removido 'index' como key
                 return(
-                    <RecipeElement key={index} recipe={recipe}/>
+                    <RecipeElement key={recipe.recipeId} recipe={recipe}/>
                 )
             })}
         </div>
     )
 }
 
-export default function RecipeListPage() {
+// 2. Recebe 'currentUser' do App.jsx
+export default function RecipeListPage({ currentUser }) {
         const [searchParams] = useSearchParams(); 
         const searchTerm = searchParams.get('q'); 
         const favorites = searchParams.get('favorites'); 
     
-        const [editProfileModalIsOpened, setEditProfileModalIsOpened] = useState(false)
+        // Estados de Layout
         const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
         const [searchText, setSearchText] = useState('')
-        const [loggedUserType, setLoggedUserType] = useState('chefe')
 
+        // Estados dos Dados
         const [recipes, setRecipes] = useState([]);
         const [isLoading, setIsLoading] = useState(true);
         const [error, setError] = useState(null);
 
-
-        const openEditProfileModal = () => {
-            setUserOptionsModalIsOpened(true);
-            setEditProfileModalIsOpened(true);
-        }
-    
-        const closeEditProfileModal = () => {
-            setEditProfileModalIsOpened(false);
-        }
-    
         const mobileSearchBarHandle = () => {
             setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
         }
 
+        // 3. useEffect para buscar dados da API
         useEffect(() => {
             const fetchRecipes = async () => {
-                console.log(favorites);
-                
                 setIsLoading(true);
                 setError(null);
                 try {
                     let fetchedRecipes;
-                    if (searchTerm) {
-                        console.log(`Buscando receitas com o termo: ${searchTerm}`);
+                    
+                    // Lógica para Favoritos (API não implementada, mas a lógica do frontend está aqui)
+                    if (favorites === 'true') {
+                        console.log('Buscando receitas favoritas...');
+                        // No futuro: fetchedRecipes = await RecipeService.getFavorites();
+                        // Por enquanto, mostraremos nenhuma receita para favoritos:
+                        fetchedRecipes = []; 
+                    
+                    // Lógica de Busca (Se houver termo de busca ou se for nulo/vazio)
+                    } else if (searchTerm || searchTerm === '') {
+                        console.log(`Buscando receitas com o termo: "${searchTerm}"`);
+                        // Rota: GET /api/recipes/search?q=...
                         fetchedRecipes = await RecipeService.searchRecipes(searchTerm);
+                    
+                    // Fallback (se nenhum parâmetro for passado)
                     } else {
-                        console.log('Buscando todas as receitas');
-                        fetchedRecipes = await RecipeService.searchRecipes('');
+                        console.log('Buscando todas as receitas (fallback)');
+                        fetchedRecipes = await RecipeService.getAllRecipes();
                     }
+                    
                     setRecipes(fetchedRecipes);
                 } catch (err) {
                     console.error('Erro ao buscar receitas:', err.message);
@@ -99,22 +111,30 @@ export default function RecipeListPage() {
             };
 
             fetchRecipes();
-        }, [searchTerm, favorites]);
+        }, [searchTerm, favorites]); // Re-executa se a busca ou o filtro de favoritos mudar
+
+    // Define o título da página
+    const getPageTitle = () => {
+        if (favorites === 'true') return 'Minhas Receitas Favoritas';
+        if (searchTerm) return `Resultados para: "${searchTerm}"`;
+        return 'Todas as Receitas';
+    };
 
     return (
         <div className="recipe-list-page">
             <Header
                 searchSetter={setSearchText} 
                 searchBarHandle={mobileSearchBarHandle}
+                currentUser={currentUser} // Passa o usuário
             />
-            <Navbar userType="chefe" />
+            <Navbar currentUser={currentUser} /> {/* Passa o usuário */}
             <MobileSearchBar searchSetter={setSearchText} isOpened={isMobileSearchBarOpened} />
             
             <h1 style={{padding: '20px', color: 'var(--primary-color)'}}>
-                Resultados para: "{searchTerm || 'Todas as Receitas'}"
+                {getPageTitle()}
             </h1>
 
-            {/* 4. RENDERIZAÇÃO CONDICIONAL */}
+            {/* 4. Renderização Condicional */}
             {isLoading && <p style={{textAlign: 'center', fontSize: '1.2rem'}}>Carregando receitas...</p>}
             {error && <p style={{textAlign: 'center', color: 'red'}}>Erro: {error}</p>}
 
@@ -128,14 +148,10 @@ export default function RecipeListPage() {
                 </>
             )}
 
+            {/* Renderiza o drawer/avatar mobile */}
             <div className="mobile-user-avatar">
-                <UserAvatar/>
+                <UserDrawer currentUser={currentUser} />
             </div>
-            <EditProfileModal
-                isOpen={editProfileModalIsOpened}
-                onClose={closeEditProfileModal}
-                userType={loggedUserType}
-            />
         </div>
     )
 }

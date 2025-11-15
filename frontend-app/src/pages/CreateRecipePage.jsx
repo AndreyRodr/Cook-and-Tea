@@ -12,30 +12,17 @@ import { RecipeService } from '../services/apiService';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function CreateRecipePage() {
+export default function CreateRecipePage({ currentUser }) {
     // ESTADOS DE LAYOUT E PESQUISA (mantidos)
-    const [userOptionsModalIsOpened, setUserOptionsModalIsOpened] = useState(true)
     const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
     const [searchText, setSearchText] = useState('')
-    const [loggedUserType, setLoggedUserType] = useState('chefe') // Usado para modais e Navbar
-    const [editProfileModalIsOpened, setEditProfileModalIsOpened] = useState(false)
+    
     const [imageFiles, setImageFiles] = useState(null);
     const navigate = useNavigate(); // Hook de navegação
 
-    const openEditProfileModal = () => { 
-        setUserOptionsModalIsOpened(true); // Fecha o menu de opções
-        setEditProfileModalIsOpened(true); // Abre o modal de edição
-    }
-
-    const closeEditProfileModal = () => {
-        setEditProfileModalIsOpened(false);
-    }
-    
     const mobileSearchBarHandle = () => {
         setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
     }
-
-
     // 3. Estados do Formulário (mantidos)
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -93,11 +80,11 @@ export default function CreateRecipePage() {
             {/* Componentes de Layout */}
             <Header 
             searchSetter={setSearchText} 
-            userAvatarModalSituation={userOptionsModalIsOpened} 
-            userAvatarModalHandle={setUserOptionsModalIsOpened} 
-            searchBarHandle={mobileSearchBarHandle} />
+            searchBarHandle={mobileSearchBarHandle} 
+            currentUser={currentUser}
+            />
             
-            <Navbar userType={loggedUserType} /> 
+            <Navbar currentUser={currentUser} /> 
             
             <div className='content'>
 
@@ -210,19 +197,6 @@ export default function CreateRecipePage() {
                 </div>
             </div>
             
-            {/* RENDERIZAÇÃO DOS MODAIS: ESSENCIAL PARA O BOTÃO DO USUÁRIO FUNCIONAR */}
-            <EditProfileModal 
-                isOpen={editProfileModalIsOpened}
-                onClose={closeEditProfileModal}
-                userType={loggedUserType}
-            />
-            
-            {!userOptionsModalIsOpened && 
-                <UserOptionsModal 
-                    type={loggedUserType}
-                    onEditProfileClick={openEditProfileModal} 
-                />
-            }
         </div>
     );
 }
