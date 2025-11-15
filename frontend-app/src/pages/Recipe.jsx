@@ -80,6 +80,11 @@ export default function Recipe({ currentUser }) {
         fetchRecipeData();
     }, [id]); 
 
+    useEffect(()=> {
+        console.log(author);
+        
+    }, [author])
+
     // Função de formatação (inalterada)
     const formatInstructions = (steps) => (
         <ol>
