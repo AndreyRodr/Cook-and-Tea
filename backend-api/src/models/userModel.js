@@ -32,12 +32,8 @@ const User = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        profilePicMimetype: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        profilePicData: {
-            type: DataTypes.BLOB, 
+        profilePicUrl: {
+            type: DataTypes.STRING, 
             allowNull: true,
         }
     },

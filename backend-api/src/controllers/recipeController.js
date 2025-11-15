@@ -1,5 +1,6 @@
-import { Op } from 'sequelize';
 import { Recipe, User, Avaliation, sequelize } from '../models/index.js' 
+import RecipeImage from '../models/recipeImageModel.js';
+import { uploadFileToS3 } from '../utils/s3Service.js';
 
 /**
  * 
@@ -30,15 +31,26 @@ export const createRecipe = async (req, res) => {
                 name,
                 authorId,
                 description,
-                ingredients,
-                instructions,
-                tags,
+                ingredients: JSON.parse(ingredients),
+                instructions: JSON.parse(instructions),
+                tags: JSON.parse(tags),
                 prepTime,
                 portions
             }
         );
         console.log(newRecipe);
+        if (req.files && req.files.length > 0) {
+            const uploadPromises = req.files.map(file => uploadFileToS3(file));
+            const imageUrls = await Promise.all(uploadPromises);
 
+            const imagesData = imageUrls.map(url => ({
+                recipeId: newRecipe.recipeId,
+                imageUrl: url
+            }));
+
+            await RecipeImage.bulkCreate(imagesData);
+        }
+        
         res.status(201).json(newRecipe);
     } catch (err) {
         console.error("Erro ao criar receita: ", err);
@@ -80,6 +92,7 @@ export const getRecipeById = async (req, res) => {
             include: [
                 { model: User, as: 'user', attributes: ['userId'] },
                 { model: Avaliation, as: 'avaliations', include: { model: User, attributes: ['userId', 'name'] } },
+                { model: RecipeImage, as: 'recipeImages', attributes: ['imageUrl'] } 
             ]
         });
 
@@ -229,3 +242,4 @@ export const deleteRecipe = async (req, res) => {
         res.status(500).json({ message: "Erro no servidor" });
     }
 };
+
