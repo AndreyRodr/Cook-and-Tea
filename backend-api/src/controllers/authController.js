@@ -17,6 +17,10 @@ export const login = async (req, res) => {
             where: { email: email.toLowerCase() } 
         });
 
+        if (!user) {
+            return res.status(401).json({ message: 'Credenciais inválidas.' });
+        }
+
         const verifyHash = await user.matchPassword(password)
         console.log(verifyHash);
         

@@ -6,7 +6,6 @@ import { connectDB, sequelize } from './config/database.js';
 
 connectDB();
 
-
 const app = express();
 
 app.use((req, res, next) => {

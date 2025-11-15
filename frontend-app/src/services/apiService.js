@@ -33,6 +33,22 @@ const apiFetch = async (endpoint, options = {}) => {
     return response.json();
 };
 
+const apiFetchFormData = async (endpoint, options = {}) => {
+    const url = `${BASE_URL}${endpoint}`;
+
+    const response = await fetch(url, {
+        ...options,
+        // Não definir 'Content-Type' para FormData; o browser faz isso automaticamente
+        credentials: 'include', // Necessário para cookies (JWT)
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Erro desconhecido no servidor.' }));
+        throw new Error(errorData.message || 'Falha na requisição.');
+    }
+    return response.json();
+}
+
 export const AuthService = {
     // POST /api/auth/login
     login: (email, password) => {
@@ -73,8 +89,17 @@ export const UserService = {
             method: 'GET',
         });
     },
-    
 
+    // 2. FUNÇÃO ADICIONADA (QUE ESTAVA FALTANDO)
+    /**
+     * @param {FormData} formData - O FormData com a foto de perfil.
+     */
+    uploadProfilePic: (formData) => {
+        return apiFetchFormData('/users/current/profile-pic', {
+            method: 'POST',
+            body: formData,
+        });
+    }
 };
 
 export const RecipeService = {

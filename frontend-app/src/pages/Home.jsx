@@ -70,7 +70,7 @@ export default function Home() {
             </div>
 
             <div className="mobile-user-avatar">
-                <UserDrawer />
+                <UserDrawer currentUser={currentUser}/>
             </div>
 
             <EditProfileModal

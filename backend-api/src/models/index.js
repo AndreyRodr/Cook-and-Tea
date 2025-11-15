@@ -2,6 +2,7 @@ import { sequelize } from "../config/database.js";
 import User from "./userModel.js";
 import Recipe from "./recipeModel.js";
 import Avaliation from "./avaliationModel.js";
+import RecipeImage from "./recipeImageModel.js";
 
 Recipe.belongsTo(User, { foreignKey: 'authorId' });
 Recipe.hasMany(Avaliation, { foreignKey: 'recipeId', as: 'avaliations' })
@@ -66,4 +67,11 @@ Avaliation.addHook('afterDestroy', async (avaliation) => {
     }
 });
 
-export { sequelize, User, Recipe, Avaliation,  }
+Recipe.hasMany(RecipeImage, {
+    foreignKey: 'recipeId',
+    as: 'recipeImages'
+});
+RecipeImage.belongsTo(Recipe, { foreignKey: 'recipeId' });
+
+
+export { sequelize, User, Recipe, Avaliation, RecipeImage };

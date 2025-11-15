@@ -36,6 +36,7 @@ export default function Recipe() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [imageUrls, setImageUrls] = useState([]);
+    const [authorImageUrl, setAuthorImageUrl] = useState(null);
 
     const BASE_URL = 'http://localhost:3001/api'; 
     
@@ -51,6 +52,8 @@ export default function Recipe() {
         setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
     }
 
+
+
     useEffect(() => {
         const fetchRecipeData = async () => {
             setIsLoading(true);
@@ -61,14 +64,14 @@ export default function Recipe() {
 
                 if (recipeData.recipeImages && recipeData.recipeImages.length > 0) {
                     const urls = recipeData.recipeImages.map(
-                        img => `${BASE_URL}/recipe-images/${img.imageId}`
-                    );
-                    setImageUrls(urls);
+                        img => img.imageUrl);
+                        setImageUrls(urls);
                 }
 
                 if (recipeData.authorId) {
                     const authorData = await UserService.getUserById(recipeData.authorId);
                     setAuthor(authorData);
+                    setAuthorImageUrl(authorData.profilePicUrl);
                 } else {
                     setAuthor({ name: 'Autor Desconhecido' }); // Fallback
                 }
@@ -147,7 +150,7 @@ export default function Recipe() {
                                 <div className="metadata">
                                     <div className="author-pic">
                                         <ProfileAvatar 
-                                            imageUrl={author ? `${BASE_URL}/users/${author.userId}/profile-pic` : null}
+                                            imageUrl={authorImageUrl} // Usa a URL da imagem do autor
                                             altText={`Foto de ${author?.name}`} 
                                             size="100px" 
                                         />
