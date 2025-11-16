@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import UserAvatar from "../User-avatar/UserAvatar";
-import { FaUserEdit, FaPlus } from 'react-icons/fa'; // Exemplo de ícones
-import './UserDrawer.css'; // Importando o CSS abaixo
+import { FaUserEdit, FaSignOutAlt } from 'react-icons/fa';
+import './UserDrawer.css';
 import { useNavigate } from 'react-router-dom';
 import EditProfileModal from '../EditProfileModal/EditProfileModal';
-import { UserService } from "../../services/apiService";
+import { UserService, AuthService } from "../../services/apiService";
 
 
 export default function UserDrawer( {currentUser} ) {
@@ -14,6 +14,16 @@ export default function UserDrawer( {currentUser} ) {
     const [loggedUserType, setLoggedUserType] = useState('chefe')
 
     const [editProfileModalIsOpened, setEditProfileModalIsOpened] = useState(false)
+
+    const handleLogout = async () => {
+        try {
+            await AuthService.logout(); 
+            window.location.href = '/home'; 
+        } catch (error) {
+            console.error('Erro ao fazer logout:', error);
+            window.location.href = '/home';
+        }
+    };
 
     useEffect(() => {
         if(currentUser) {
@@ -54,8 +64,8 @@ export default function UserDrawer( {currentUser} ) {
                             <FaUserEdit className="icon" />
                             <span>Editar Perfil</span>
                         </li>
-                        <li onClick={() => console.log('Adicionar')}>
-                            <FaPlus className="icon sair" />
+                        <li onClick={handleLogout}>
+                            <FaSignOutAlt className="icon" />
                             <span>Sair</span>
                         </li>
                     </ul>

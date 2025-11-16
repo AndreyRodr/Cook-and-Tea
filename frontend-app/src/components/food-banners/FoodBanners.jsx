@@ -3,14 +3,17 @@ import cha from "../../assets/images/chas.png";
 import comida from "../../assets/images/comidas.png";
 import hamburgers from "../../assets/images/lanches.png";
 import pudim from "../../assets/images/pudim.png";
+import veg from '../../assets/images/prato-vegano-saudavel-.webp'
 import './FoodBanners.css'
+
+import { Link } from 'react-router-dom';
 
 function FoodBanner({ img, text, route }) {
     return(
-        <div className="banner suprise-banner">
+        <Link to={`/recipe-list?tag=${text}`} className="banner">
             <img src={img} alt="" />
             <h1>{text}</h1>
-        </div>
+        </Link>
     )
 }
 
@@ -38,13 +41,14 @@ export default function FoodBanners() {
             route: ''
         },
         {
-            text: 'Bolos',
-            img: bolo,
+            text: 'Veganos',
+            img: veg,
             route: ''
         },
     ]
     
     return(
+    <>
         <div className="banners">
             {banners.map((banner) => {
                 return(
@@ -52,5 +56,6 @@ export default function FoodBanners() {
                 )
             })}
         </div>
+    </>
     )
 }

@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react'
 import noImg from '../assets/images/noImg.jpg'
 import { useSearchParams, useNavigate } from 'react-router-dom'; // Adicionado useNavigate
 
-import { RecipeService } from '../services/apiService'
+import { RecipeService, UserService } from '../services/apiService'
 
 import './RecipeListPage.css'
 
@@ -56,6 +56,7 @@ export default function RecipeListPage({ currentUser }) {
         const [searchParams, setSearchParams] = useSearchParams(); 
         const searchTerm = searchParams.get('q'); 
         const favorites = searchParams.get('favorites'); 
+        const tag = searchParams.get('tag'); 
     
         // Estados de Layout
         const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
@@ -83,8 +84,6 @@ export default function RecipeListPage({ currentUser }) {
     }
 
         useEffect(() => {
-            console.log(searchTerm);
-            
             const fetchRecipes = async () => {
                 setIsLoading(true);
                 setError(null);
@@ -93,14 +92,18 @@ export default function RecipeListPage({ currentUser }) {
                     
                     if (favorites === 'true') {
                         console.log('Buscando receitas favoritas...');
-                        fetchedRecipes = []; 
-                    
+                        fetchedRecipes = await UserService.getFavorites();
+                        console.log(fetchedRecipes);
+                        
                     // Lógica de Busca (Se houver termo de busca ou se for nulo/vazio)
                     } else if (searchTerm !== null) {
                         console.log(`Buscando receitas com o termo: "${searchTerm}"`);
                         // Rota: GET /api/recipes/search?q=...
                         fetchedRecipes = await RecipeService.searchRecipes(searchTerm);
                     
+                    } else if(tag) {
+                        console.log(tag);
+                        fetchedRecipes = await RecipeService.getRecipesByTag(tag);
                     // Fallback 
                     } else {
                         console.log('Buscando todas as receitas (fallback)');
@@ -117,12 +120,13 @@ export default function RecipeListPage({ currentUser }) {
             };
 
             fetchRecipes();
-        }, [searchTerm, favorites]); // Re-executa se a busca ou o filtro de favoritos mudar
+        }, [searchTerm, favorites, tag]); // Re-executa se a busca ou o filtro de favoritos mudar
 
     // Define o título da página
     const getPageTitle = () => {
         if (favorites === 'true') return 'Minhas Receitas Favoritas';
         if (searchTerm) return `Resultados para: "${searchTerm}"`;
+        if (tag) return `Resltados para: "${tag}"`
         return 'Todas as Receitas';
     };
 

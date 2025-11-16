@@ -21,7 +21,7 @@ export default function AuthPage() {
 
     const handleGoHome = () => {
         // Lógica de navegação real:
-        navigate('/Home');  
+        window.location.href = '/home'; 
     };
     // 2. Função de manipulação do formulário (Login/Cadastro)
     const handleSubmit = async (e) => {

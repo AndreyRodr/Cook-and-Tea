@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { UserService } from '../../services/apiService';
 import { IoIosHeartEmpty, IoIosHeart } from "react-icons/io";
 import { IconContext } from "react-icons";
 import './FavoriteButton.css';
@@ -13,19 +14,41 @@ import './FavoriteButton.css';
 export default function FavoriteButton({ recipeId, initialState = false }) {
     const [isFavorite, setIsFavorite] = useState(initialState);
 
-    const handleToggleFavorite = () => {
-        const newState = !isFavorite;
-        setIsFavorite(newState);
 
-        // Aqui você faria a chamada de API para adicionar/remover dos favoritos
-        if (newState) {
-            console.log(`Receita ${recipeId} adicionada aos favoritos!`);
-            // Exemplo: API.addFavorite(recipeId);
-        } else {
-            console.log(`Receita ${recipeId} removida dos favoritos.`);
-            // Exemplo: API.removeFavorite(recipeId);
+    const handleToggleFavorite = async () => {
+        try{
+            if(!isFavorite) {
+                await UserService.addFavorite(recipeId)
+                setIsFavorite(true)
+            } else {
+                await UserService.removeFavorite(recipeId)
+                setIsFavorite(false)
+            }
+        } catch(err) {
+            console.error(`Erro ao adicionar a receita aos favoritos: ${err}`);
         }
     };
+
+    useEffect(() => {
+        const checkFavoriteStatus = async () => {
+            try {
+                const favoritesList = await UserService.getFavorites(); 
+
+                const isAlreadyFavorite = favoritesList.some(
+                    (recipe) => recipe.recipeId === recipeId
+                );
+                
+                setIsFavorite(isAlreadyFavorite);
+
+            } catch (err) {
+                console.error("Erro ao verificar status de favorito:", err);
+                setIsFavorite(initialState); 
+            } 
+        };
+
+        checkFavoriteStatus();
+        
+    }, [recipeId, initialState]);
 
     return (
         <button 

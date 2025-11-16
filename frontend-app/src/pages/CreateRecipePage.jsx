@@ -58,7 +58,6 @@ export default function CreateRecipePage({ currentUser }) {
             }
         }
 
-        console.log(formData.values());
         try {
             const newRecipe = await RecipeService.createRecipe(formData);
 
@@ -118,14 +117,23 @@ export default function CreateRecipePage({ currentUser }) {
                         </div>
                         
                         {/* Categoria */}
-                        <InputBox
-                            label="Categoria"
-                            type="text"
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            placeholder="Ex: Doces, Prato Principal, Lanches"
-                            required
-                        />
+                        <div className="form-group-select">
+                            <label htmlFor="category">Categoria</label>
+                            <select
+                                id="category"
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                                className="custom-select" // Usaremos esta classe para estilizar
+                                required
+                            >
+                                <option value="" disabled>Selecione uma categoria</option>
+                                <option value="Lanches">Lanches</option>
+                                <option value="Salgados">Salgados</option>
+                                <option value="Doces">Doces</option>
+                                <option value="Bebidas">Bebidas</option>
+                                <option value="Veganos">Veganos</option>
+                            </select>
+                        </div>
 
                         {/* Tempo de Preparo e Porções em uma linha (Flexbox) */}
                         <div className="time-servings-group">

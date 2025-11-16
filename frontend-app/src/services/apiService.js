@@ -65,6 +65,12 @@ export const AuthService = {
             method: 'POST',
             body: JSON.stringify({ name, email, password, type }),
         });
+    },
+
+    logout: () => {
+        return apiFetch('/auth/logout', {
+            method: 'POST',
+        });
     }
 };
 
@@ -97,6 +103,36 @@ export const UserService = {
         return apiFetchFormData('/users/current/profile-pic', {
             method: 'POST',
             body: formData,
+        });
+    },
+    /**
+     * Busca a lista de receitas favoritas do usuário logado
+     * Rota: GET /api/users/current/favorites
+     */
+    getFavorites: () => {
+        return apiFetch('/users/current/favorites', {
+            method: 'GET',
+        });
+    },
+
+    /**
+     * Adiciona uma receita aos favoritos
+     * Rota: POST /api/users/current/favorites
+     */
+    addFavorite: (recipeId) => {
+        return apiFetch('/users/current/favorites', {
+            method: 'POST',
+            body: JSON.stringify({ recipeId }),
+        });
+    },
+
+    /**
+     * Remove uma receita dos favoritos
+     * Rota: DELETE /api/users/current/favorites/:recipeId
+     */
+    removeFavorite: (recipeId) => {
+        return apiFetch(`/users/current/favorites/${recipeId}`, {
+            method: 'DELETE',
         });
     }
 };
@@ -135,6 +171,16 @@ export const RecipeService = {
     
     getRecipeById: (id) => {
         return apiFetch(`/recipes/${id}`, {
+            method: 'GET',
+        });
+    },
+
+    /**
+     * BUSCA receitas que contenham {tag}
+     * @param {string} tag 
+     */
+    getRecipesByTag: (tag) => {
+        return apiFetch(`/recipes/tag/${tag}`, {
             method: 'GET',
         });
     },
