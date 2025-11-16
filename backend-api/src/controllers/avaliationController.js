@@ -1,4 +1,39 @@
-import { Avaliation, User, Recipe } from '../models/index.js';
+import { Avaliation, User, Recipe, sequelize } from '../models/index.js';
+
+const updateRecipeStats = async (recipeId, transaction) => {
+    try {
+        // Calcula as novas estatísticas
+        const stats = await Avaliation.findOne({
+            where: { recipeId: recipeId },
+            attributes: [
+                [sequelize.fn('COUNT', sequelize.col('id')), 'count'], 
+                [sequelize.fn('AVG', sequelize.col('stars')), 'avg']
+            ],
+            raw: true, 
+            transaction: transaction
+        });
+
+        // Prepara os valores com segurança (tratando nulos)
+        const avaliationsAmount = parseInt(stats?.count || 0, 10);
+        const starsAvg = parseFloat(stats?.avg || 0);
+
+        // Atualiza a tabela Recipe com os novos valores
+        await Recipe.update(
+            { 
+                starsAvg: starsAvg, 
+                avaliationsAmount: avaliationsAmount 
+            },
+            { 
+                where: { recipeId: recipeId } ,
+                transaction: transaction 
+            }
+        );
+
+    } catch (err) {
+        console.error("Erro ORIGINAL ao atualizar estatísticas da receita:", err); 
+        throw new Error("Falha ao atualizar estatísticas da receita.");
+    }
+};
 
 /**
  * @desc    Criar uma nova avaliação
@@ -17,10 +52,16 @@ export const createAvaliation = async (req, res) => {
             return res.status(400).json({ message: "Faltando 'stars' ou 'recipeId'." });
         }
 
-        const newAvaliation = await Avaliation.create({
-            stars,
-            userId: userId,
-            recipeId: recipeId
+        const newAvaliation = await sequelize.transaction(async (t) => {
+            const avaliation = await Avaliation.create({
+                stars,
+                userId: userId,
+                recipeId: recipeId
+            }, { transaction: t });
+
+            await updateRecipeStats(recipeId, t);
+
+            return avaliation;
         });
 
         res.status(201).json(newAvaliation);
@@ -76,9 +117,6 @@ export const updateAvaliation = async (req, res) => {
         const { stars } = req.body; 
         const userId = req.user.userId; 
 
-        console.log(userId);
-        
-
         const avaliation = await Avaliation.findByPk(id);
         
         if (!avaliation) {
@@ -89,10 +127,18 @@ export const updateAvaliation = async (req, res) => {
             return res.status(403).json({ message: "Acesso negado. Você não é o dono desta avaliação." });
         }
 
-        avaliation.stars = stars;
-        await avaliation.save();
+        const { recipeId } = avaliation; 
 
-        res.status(200).json(avaliation);
+        const updatedAvaliation = await sequelize.transaction(async (t) => {
+            avaliation.stars = stars;
+            await avaliation.save({ transaction: t });
+
+            await updateRecipeStats(recipeId, t);
+            
+            return avaliation;
+        });
+
+        res.status(200).json(updatedAvaliation);
 
     } catch (err) {
         console.error("Erro ao editar avaliação: ", err);
@@ -123,7 +169,13 @@ export const deleteAvaliation = async (req, res) => {
             return res.status(403).json({ message: "Acesso negado." });
         }
 
-        await avaliation.destroy();
+        const { recipeId } = avaliation;
+
+        await sequelize.transaction(async (t) => {
+            await avaliation.destroy({ transaction: t });
+
+            await updateRecipeStats(recipeId, t);
+        });
 
         res.status(200).json({ message: "Avaliação deletada com sucesso." });
 

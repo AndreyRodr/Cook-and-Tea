@@ -1,6 +1,7 @@
 import { Recipe, User, Avaliation, sequelize } from '../models/index.js' 
 import RecipeImage from '../models/recipeImageModel.js';
 import { uploadFileToS3, deleteFileFromS3 } from '../utils/s3Service.js';
+import { Op } from 'sequelize';
 
 /**
  * 
@@ -38,7 +39,6 @@ export const createRecipe = async (req, res) => {
                 portions
             }
         );
-        console.log(newRecipe);
         if (req.files && req.files.length > 0) {
             const uploadPromises = req.files.map(file => uploadFileToS3(file));
             const imageUrls = await Promise.all(uploadPromises);
@@ -69,11 +69,10 @@ export const getAllRecipes = async (req, res) => {
     try {
         const recipes = await Recipe.findAll({
             order: [['createdAt', 'DESC']],
-            include: {
-                model: User,
-                as: 'user',
-                attributes: ['userId']
-            }
+            include: [
+                { model: User, as: 'user', attributes: ['userId'] },
+                { model: Avaliation, as: 'avaliations', include: { model: User, attributes: ['userId', 'name'] } },
+                { model: RecipeImage, as: 'recipeImages', attributes: ['imageUrl'] } ]
         });
         res.status(200).json(recipes);
     } catch (err) {
@@ -129,18 +128,34 @@ export const getRecipeByAuthor = async (req, res) => {
  */
 export const getRecipeByName = async (req, res) => {
     try {
-        const query = req.query.q;
+        const { q, favorites } = req.query;
+
+        let whereCondition = {};
+
+        if (q) {
+            whereCondition.name = {
+                [Op.iLike]: `%${q}%`
+            };
+        }
+
+        if (favorites === 'true') {;
+            whereCondition.tags = {
+                [Op.contains]: ['favoritos']
+            };
+        }
+
         const recipes = await Recipe.findAll({
-            where: {
-                name: {
-                    [Op.iLike]: `%${query}%` 
-                }
-            },
-            include: { model: User, as: 'user', attributes: ['userId', 'name'] }
+            where: whereCondition,
+            include: [
+                { model: User, as: 'user', attributes: ['userId'] },
+                { model: Avaliation, as: 'avaliations', include: { model: User, attributes: ['userId', 'name'] } },
+                { model: RecipeImage, as: 'recipeImages', attributes: ['imageUrl'] } 
+            ]
         });
+
         res.status(200).json(recipes);
     } catch (err) {
-        console.error("Erro ao buscar por nome: ", err);
+        console.error("Erro ao buscar receitas: ", err);
         res.status(500).json({ message: "Erro no servidor" });
     }
 };
