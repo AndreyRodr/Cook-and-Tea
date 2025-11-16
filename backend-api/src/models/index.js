@@ -73,5 +73,17 @@ Recipe.hasMany(RecipeImage, {
 });
 RecipeImage.belongsTo(Recipe, { foreignKey: 'recipeId' });
 
+User.belongsToMany(Recipe, {
+    through: 'UserFavorites',    
+    foreignKey: 'userId',    
+    as: 'FavoriteRecipes'      
+});
+
+Recipe.belongsToMany(User, {
+    through: 'UserFavorites',  
+    foreignKey: 'recipeId',    
+    as: 'FavoritedByUsers'     
+});
+
 
 export { sequelize, User, Recipe, Avaliation, RecipeImage };

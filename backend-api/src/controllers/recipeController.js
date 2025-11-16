@@ -173,7 +173,11 @@ export const getRecipeByTag = async (req, res) => {
                     [Op.contains]: [tagname] 
                 }
             },
-            include: { model: User, as: 'user', attributes: ['userId', 'name'] }
+            include: [
+                { model: User, as: 'user', attributes: ['userId'] },
+                { model: Avaliation, as: 'avaliations', include: { model: User, attributes: ['userId', 'name'] } },
+                { model: RecipeImage, as: 'recipeImages', attributes: ['imageUrl'] } 
+            ]
         });
         res.status(200).json(recipes);
     } catch (err) {

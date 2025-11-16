@@ -31,10 +31,20 @@ router.post(
 );
 
 // GET /api/users/:userId/profile-pic (Ver a foto de qualquer usuário)
-// IMPORTANTE: Esta rota deve vir ANTES de '/:userId'
 router.get('/:userId/profile-pic', userController.getProfilePic);
 
 // GET /api/users/:id
 router.get('/:userId', userController.getUserById)
+
+
+// GET /api/users/current/favorites
+// POST /api/users/current/favorites
+router.route('/current/favorites')
+.get(protect, userController.listFavorites)   
+.post(protect, userController.addFavorite);
+
+// DELETE /api/users/current/favorites/:recipeId
+router.route('/current/favorites/:recipeId')
+    .delete(protect, userController.removeFavorite); 
 
 export default router;

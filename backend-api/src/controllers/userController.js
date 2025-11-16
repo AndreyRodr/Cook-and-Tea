@@ -264,3 +264,87 @@ export const getProfilePic = async (req, res) => {
         res.status(500).json({ message: 'Erro no servidor.' });
     }
 };
+
+/**
+ * @desc    Listar receitas favoritas do usuário logado
+ * @route   GET /api/users/current/favorites
+ */
+export const listFavorites = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const user = await User.findByPk(userId, {
+            // Usa o 'alias' que definimos no index.js para incluir as receitas
+            include: {
+                model: Recipe,
+                as: 'FavoriteRecipes',
+                attributes: { exclude: [] },
+                through: { attributes: [] } 
+            }
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        res.status(200).json(user.FavoriteRecipes);
+    } catch (error) {
+        console.error('Erro ao listar favoritos:', error);
+        res.status(500).json({ message: 'Erro no servidor.' });
+    }
+};
+
+/**
+ * @desc    Adicionar uma receita aos favoritos
+ * @route   POST /api/users/current/favorites
+ */
+export const addFavorite = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { recipeId } = req.body; // O frontend enviará o ID da receita
+
+        if (!recipeId) {
+            return res.status(400).json({ message: 'ID da receita é obrigatório.' });
+        }
+
+        const user = await User.findByPk(userId);
+        const recipe = await Recipe.findByPk(recipeId);
+
+        if (!user || !recipe) {
+            return res.status(404).json({ message: 'Usuário ou receita não encontrado.' });
+        }
+
+        // Método "mágico" do Sequelize: add[Alias]
+        await user.addFavoriteRecipe(recipe);
+
+        res.status(201).json({ message: 'Receita adicionada aos favoritos.' });
+    } catch (error) {
+        console.error('Erro ao adicionar favorito:', error);
+        res.status(500).json({ message: 'Erro no servidor.' });
+    }
+};
+
+/**
+ * @desc    Remover uma receita dos favoritos
+ * @route   DELETE /api/users/current/favorites/:recipeId
+ */
+export const removeFavorite = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { recipeId } = req.params; // O ID vem da URL
+
+        const user = await User.findByPk(userId);
+        const recipe = await Recipe.findByPk(recipeId);
+
+        if (!user || !recipe) {
+            return res.status(404).json({ message: 'Usuário ou receita não encontrado.' });
+        }
+
+        // Método "mágico" do Sequelize: remove[Alias]
+        await user.removeFavoriteRecipe(recipe);
+
+        res.status(200).json({ message: 'Receita removida dos favoritos.' });
+    } catch (error) {
+        console.error('Erro ao remover favorito:', error);
+        res.status(500).json({ message: 'Erro no servidor.' });
+    }
+};

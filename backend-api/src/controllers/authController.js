@@ -45,3 +45,15 @@ export const login = async (req, res) => {
         res.status(500).json({ message: 'Erro no servidor.' });
     }
 };
+
+/**
+ * @desc    Deslogar um usuário e limpar o cookie
+ * @route   POST /api/auth/logout
+ */
+export const logout = (req, res) => {
+    res.cookie('jwt', '', { // Seta o cookie 'jwt' como vazio
+        httpOnly: true,
+        expires: new Date(0), // Define a data de expiração para o passado
+    });
+    res.status(200).json({ message: 'Logout realizado com sucesso.' });
+};
