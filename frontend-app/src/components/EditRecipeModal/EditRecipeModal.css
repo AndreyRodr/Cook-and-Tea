@@ -1,0 +1,119 @@
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 900px;
+    height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    color: #888;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Reutiliza o layout de 'CreateRecipePage' */
+.edit-recipe-form .create-recipe-page {
+    padding: 0;
+    gap: 20px;
+}
+
+/* Ajustes no formulário dentro do modal */
+.edit-recipe-form .form-column {
+    flex-basis: 48%;
+}
+
+.edit-recipe-form label {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.edit-recipe-form input[type="text"],
+.edit-recipe-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: var(--font-primary);
+}
+
+.edit-recipe-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.edit-recipe-form .dynamic-field {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.edit-recipe-form .dynamic-field input,
+.edit-recipe-form .dynamic-field textarea {
+    flex-grow: 1;
+}
+
+.edit-recipe-form .dynamic-field button {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+
+.edit-recipe-form .add-field-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+    font-size: 0.9rem;
+}
+
+.edit-recipe-form .form-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.edit-recipe-form .error-message {
+    color: red;
+    margin-top: 10px;
+}

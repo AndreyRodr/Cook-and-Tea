@@ -14,7 +14,7 @@ export default function MobileSearchBar( {searchSetter, isOpened} ) {
         searchSetter(text)
 
         if (text.trim() !== "") {
-            navigate(`/recipe-list?q=${encodeURIComponent(text)}`);
+            navigate(`/recipe-list?favorites=false&q=${encodeURIComponent(text)}`);
         }
     }
 

@@ -19,7 +19,7 @@ export function ReadOnlyStarsRate({ rate }) {
         <Box sx={{ '& > legend': { mt: 2 } }}>
             <StyledRating 
                 name="half-rating" 
-                defaultValue={rate} 
+                value={rate} 
                 precision={0.5} 
                 icon={<StarIcon fontSize="inherit" />}
                 emptyIcon={<StarBorderOutlinedIcon fontSize="inherit" />}
@@ -28,15 +28,18 @@ export function ReadOnlyStarsRate({ rate }) {
     );
 }
 
-export function StarsRate() {
+export function StarsRate({ onChange, disabled = false, initialValue = 0 }) {
     return (
         <Box sx={{ '& > legend': { mt: 2 } }}>
             <StyledRating 
                 name="half-rating" 
-                defaultValue={0} 
+                defaultValue={initialValue} 
                 precision={0.5} 
                 icon={<StarIcon fontSize="inherit" />}
-                emptyIcon={<StarBorderOutlinedIcon fontSize="inherit" />}/>
+                emptyIcon={<StarBorderOutlinedIcon fontSize="inherit" />}
+                onChange={onChange} 
+                disabled={disabled}
+                />
         </Box>
     );
 }

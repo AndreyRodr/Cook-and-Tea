@@ -15,22 +15,17 @@ import { RecipeService } from '../services/apiService'
 
 import './RecipeListPage.css'
 
-// 1. Componente RecipeElement (Lógica de navegação adicionada)
 function RecipeElement( {recipe} ){
     const navigate = useNavigate();
-    
-    // Define a imagem (se houver) ou usa a imagem padrão
-    // (O backend não retorna imagens na busca geral, então usará noImg)
-    const recipeImage = (recipe.images && recipe.images[0]) ? recipe.images[0] : noImg;
+    const imageUrl = recipe?.recipeImages?.[0]?.imageUrl || noImg;
 
-    // Handler para navegar para a página da receita
     const handleRecipeClick = () => {
         navigate(`/recipe/${recipe.recipeId}`);
     };
 
     return(
-        <div className="recipe-element" onClick={handleRecipeClick}> {/* Adicionado onClick */}
-            <img src={recipeImage} alt={recipe.name} /> 
+        <div className="recipe-element" onClick={handleRecipeClick}>
+            <img src={imageUrl} alt={recipe.name} /> 
             <div className="info-content">
                 <h3>{recipe.name}</h3>
                 <p>{recipe.description}</p>
@@ -44,9 +39,10 @@ function RecipeElement( {recipe} ){
 }
 
 function RecipeList( {recipes} ) {
+
     return(
         <div className="recipe-list">
-            {recipes.map((recipe) => { // Removido 'index' como key
+            {recipes.map((recipe) => {
                 return(
                     <RecipeElement key={recipe.recipeId} recipe={recipe}/>
                 )
@@ -55,15 +51,15 @@ function RecipeList( {recipes} ) {
     )
 }
 
-// 2. Recebe 'currentUser' do App.jsx
+// Recebe 'currentUser' do App.jsx
 export default function RecipeListPage({ currentUser }) {
-        const [searchParams] = useSearchParams(); 
+        const [searchParams, setSearchParams] = useSearchParams(); 
         const searchTerm = searchParams.get('q'); 
         const favorites = searchParams.get('favorites'); 
     
         // Estados de Layout
         const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
-        const [searchText, setSearchText] = useState('')
+        const [searchText, setSearchText] = useState(searchTerm || '')
 
         // Estados dos Dados
         const [recipes, setRecipes] = useState([]);
@@ -74,28 +70,38 @@ export default function RecipeListPage({ currentUser }) {
             setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
         }
 
-        // 3. useEffect para buscar dados da API
+        const handleSearch = (textFromInput) => {
+        // Atualiza o estado local para o input ser controlado
+        setSearchText(textFromInput);
+
+        // Atualiza a URL
+        // Pega todos os parâmetros atuais (para não perder os 'favorites')
+        const currentParams = Object.fromEntries(searchParams.entries());
+        
+        // Define o novo 'q' e mantém os outros parâmetros
+        setSearchParams({ ...currentParams, q: textFromInput });
+    }
+
         useEffect(() => {
+            console.log(searchTerm);
+            
             const fetchRecipes = async () => {
                 setIsLoading(true);
                 setError(null);
                 try {
                     let fetchedRecipes;
                     
-                    // Lógica para Favoritos (API não implementada, mas a lógica do frontend está aqui)
                     if (favorites === 'true') {
                         console.log('Buscando receitas favoritas...');
-                        // No futuro: fetchedRecipes = await RecipeService.getFavorites();
-                        // Por enquanto, mostraremos nenhuma receita para favoritos:
                         fetchedRecipes = []; 
                     
                     // Lógica de Busca (Se houver termo de busca ou se for nulo/vazio)
-                    } else if (searchTerm || searchTerm === '') {
+                    } else if (searchTerm !== null) {
                         console.log(`Buscando receitas com o termo: "${searchTerm}"`);
                         // Rota: GET /api/recipes/search?q=...
                         fetchedRecipes = await RecipeService.searchRecipes(searchTerm);
                     
-                    // Fallback (se nenhum parâmetro for passado)
+                    // Fallback 
                     } else {
                         console.log('Buscando todas as receitas (fallback)');
                         fetchedRecipes = await RecipeService.getAllRecipes();
@@ -123,12 +129,12 @@ export default function RecipeListPage({ currentUser }) {
     return (
         <div className="recipe-list-page">
             <Header
-                searchSetter={setSearchText} 
+                searchSetter={handleSearch} 
                 searchBarHandle={mobileSearchBarHandle}
                 currentUser={currentUser} // Passa o usuário
             />
             <Navbar currentUser={currentUser} /> {/* Passa o usuário */}
-            <MobileSearchBar searchSetter={setSearchText} isOpened={isMobileSearchBarOpened} />
+            <MobileSearchBar searchSetter={handleSearch} isOpened={isMobileSearchBarOpened} />
             
             <h1 style={{padding: '20px', color: 'var(--primary-color)'}}>
                 {getPageTitle()}

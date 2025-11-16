@@ -235,3 +235,58 @@
     }
     
 }
+
+.recipe-owner-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding: 0px 40px;
+    margin: 10px 0;
+    max-width: 1400px;
+    width: 100%;
+    box-sizing: border-box; /* Garante que o padding não quebre o layout */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Opcional: Estilo 'danger' para o botão de excluir */
+/* (Você precisa adicionar 'styleType' no seu componente Button.jsx) */
+/* Se não funcionar, o botão apenas ficará verde */
+.recipe-owner-actions .button-danger {
+    background-color: #e63946; /* Vermelho perigo */
+}
+.recipe-owner-actions .button-danger:hover {
+    background-color: #d0303c;
+}
+
+
+/* Botões de Ação (Mobile) */
+.recipe-owner-actions-mobile {
+    display: none; /* Escondido por padrão */
+    position: fixed;
+    bottom: 60px; /* Acima do 'mobile-user-avatar' */
+    left: 0;
+    width: 100%;
+    background: #fff;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    padding: 10px;
+    justify-content: center;
+    gap: 20px;
+    z-index: 50;
+}
+
+
+@media (max-width: 768px) {
+    .recipe-owner-actions {
+        display: none; /* Esconde botões do desktop em mobile */
+    }
+
+    .recipe-owner-actions-mobile {
+        display: flex; /* Mostra botões mobile */
+    }
+
+    /* Ajusta a página para ter espaço para os botões mobile */
+    .recipe-page main {
+        padding-bottom: 120px; /* Espaço para botões de ação + avatar */
+    }
+}

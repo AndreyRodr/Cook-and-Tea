@@ -90,7 +90,6 @@ export const UserService = {
         });
     },
 
-    // 2. FUNÇÃO ADICIONADA (QUE ESTAVA FALTANDO)
     /**
      * @param {FormData} formData - O FormData com a foto de perfil.
      */
@@ -138,5 +137,41 @@ export const RecipeService = {
         return apiFetch(`/recipes/${id}`, {
             method: 'GET',
         });
+    },
+
+    /**
+     * ATUALIZA uma receita existente.
+     * Rota: PUT /api/recipes/:id
+     * @param {string} id - O ID da receita
+     * @param {FormData} formData - O FormData com os dados (incluindo imagens)
+     */
+    updateRecipe: (id, formData) => {
+        return apiFetchFormData(`/recipes/${id}`, {
+            method: 'PUT',
+            body: formData,
+        });
+    },
+
+    /**
+     * DELETA uma receita.
+     * Rota: DELETE /api/recipes/:id
+     */
+    deleteRecipe: (id) => {
+        return apiFetch(`/recipes/${id}`, {
+            method: 'DELETE',
+        });
     }
+};
+
+export const AvaliationService = {
+    /**
+     * Cria uma nova avaliação.
+     * Rota: POST /api/avaliations
+     */
+    createAvaliation: (stars, recipeId) => {
+        return apiFetch('/avaliations', {
+            method: 'POST',
+            body: JSON.stringify({ stars, recipeId }),
+        });
+    },
 };

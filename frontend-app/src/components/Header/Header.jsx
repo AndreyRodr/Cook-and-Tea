@@ -15,7 +15,7 @@ function SearchBar( {searchSetter} ) {
         searchSetter(text)
 
         if (text.trim() !== "") {
-            navigate(`/recipe-list?favorites=false&?q=${encodeURIComponent(text)}`);
+            navigate(`/recipe-list?favorites=false&q=${encodeURIComponent(text)}`);
         }
     }
 
