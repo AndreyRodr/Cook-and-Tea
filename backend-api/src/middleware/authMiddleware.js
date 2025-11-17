@@ -31,5 +31,13 @@ export const protect = async (req, res, next) => {
     } else {
         return res.status(401).json({ message: 'Não autorizado, sem token.' });
     }
-}
+};
 
+export const protectChef = (req, res, next) => {
+    // 'protect' deve ter sido executado antes, adicionando req.user
+    if (req.user && req.user.type === 'chefe') {
+        next(); // Usuário é chefe, pode continuar
+    } else {
+        res.status(403).json({ message: 'Acesso negado. Rota restrita para Chefes.' });
+    }
+};

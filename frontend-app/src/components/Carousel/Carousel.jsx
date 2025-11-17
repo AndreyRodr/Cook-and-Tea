@@ -33,13 +33,13 @@ export default function Carousel({ images }) {
             ) : (
                 // Se houver imagens, renderiza o carrossel
                 <>
-                    <button onClick={goToPrevious} className="carousel-button prev">&lt;</button>
+                    <button type="button" onClick={goToPrevious} className="carousel-button prev">&lt;</button>
                     <img 
                         src={images[currentIndex]} 
                         alt={`Imagem da receita ${currentIndex + 1}`} 
                         className="carousel-image" 
                     />
-                    <button onClick={goToNext} className="carousel-button next">&gt;</button>
+                    <button type="button" onClick={goToNext} className="carousel-button next">&gt;</button>
                     
                     <div className="carousel-dots">
                         {images.map((_, index) => (

@@ -1,3 +1,4 @@
+import { URL } from 'url';
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import 'dotenv/config';
 
@@ -28,8 +29,9 @@ export async function uploadFileToS3(file) {
     try {
         await s3Client.send(command);
 
+        const encodedFileName = encodeURIComponent(fileName);
         // Retorna a URL pública
-        return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/${fileName}`;
+        return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/${encodedFileName}`;
         
     } catch (error) {
         console.error("Erro no upload para o S3:", error);
@@ -50,22 +52,26 @@ export async function deleteFileFromS3(fileUrl) {
     try {
         // extrai a "Key" (o nome do arquivo) da URL
         const url = new URL(fileUrl);
-        const key = url.pathname.substring(1); // Remove a "/" inicial do caminho
 
-        if (!key) {
+        const decodePathname = decodeURIComponent(url.pathname);
+        const fileKey = decodePathname.substring(1); // Remove a "/" inicial do caminho
+
+
+        if (!fileKey) {
             console.warn(`Não foi possível extrair a chave do S3 da URL: ${fileUrl}`);
             return;
         }
 
         const command = new DeleteObjectCommand({
             Bucket: process.env.AWS_BUCKET_NAME,
-            Key: key, // O nome do arquivo no S3
+            Key: fileKey, // O nome do arquivo no S3
         });
 
         await s3Client.send(command);
-        console.log(`Arquivo deletado com sucesso do S3: ${key}`);
+        console.log(`Arquivo deletado com sucesso do S3: ${fileKey}`);
 
     } catch (error) {
         console.error(`Erro ao deletar arquivo do S3 (${fileUrl}):`, error);
+        throw new Error("Falha ao deletar a imagem.");
     }
 }

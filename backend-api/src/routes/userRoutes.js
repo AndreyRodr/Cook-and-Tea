@@ -17,24 +17,20 @@ router.post('/', userController.createUser)
 router.get('/current', protect, userController.getCurrentUser)
 
 // PUT /api/users/current
-router.put('/current', protect, userController.updateCurrentUser)
+router.put('/current', protect, upload.single('profilePic'), userController.updateCurrentUser)
 
 // DELETE /api/users/current
 router.delete('/current', protect, userController.deleteCurrentUser)
 
-// POST /api/users/current/profile-pic (Upload da foto do usuário logado)
-router.post(
-    '/current/profile-pic',
-    protect, // Garante que o usuário está logado (pega req.user)
-    upload.single('profilePic'), // Processa o arquivo ('profilePic' é o nome do campo do form)
-    userController.uploadProfilePic
-);
+// DELETE /api/users/current/profile-pic (Excluir a foto do usuário logado)
+router.delete('/current/profile-pic', protect, userController.deleteProfilePic);
 
 // GET /api/users/:userId/profile-pic (Ver a foto de qualquer usuário)
 router.get('/:userId/profile-pic', userController.getProfilePic);
 
 // GET /api/users/:id
 router.get('/:userId', userController.getUserById)
+
 
 
 // GET /api/users/current/favorites

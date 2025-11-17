@@ -83,10 +83,10 @@ export const UserService = {
     },
     
     // PUT /api/users/current
-    updateProfile: (data) => {
-        return apiFetch('/users/current', {
+    updateProfile: (formData) => {
+        return apiFetchFormData('/users/current', {
             method: 'PUT',
-            body: JSON.stringify(data),
+            body: formData,
         });
     },
 
@@ -105,6 +105,13 @@ export const UserService = {
             body: formData,
         });
     },
+
+    deleteProfilePic: () => {
+        return apiFetch('/users/current/profile-pic', {
+            method: 'DELETE',
+        });
+    },
+
     /**
      * Busca a lista de receitas favoritas do usuário logado
      * Rota: GET /api/users/current/favorites

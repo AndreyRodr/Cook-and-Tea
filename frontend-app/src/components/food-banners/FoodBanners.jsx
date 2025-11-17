@@ -21,12 +21,12 @@ export default function FoodBanners() {
     
     const banners = [
         {
-            text: 'Lanches',
+            text: 'Salgados',
             img: hamburgers,
             route: ''
         },
         {
-            text: 'Comidas',
+            text: 'Refeições',
             img: comida,
             route: ''
         },

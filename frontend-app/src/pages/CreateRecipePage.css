@@ -84,6 +84,7 @@
 /* Estilo para Inputs que ficam lado a lado (Tempo e Porções) */
 .time-servings-group {
     display: flex;
+    flex-direction: column;
     gap: 20px;
 }
 
@@ -104,12 +105,34 @@
     border-radius: 8px;
     background-color: #f9f9f9;
 }
-.HomeButton {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1000;
+
+.form-group-carousel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 5px; /* Espaço entre o carrossel e o input */
 }
+
+.form-group-carousel label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2b2520f5;
+    margin-bottom: 8px;
+}
+
+/* Sobrescreve a altura padrão do carrossel para ser menor no formulário */
+.form-group-carousel .carousel-container {
+    max-height: 300px; 
+    min-height: 200px; /* Garante altura mínima mesmo no placeholder */
+    margin-bottom: 0; /* Remove a margem padrão do carrossel */
+}
+
+/* Garante que o placeholder (Nenhuma imagem) também tenha a altura mínima */
+.form-group-carousel .carousel-placeholder {
+    min-height: 200px;
+    height: 100%;
+}
+
 /* Media Query para Navbar em Desktop */
 @media (max-width: 1023px) {
     .content {
@@ -121,6 +144,58 @@
     /* O Navbar não é mais fixo no desktop, basta um padding-bottom normal */
     .content {
         padding-bottom: 40px; 
+    }
+
+    .time-servings-group{
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .form-group-carousel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 5px; /* Espaço entre o carrossel e o input */
+}
+
+    .form-group-carousel label {
+        font-size: 16px;
+        font-weight: 600;
+        color: #2b2520f5;
+        margin-bottom: 8px;
+        
+    }
+
+    /* Sobrescreve a altura padrão do carrossel para ser menor no formulário */
+    .form-group-carousel .carousel-container {
+        max-height: 300px; 
+        min-height: 200px; /* Garante altura mínima mesmo no placeholder */
+        margin-bottom: 0; /* Remove a margem padrão do carrossel */
+        align-self: center;
+    }
+
+    /* Garante que o placeholder (Nenhuma imagem) também tenha a altura mínima */
+    .form-group-carousel .carousel-placeholder {
+        min-height: 200px;
+        height: 100%;
+    }
+
+    /* Estilo para upload de imagem */
+    .form-group-image {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0;
+        align-items: center;
+        
+    }
+
+    .form-group-image input[type="file"] {
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        align-self: center;
     }
 }
 

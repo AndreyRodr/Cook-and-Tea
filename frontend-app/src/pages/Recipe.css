@@ -138,6 +138,10 @@
         max-width: 100%; 
         
     }
+
+.author-pic {
+        align-self: center;
+    }
 /* DESKTOP LAYOUT (A partir de 1024px) */
 @media (min-width: 1024px) {
     .recipe-page main {
@@ -249,9 +253,6 @@
     margin-right: auto;
 }
 
-/* Opcional: Estilo 'danger' para o botão de excluir */
-/* (Você precisa adicionar 'styleType' no seu componente Button.jsx) */
-/* Se não funcionar, o botão apenas ficará verde */
 .recipe-owner-actions .button-danger {
     background-color: #e63946; /* Vermelho perigo */
 }

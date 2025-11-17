@@ -3,6 +3,7 @@ import Recipe from '../models/recipeModel.js'
 import Avaliation from '../models/avaliationModel.js'
 import generateToken from '../utils/generateToken.js';
 import { uploadFileToS3, deleteFileFromS3 } from '../utils/s3Service.js';
+import { profile } from 'console';
 
 /**
  * @desc Cria um usuário
@@ -111,6 +112,16 @@ export const updateCurrentUser = async (req, res) => {
             user.password = password;
         }
 
+        if (req.file) {
+            // Se um arquivo foi enviado, faz o upload para o S3
+            if (user.profilePicUrl) {
+                // Se já existe uma imagem, deleta a antiga
+                await deleteFileFromS3(user.profilePicUrl);
+            }
+            const imageUrl = await uploadFileToS3(req.file);
+            user.profilePicUrl = imageUrl;
+        }
+
         const userUpdated = await user.save();
 
         res.status(200).json({
@@ -118,6 +129,7 @@ export const updateCurrentUser = async (req, res) => {
             name: userUpdated.name,
             type: userUpdated.type,
             email: userUpdated.email,
+            profilePicUrl: userUpdated.profilePicUrl
         });
 
     } catch (error) {
@@ -345,6 +357,37 @@ export const removeFavorite = async (req, res) => {
         res.status(200).json({ message: 'Receita removida dos favoritos.' });
     } catch (error) {
         console.error('Erro ao remover favorito:', error);
+        res.status(500).json({ message: 'Erro no servidor.' });
+    }
+};
+
+/**
+ * @desc    Excluir a foto de perfil
+ * @route   DELETE /api/users/current/profile-pic
+ */
+export const deleteProfilePic = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        // 1. Pega a URL antiga antes de apagar
+        const oldFileUrl = user.profilePicUrl;
+
+        // 2. Apaga a URL do banco de dados (Neon)
+        user.profilePicUrl = null;
+        // 3. Apaga o arquivo do S3 (AWS)
+        await deleteFileFromS3(oldFileUrl);
+        await user.save();
+
+
+        res.status(200).json({ message: 'Foto de perfil removida com sucesso.' });
+
+    } catch (error) {
+        console.error('Erro ao remover foto de perfil:', error);
         res.status(500).json({ message: 'Erro no servidor.' });
     }
 };

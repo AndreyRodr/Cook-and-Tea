@@ -57,7 +57,7 @@ export default function Home({ currentUser }) {
 
             <MobileSearchBar searchSetter={setSearchText} isOpened={isMobileSearchBarOpened} />
             <p className="text-wrapper">
-                Bem-vindo ao Cook n’Tea: Uma pitada de sabor & Uma xícara de carinho!
+                Bem-vindo(a) ao Cook n’Tea: Uma pitada de sabor & Uma xícara de carinho!
             </p>
 
             <FoodBanners />

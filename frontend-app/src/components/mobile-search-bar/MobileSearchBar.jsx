@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { IoSearch } from "react-icons/io5";
 import { IconContext } from "react-icons";
@@ -14,7 +15,13 @@ export default function MobileSearchBar( {searchSetter, isOpened} ) {
         searchSetter(text)
 
         if (text.trim() !== "") {
-            navigate(`/recipe-list?favorites=false&q=${encodeURIComponent(text)}`);
+            navigate(`/recipe-list?favorites=false&?q=${encodeURIComponent(text)}`);
+        }
+    }
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            searchHandle();
         }
     }
 
@@ -22,7 +29,13 @@ export default function MobileSearchBar( {searchSetter, isOpened} ) {
         <>
             {isOpened &&
                 <div className="mobile-search-bar">
-                    <input type="text" id="search-bar" className="mobile-search-bar-input" placeholder="Procure uma receita"/>
+                    <input 
+                        type="text" 
+                        id="search-bar" 
+                        className="mobile-search-bar-input" 
+                        placeholder="Procure uma receita"
+                        onKeyDown={handleKeyDown} // 2. ADICIONE ESTA PROP
+                    />
                     <button className="mobile-search-bar-btn" onClick={searchHandle}>
                         <IconContext.Provider value={{ className: "search-btn-icon", size: '20px' }}>
                             <IoSearch />

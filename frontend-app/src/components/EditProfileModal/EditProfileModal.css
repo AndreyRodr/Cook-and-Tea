@@ -11,6 +11,8 @@
     align-items: center; /* Centraliza verticalmente */
     z-index: 1000; /* Garante que fique acima de todo o conteúdo da página */
     padding: 20px;
+    /* Permite rolagem se o conteúdo do modal for muito grande */
+    overflow-y: auto; 
 }
 
 /* O cartão de conteúdo do modal */
@@ -60,11 +62,78 @@
     color: #f77f00;
 }
 
-/* Formulário e Grupos de Campos */
+/* --- NOVOS ESTILOS --- */
+
+/* Wrapper para todo o conteúdo do formulário */
+.edit-profile-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaço entre os elementos */
+}
+
+/* Pré-visualização do Avatar */
+.profile-pic-preview {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+/* Estilo para o <input type="file"> */
+.form-group-image {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group-image input[type="file"] {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+}
+
+/* Estilo para o botão "Remover Foto Atual" */
+.remove-button {
+    /* Estilo "fantasma" ou "secundário" */
+    background-color: #f77f00;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    margin-top: 10px;
+    align-self: center;       
+    width: 100%;
+    min-width: 50%;
+    white-space: nowrap;
+}
+
+.remove-button:hover:not(:disabled) {
+    background-color: #fff0f0; /* Fundo vermelho bem claro */
+    color: #a30000;
+    border-color: #a30000;
+}
+
+/* Separador horizontal */
+.separator {
+    border: none;
+    height: 1px;
+    background-color: #e0e0e0; /* Cinza claro */
+    margin: 10px 0;
+}
+
+/* --- FIM DOS NOVOS ESTILOS --- */
+
+
+/* Formulário e Grupos de Campos (Estilos existentes) */
 .edit-profile-form {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Espaço entre os grupos de formulário */
+    gap: 15px; 
 }
 
 .form-group {
@@ -77,20 +146,6 @@
     font-weight: 600;
     color: #2b2520f5;
     margin-bottom: 5px;
-}
-
-.form-group input {
-    padding: 10px 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    transition: border-color 0.2s;
-}
-
-.form-group input:focus {
-    border-color: #f77f00;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(247, 127, 0, 0.1);
 }
 
 /* Toggle Chefe */
@@ -114,7 +169,7 @@
 }
 
 
-/* Botão Salvar (usando o estilo do seu Button.css como base) */
+/* Botão Salvar (Estilo existente) */
 .save-button {
     background-color: #f77f00;
     color: #ffffff;

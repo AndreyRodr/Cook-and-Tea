@@ -19,9 +19,15 @@ function SearchBar( {searchSetter} ) {
         }
     }
 
+    const handleKeyDow = (event) => {
+        if (event.key === 'Enter') {
+            searchHandle();
+        }
+    }
+
     return(
         <div className="search-bar">
-            <input type="text" id="search-bar" className="search-bar-input" placeholder="Procure uma receita"/>
+            <input type="text" id="search-bar" className="search-bar-input" placeholder="Procure uma receita" onKeyDown={handleKeyDow}/>
             <button className="search-bar-btn" onClick={searchHandle}>Procurar</button>
         </div>
     )

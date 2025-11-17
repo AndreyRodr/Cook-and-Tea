@@ -1,7 +1,8 @@
 import { Router } from "express";
 const recipeRoutes = Router();
 import * as recipeController from '../controllers/recipeController.js';
-import { protect } from '../middleware/authMiddleware.js'
+
+import { protect, protectChef } from '../middleware/authMiddleware.js'
 import multer from 'multer';
 
 const storage = multer.memoryStorage();
@@ -26,7 +27,8 @@ recipeRoutes.get('/:id', recipeController.getRecipeById);
 recipeRoutes.post(
     '/',
     protect,
-    upload.array('recipeImages'),
+    protectChef,
+    upload.array('recipeImages', 5), // Até 5 imagens por receita
     recipeController.createRecipe);
 
 //PUT /api/recipes/:id

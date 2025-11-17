@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './CreateRecipePage.css';
 import InputBox from '../components/Input/InputBox';
 import Button from '../components/Button/Button';
@@ -8,6 +8,8 @@ import Navbar from '../components/Navbar/Navbar';
 import UserOptionsModal from '../components/User-options-modal/UserOptionsModal';
 import EditProfileModal from '../components/EditProfileModal/EditProfileModal'; 
 
+import Carousel from '../components/Carousel/Carousel'
+
 import { RecipeService } from '../services/apiService';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,10 +18,9 @@ export default function CreateRecipePage({ currentUser }) {
     // ESTADOS DE LAYOUT E PESQUISA (mantidos)
     const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
     const [searchText, setSearchText] = useState('')
-    
-    const [imageFiles, setImageFiles] = useState(null);
     const navigate = useNavigate(); // Hook de navegação
-
+    
+    
     const mobileSearchBarHandle = () => {
         setIsMobileSearchBarOpened(!isMobileSearchBarOpened)
     }
@@ -32,7 +33,40 @@ export default function CreateRecipePage({ currentUser }) {
     const [prepTime, setPrepTime] = useState('');
     const [servings, setServings] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    
+    const [imageFiles, setImageFiles] = useState([]);
+    const [imagePreviews, setImagePreviews] = useState([]);
+   
+    useEffect(() => {
+        if (!imageFiles || imageFiles.length === 0) {
+            setImagePreviews([]);
+            return;
+        }
 
+        const objectUrls = Array.from(imageFiles).map(file => URL.createObjectURL(file));
+        setImagePreviews(objectUrls);
+
+        return () => {
+            objectUrls.forEach(url => URL.revokeObjectURL(url));
+        };
+
+    }, [imageFiles]);
+
+    const MAX_FILES = 5;
+
+    const handleImageSelect = (e) => {
+        const files = e.target.files;
+        if (!files) return;
+
+        let selectedFiles = Array.from(files);
+
+        if (selectedFiles.length > MAX_FILES) {
+                alert(`Você pode enviar no máximo ${MAX_FILES} imagens. As 5 primeiras foram selecionadas.`);
+                selectedFiles = selectedFiles.slice(0, MAX_FILES)
+        }
+
+        setImageFiles(selectedFiles)
+    }
     // 4. Função de Submissão (mantida)
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -48,13 +82,15 @@ export default function CreateRecipePage({ currentUser }) {
         const instructionsArray = steps.split('\n').filter(s => s.trim() !== '');
         const tagsArray = [category.trim()];
 
-        ingredientsArray.forEach(item => formData.append('ingredients', item));
-        instructionsArray.forEach(item => formData.append('instructions', item));
-        tagsArray.forEach(item => formData.append('tags', item));
+        formData.append('ingredients', JSON.stringify(ingredientsArray));
+        formData.append('instructions', JSON.stringify(instructionsArray));
+        formData.append('tags', JSON.stringify(tagsArray));
         
+        // Anexa os arquivos de imagem 
         if (imageFiles && imageFiles.length > 0) {
             for (let i = 0; i < imageFiles.length; i++) {
-                formData.append('recipeImages', imageFiles[i]);
+                // O backend espera 'recipeImages'
+                formData.append('recipeImages', imageFiles[i]); 
             }
         }
 
@@ -82,7 +118,7 @@ export default function CreateRecipePage({ currentUser }) {
             searchBarHandle={mobileSearchBarHandle} 
             currentUser={currentUser}
             />
-            
+             
             <Navbar currentUser={currentUser} /> 
             
             <div className='content'>
@@ -127,8 +163,8 @@ export default function CreateRecipePage({ currentUser }) {
                                 required
                             >
                                 <option value="" disabled>Selecione uma categoria</option>
-                                <option value="Lanches">Lanches</option>
                                 <option value="Salgados">Salgados</option>
+                                <option value="Refeições">Refeições</option>
                                 <option value="Doces">Doces</option>
                                 <option value="Bebidas">Bebidas</option>
                                 <option value="Veganos">Veganos</option>
@@ -182,18 +218,28 @@ export default function CreateRecipePage({ currentUser }) {
                                 required
                             />
                         </div>
-                        
-                        {/* Campo para Upload de Imagem (Placeholder) */}
+                        {/* Container para a Pré-visualização (Carrossel) */}
+                        <div className="form-group-carousel">
+                            <label>Pré-visualização das Imagens (Máx: 5)</label>
+                            
+                            <Carousel images={imagePreviews} /> 
+                        </div>
+                        {/* Container para o Input de Upload */}
                         <div className="form-group-image">
-                            <label htmlFor="image-upload">Imagem Principal da Receita</label>
                             <input 
                                 type="file" 
                                 id="image-upload" 
                                 accept="image/*" 
-                                multiple 
-                                onChange={(e) => setImageFiles(e.target.files)} 
+                                multiple // Permite selecionar várias imagens
+                                // O onChange agora atualiza 'imageFiles' (o que dispara o useEffect)
+                                onChange={handleImageSelect} 
                             />
+                            <label htmlFor="image-upload">
+                                {imageFiles ? `(${imageFiles.length}) Imagens Selecionadas` : 'Adicionar Imagens'}
+                            </label>
                         </div>
+                        
+
 
 
                         {/* Botão de submissão */}

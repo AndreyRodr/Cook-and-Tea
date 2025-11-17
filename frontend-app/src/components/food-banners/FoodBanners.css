@@ -69,14 +69,14 @@
 
 @media (min-width: 1024px) {
     .banner {
-        width: 11%;
+        width: 200px;
     }
 
     .surprise-banner {
-    width: 64%;
+    width: 1120px;
     height: 500px;
     margin: 30px 0;
-}
+    }
 
 .surprise-banner h1 {
     font-size: 3rem;
