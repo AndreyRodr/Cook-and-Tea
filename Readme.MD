@@ -2,7 +2,7 @@
 
 O **Cook n' Tea** é uma plataforma web interativa para compartilhamento e descoberta de receitas culinárias. O sistema permite que usuários se cadastrem, publiquem suas próprias receitas (se forem Chefs), avaliem pratos, favoritem suas escolhas preferidas e explorem um mundo de sabores.
 
-![Logo](/frontend-app/public/logo-sem-txt.png)
+![Logo](frontend-app/src/assets/images/logo.png)
 
 ## 📋 Funcionalidades
 
