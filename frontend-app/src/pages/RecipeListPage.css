@@ -14,10 +14,12 @@
 
 .recipe-element {
     display: flex;
+    flex-direction: column;
     transition: 0.1s;
     padding: 10px;
     border-radius: 12px;
     cursor: pointer;
+    background-color: var(--header-color);
 }
 
 .recipe-element:hover {
@@ -39,4 +41,15 @@
 
 .avaliation-container {
     display: flex;
+}
+
+@media (min-width: 1024px) {
+    .recipe-element {
+        display: flex;
+        transition: 0.1s;
+        padding: 10px;
+        border-radius: 12px;
+        cursor: pointer;
+        background-color: transparent;
+    }
 }
