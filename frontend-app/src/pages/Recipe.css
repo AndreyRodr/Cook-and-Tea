@@ -268,14 +268,19 @@
     bottom: 60px; /* Acima do 'mobile-user-avatar' */
     left: 0;
     width: 100%;
-    background: #fff;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
     padding: 10px;
     justify-content: center;
     gap: 20px;
     z-index: 50;
 }
 
+.r-page .user-menu-container .avatar-wrapper .user-avatar{
+    margin-bottom: 110px;
+}
+
+.r-page .user-menu-container {
+    margin-bottom: 75px;
+}
 
 @media (max-width: 768px) {
     .recipe-owner-actions {

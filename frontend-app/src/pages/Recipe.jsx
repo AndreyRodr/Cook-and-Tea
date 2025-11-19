@@ -266,9 +266,17 @@ export default function Recipe({ currentUser }) {
                 )}
 
                 {/* Renderiza o drawer/avatar mobile (que controla seus próprios modais) */}
-                <div className="mobile-user-avatar">
-                    <UserDrawer currentUser={currentUser} />
-                </div>
+                {isOwner &&
+                    <div className="mobile-user-avatar r-page">
+                        <UserDrawer currentUser={currentUser} isRecipePage = {true}/>
+                    </div>
+                }
+
+                {!isOwner &&
+                    <div className="mobile-user-avatar">
+                        <UserDrawer currentUser={currentUser} isRecipePage = {true}/>
+                    </div>
+                }
 
                 {isEditModalOpen && (
                     <EditRecipeModal
