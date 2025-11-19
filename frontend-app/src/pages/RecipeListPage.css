@@ -46,6 +46,7 @@
 @media (min-width: 1024px) {
     .recipe-element {
         display: flex;
+        flex-direction: row;
         transition: 0.1s;
         padding: 10px;
         border-radius: 12px;
