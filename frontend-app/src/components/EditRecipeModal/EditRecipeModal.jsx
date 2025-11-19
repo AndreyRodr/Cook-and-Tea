@@ -127,6 +127,7 @@ export default function EditRecipeModal({ recipeToEdit, onClose, onRecipeUpdated
                             />
 
                             <label>Novas Imagens (substituirão as antigas)</label>
+                            <br />
                             <input 
                                 type="file" 
                                 multiple 
@@ -148,7 +149,7 @@ export default function EditRecipeModal({ recipeToEdit, onClose, onRecipeUpdated
                                 </div>
                             ))}
                             <button type="button" onClick={() => handleAddField(setIngredients)} className="add-field-btn">+ Adicionar Ingrediente</button>
-
+                            <br />
                             <label>Modo de Preparo</label>
                             {instructions.map((step, index) => (
                                 <div key={index} className="dynamic-field">

@@ -50,6 +50,8 @@
 /* Ajustes no formulário dentro do modal */
 .edit-recipe-form .form-column {
     flex-basis: 48%;
+    display: flex;
+    flex-direction: column;
 }
 
 .edit-recipe-form label {
