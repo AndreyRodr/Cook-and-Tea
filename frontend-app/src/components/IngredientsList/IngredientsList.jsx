@@ -37,6 +37,8 @@ function ListItem( {text} ) {
 }
 
 export default function IngredientsList( {ingredients} ) {
+    console.log(ingredients);
+    
     return (
         <ul className='ingredients-list'>
             {ingredients.map((ing, index) => {

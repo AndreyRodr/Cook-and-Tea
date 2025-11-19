@@ -11,13 +11,25 @@ import { Op } from 'sequelize';
  */
 export const createRecipe = async (req, res) => {
     try {
+        const formatToArray = (data) => {
+            if (!data) return []; 
+            if (Array.isArray(data)) return data; 
+            
+            if (typeof data === 'string') {
+                return data.split(/\r?\n/)
+                            .map(item => item.trim())
+                            .filter(item => item !== '');
+            }
+            return [data]; // Fallback
+        };
+
         const { name, description, prepTime, portions } = req.body;
 
         const authorId = req.user.userId;
-
-        const ingredients = Array.isArray(req.body.ingredients) ? req.body.ingredients : [req.body.ingredients];
-        const instructions = Array.isArray(req.body.instructions) ? req.body.instructions : [req.body.instructions];
-        const tags = Array.isArray(req.body.tags) ? req.body.tags : [req.body.tags];
+        
+        const ingredients = formatToArray(req.body.ingredients);
+        const instructions = formatToArray(req.body.instructions);
+        const tags = formatToArray(req.body.tags);
 
         if(req.user.type !== "chefe") {
             return res.status(403).json({message: "Usuário não autorizado"});
@@ -32,9 +44,9 @@ export const createRecipe = async (req, res) => {
                 name,
                 authorId,
                 description,
-                ingredients: ingredients,
-                instructions: instructions,
-                tags: tags,
+                ingredients,
+                instructions,
+                tags,
                 prepTime,
                 portions
             }

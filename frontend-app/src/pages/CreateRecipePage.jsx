@@ -78,13 +78,13 @@ export default function CreateRecipePage({ currentUser }) {
         formData.append('prepTime', prepTime);
         formData.append('portions', parseInt(servings));
 
-        const ingredientsArray = ingredients.split('\n').filter(i => i.trim() !== '');
-        const instructionsArray = steps.split('\n').filter(s => s.trim() !== '');
-        const tagsArray = [category.trim()];
+        const ingredientsArray = ingredients;
+        const instructionsArray = steps;
+        const tagsArray = category.trim();
 
-        formData.append('ingredients', JSON.stringify(ingredientsArray));
-        formData.append('instructions', JSON.stringify(instructionsArray));
-        formData.append('tags', JSON.stringify(tagsArray));
+        formData.append('ingredients', ingredientsArray);
+        formData.append('instructions', instructionsArray);
+        formData.append('tags', tagsArray);
         
         // Anexa os arquivos de imagem 
         if (imageFiles && imageFiles.length > 0) {
