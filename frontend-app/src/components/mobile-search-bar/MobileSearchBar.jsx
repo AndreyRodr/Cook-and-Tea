@@ -34,7 +34,7 @@ export default function MobileSearchBar( {searchSetter, isOpened} ) {
                         id="search-bar" 
                         className="mobile-search-bar-input" 
                         placeholder="Procure uma receita"
-                        onKeyDown={handleKeyDown} // 2. ADICIONE ESTA PROP
+                        onKeyDown={handleKeyDown} 
                     />
                     <button className="mobile-search-bar-btn" onClick={searchHandle}>
                         <IconContext.Provider value={{ className: "search-btn-icon", size: '20px' }}>
