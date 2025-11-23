@@ -4,17 +4,17 @@ import InputBox from '../components/Input/InputBox';
 import Button from '../components/Button/Button';
 import Header from '../components/Header/Header';
 import Navbar from '../components/Navbar/Navbar';
-// 1. Importar os modais
-import UserOptionsModal from '../components/User-options-modal/UserOptionsModal';
-import EditProfileModal from '../components/EditProfileModal/EditProfileModal'; 
 
 import Carousel from '../components/Carousel/Carousel'
 
-import { RecipeService } from '../services/apiService';
+import { RecipeService, UserService } from '../services/apiService';
 import { useNavigate } from 'react-router-dom';
 
 
 export default function CreateRecipePage({ currentUser }) {
+    const [canAccess, setCanAccess] = useState(false);
+    const [accessError, setAccessError] = useState('');
+
     // ESTADOS DE LAYOUT E PESQUISA (mantidos)
     const [isMobileSearchBarOpened, setIsMobileSearchBarOpened] = useState(false)
     const [searchText, setSearchText] = useState('')
@@ -36,7 +36,7 @@ export default function CreateRecipePage({ currentUser }) {
     
     const [imageFiles, setImageFiles] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
-   
+
     useEffect(() => {
         if (!imageFiles || imageFiles.length === 0) {
             setImagePreviews([]);
@@ -109,26 +109,38 @@ export default function CreateRecipePage({ currentUser }) {
         }
     };
 
+
+
+    useEffect(() => {
+        if(currentUser) {
+            if(currentUser.type === 'chefe') {
+                setCanAccess(true)
+            } else {
+                setCanAccess(false)
+                setAccessError("Você não tem permissão para criar uma receita. Apenas chefes podem fazer isso.")
+            }
+        } else {
+            setAccessError('Você precisa estar logado em uma conta de tipo "chefe" para criar uma receita.')
+        }
+    }, [currentUser])
+
     return (
         <div className="create-recipe-page-container">
             
-            {/* Componentes de Layout */}
             <Header 
             searchSetter={setSearchText} 
             searchBarHandle={mobileSearchBarHandle} 
             currentUser={currentUser}
             />
-             
             <Navbar currentUser={currentUser} /> 
             
-            <div className='content'>
+            {canAccess ? <div className='content'>
 
                 <div className="recipe-form-card">
                     <h2 className="form-title">Crie Sua Nova Receita</h2>
 
                     <form className="recipe-form" onSubmit={handleSubmit}>
                         
-                        {/* Título da Receita */}
                         <InputBox
                             label="Título da Receita"
                             type="text"
@@ -249,7 +261,7 @@ export default function CreateRecipePage({ currentUser }) {
                     </form>
 
                 </div>
-            </div>
+            </div> : <p className='error-msg'>{accessError}</p>}
             
         </div>
     );

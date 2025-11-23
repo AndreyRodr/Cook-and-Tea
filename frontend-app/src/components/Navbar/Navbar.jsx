@@ -61,14 +61,12 @@ export default function Navbar( {currentUser} ) {
             } txt="Favoritos"
             onClick={handleGoFavorites}/>
             <span></span>
-            {isChef &&
                 <NavbarElement icon = {
                     <IconContext.Provider value= {{ className: 'nav-element-icon add-recipe-icon', size:"20px" }}>
                         <RiAddBoxFill />
                     </IconContext.Provider>
             } txt="Criar Receita" 
             onClick={handleCreateRecipe}/>
-            }
         </nav>
     )
 }

@@ -133,6 +133,13 @@
     height: 100%;
 }
 
+.error-msg {
+    text-align: center;
+    color: red;
+    margin-top: 10px;
+    width: 100%;
+}
+
 /* Media Query para Navbar em Desktop */
 @media (max-width: 1023px) {
     .content {
