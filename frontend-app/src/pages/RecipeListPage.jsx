@@ -106,7 +106,6 @@ export default function RecipeListPage({ currentUser }) {
                         fetchedRecipes = await RecipeService.getRecipesByTag(tag);
                     // Fallback 
                     } else {
-                        console.log('Buscando todas as receitas (fallback)');
                         fetchedRecipes = await RecipeService.getAllRecipes();
                     }
                     
@@ -144,9 +143,8 @@ export default function RecipeListPage({ currentUser }) {
                 {getPageTitle()}
             </h1>
 
-            {/* 4. Renderização Condicional */}
             {isLoading && <p style={{textAlign: 'center', fontSize: '1.2rem'}}>Carregando receitas...</p>}
-            {error && <p style={{textAlign: 'center', color: 'red'}}>Erro: {error}</p>}
+            {error === "Não autorizado, sem token." && <p style={{textAlign: 'center', color: 'red'}}>Você precisa fazer login para favoritar receitas</p>}
 
             {!isLoading && !error && (
                 <>

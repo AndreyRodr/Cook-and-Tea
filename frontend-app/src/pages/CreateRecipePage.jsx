@@ -120,7 +120,7 @@ export default function CreateRecipePage({ currentUser }) {
                 setAccessError("Você não tem permissão para criar uma receita. Apenas chefes podem fazer isso.")
             }
         } else {
-            setAccessError('Você precisa estar logado em uma conta de tipo "chefe" para criar uma receita.')
+            setAccessError('Você precisa fazer login em uma conta de tipo "chefe" para criar uma receita.')
         }
     }, [currentUser])
 
