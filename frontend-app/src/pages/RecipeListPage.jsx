@@ -101,12 +101,9 @@ export default function RecipeListPage({ currentUser }) {
                     if (favorites === 'true') {
                         console.log('Buscando receitas favoritas...');
                         fetchedRecipes = await UserService.getFavorites();
-                        console.log(fetchedRecipes);
                         
-                    // Lógica de Busca (Se houver termo de busca ou se for nulo/vazio)
                     } else if (searchTerm !== null) {
                         console.log(`Buscando receitas com o termo: "${searchTerm}"`);
-                        // Rota: GET /api/recipes/search?q=...
                         fetchedRecipes = await RecipeService.searchRecipes(searchTerm);
                     
                     } else if(tag) {

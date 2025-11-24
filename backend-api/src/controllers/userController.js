@@ -1,6 +1,7 @@
 import User from '../models/userModel.js';
 import Recipe from '../models/recipeModel.js'
 import Avaliation from '../models/avaliationModel.js'
+import RecipeImage from '../models/recipeImageModel.js';
 import generateToken from '../utils/generateToken.js';
 import { uploadFileToS3, deleteFileFromS3 } from '../utils/s3Service.js';
 import { profile } from 'console';
@@ -286,18 +287,24 @@ export const listFavorites = async (req, res) => {
         const userId = req.user.userId;
         const user = await User.findByPk(userId, {
             // Usa o 'alias' que definimos no index.js para incluir as receitas
-            include: {
-                model: Recipe,
-                as: 'FavoriteRecipes',
-                attributes: { exclude: [] },
-                through: { attributes: [] } 
-            }
+            include: 
+                {
+                    model: Recipe,
+                    as: 'FavoriteRecipes',
+                    include: [ 
+                        {
+                            model: RecipeImage,
+                            as: 'recipeImages', // Alias definido no index.js
+                            attributes: ['imageUrl'] // Traz apenas a URL
+                        }
+                    ],
+                    through: { attributes: [] } 
+                }
         });
 
         if (!user) {
             return res.status(404).json({ message: 'Usuário não encontrado.' });
         }
-
         res.status(200).json(user.FavoriteRecipes);
     } catch (error) {
         console.error('Erro ao listar favoritos:', error);
