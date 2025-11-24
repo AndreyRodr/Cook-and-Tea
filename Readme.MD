@@ -48,7 +48,7 @@ Antes de começar, certifique-se de ter instalado em sua máquina:
 O backend necessita de um arquivo `.env` para funcionar corretamente e conectar ao banco de dados e à AWS.
 
 1.  Navegue até a pasta do backend: `backend-api/src`
-2.  Crie um arquivo chamado `.env` baseado nas configurações encontradas em `src/config/database.js` e `src/utils/s3Service.js`.
+2.  Crie um arquivo chamado `.env`.
 
 Exemplo de `.env`:
 
