@@ -32,7 +32,10 @@ recipeRoutes.post(
     recipeController.createRecipe);
 
 //PUT /api/recipes/:id
-recipeRoutes.put('/:id', protect, recipeController.updateRecipe);
+recipeRoutes.put(
+    '/:id', 
+    protect,
+    upload.array('recipeImages', 5), recipeController.updateRecipe);
 
 //DELETE /api/recipes/:id
 recipeRoutes.delete("/:id", protect, recipeController.deleteRecipe);

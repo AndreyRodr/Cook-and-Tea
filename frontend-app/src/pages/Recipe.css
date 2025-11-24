@@ -1,16 +1,21 @@
+/* src/pages/Recipe.css */
+
 .recipe-page {
-    background-color: var(--bg-color); /* Usa a cor de fundo */
+    background-color: var(--bg-color);
     min-height: 100vh;
+    height: 100vh; 
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .recipe-page main {
     width: 100%;
-    max-width: 1200px; /* Limita a largura em telas grandes */
+    max-width: 1200px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    padding-bottom: 70px; /* Espaço para navbar mobile */
+    padding-bottom: 120px; 
 }
 
 .recipe-page main h1,
@@ -18,6 +23,7 @@
     color: var(--primary-color);
     margin-bottom: 10px;
 }
+
 .recipe-page main h2 {
     font-size: 1.5rem;
     border-bottom: 2px solid var(--primary-hover-color);
@@ -31,7 +37,7 @@
     padding: 10px 0;
 }
 
-/* Título e Avaliação Média */
+/* --- Título e Rating --- */
 .title-content {
     display: flex;
     flex-direction: column; 
@@ -50,9 +56,10 @@
     gap: 10px;
     font-size: 0.9rem;
     color: #555;
+    flex-wrap: wrap;
 }
 
-/* Detalhes e Imagem */
+/* --- Detalhes (Metadados + Carrossel) --- */
 .recipe-details {
     display: flex;
     flex-direction: column;
@@ -60,21 +67,49 @@
     margin-bottom: 20px;
 }
 
-/* Metadados (Autor, Tempo, Porções) */
+/* MOBILE: Move o carrossel para o topo (acima dos metadados) */
+.carousel-container { 
+    order: -1; /* <--- ESTA LINHA FAZ O CARROSSEL SUBIR NO MOBILE */
+    max-width: 100%;
+    height: 300px; /* Altura ajustada para mobile */
+    margin-left: 0; 
+    margin-bottom: 0;
+}
+
+.metadata-and-rating-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 100%; 
+}
+
 .metadata {
     background-color: #fff;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-
     display: flex;
     flex-direction: column;
     text-align: start;
-    gap: 10px
-    
+    gap: 10px;
 }
 .metadata p {
     margin: 5px 0;
+}
+
+.author-info {
+    display: block;
+    text-align: center;
+    margin-bottom: 0px; 
+}
+
+.author-info p {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+.author-pic {
+    align-self: center;
 }
 
 .description, .instructions-text {
@@ -86,7 +121,6 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-/* Seção de Avaliação do Usuário */
 .user-rating-section {
     background-color: var(--header-color);
     padding: 50px;
@@ -100,7 +134,7 @@
     margin-bottom: 10px;
 }
 
-/* Seção de Ingredientes e Modo de Preparo */
+/* --- Seções Gerais --- */
 .section {
     margin-bottom: 30px;
     width: 100%;
@@ -110,7 +144,7 @@
     margin-bottom: 30px;
     width: 100%;
 }
-/* Modo de Preparo em lista ordenada */
+
 .instructions-text ol {
     padding-left: 20px;
 }
@@ -118,31 +152,62 @@
     margin-bottom: 10px;
 }
 
-/* Estilo para agrupar o avatar e o nome do autor */
-.author-info {
-    display: block;
-    text-align: center;
-    margin-bottom: 0px; /* Espaço abaixo da informação do autor */
+/* --- Botões --- */
+/* Esconde botões inline no mobile */
+.recipe-owner-actions-inline {
+    display: none;
 }
 
-.author-info p {
-    font-size: 1rem;
-    margin: 5px 0;
+/* Botões flutuantes no mobile */
+.recipe-owner-actions-mobile {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 20px;
+    width: 100%;
+    position: fixed; /* Garante que fique fixo embaixo se desejar */
+    bottom: 45px;
+    left: 0;
+    z-index: 50;
+    pointer-events: none;
 }
-.metadata-and-rating-column {
-        flex: 1;
-        order: 1; /* Força a ficar na ESQUERDA */
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        max-width: 100%; 
-        
-    }
+.recipe-owner-actions-mobile button {
+    pointer-events: auto;
+    width: auto;
+    min-width: 120px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
 
-.author-pic {
-        align-self: center;
-    }
-/* DESKTOP LAYOUT (A partir de 1024px) */
+.danger-btn {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+.danger-btn:hover {
+    background-color: #bb2d3b !important;
+}
+
+.edit-btn {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+}
+.edit-btn:hover {
+    background-color: var(--secondary-hover-color) !important;
+}
+.small-btn {
+    padding: 5px 15px;
+    font-size: 0.85rem;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto !important;
+    min-width: 80px;
+}
+
+
+/* ==========================================
+   DESKTOP LAYOUT (A partir de 1024px)
+   ========================================== */
 @media (min-width: 1024px) {
     .recipe-page main {
         flex-direction: row;
@@ -160,54 +225,67 @@
     .right-content {
         flex: 1;
         order: 2;
-        padding-top: 0;
-        padding-bottom: 160px;
+        /* REVERTIDO: Mantendo o espaçamento original que você gostava */
+        padding-bottom: 160px; 
+        padding-top: 0; 
     }
 
-    .section{
+    .section {
         padding-bottom: 0px;
-        
     }
 
     .title-content {
         flex-direction: row; 
         align-items: center;
         margin-bottom: 0px;
+        gap: 0px;
+        justify-content: space-between;
+    }
+
+    /* Mostra botões ao lado do rating */
+    .recipe-owner-actions-inline {
+        display: flex;
+        gap: 10px;
+        margin-left: 15px;
+    }
+    .recipe-owner-actions-mobile {
+        display: none;
     }
 
     /* Container dos detalhes: Metadados + Carrossel */
     .recipe-details {
-        display: flex; /* CHAVE: Permite side-by-side */
+        display: flex; 
         flex-direction: row; 
         gap: 30px;
         align-items: flex-start;
-        margin-bottom: 30px; /* Espaçamento abaixo do bloco inteiro */
+        margin-bottom: 30px; 
     }
 
     /* METADADOS (ESQUERDA) */
     .metadata-and-rating-column {
         flex: 1;
-        order: 1; /* Força a ficar na ESQUERDA */
+        order: 1; 
         display: flex;
         flex-direction: column;
-        gap: 7.5px;
+        gap: 7.5px; /* Mantido o gap original */
         max-width: 35%; 
     }
     
     /* CARROSSEL (DIREITA) */
     .carousel-container { 
         flex: 2;
-        order: 2; /* Força a ficar na DIREITA */
+        order: 2; 
         max-width: 65%;
         height: 400px;
-        margin-left: 0; /* CORREÇÃO: Remove a margem incorreta */
+        margin-left: 0; 
         margin-bottom: 0;
     }
     
     .metadata {
+        margin-bottom: 0;
+        height: 240px; /* Mantida altura original */
         display: flex;
         flex-direction: column;
-        height: 240px;
     }
     
     .user-rating-section{
@@ -215,7 +293,6 @@
         height: 100px;
         padding: 20px;
     }
-    
 
     .author-info {
         display: block;
@@ -228,71 +305,5 @@
 
     .author-pic {
         align-self: center;
-    }
-    .description, .instructions-text {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        line-height: 1.6;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    }
-    
-}
-
-.recipe-owner-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    padding: 0px 40px;
-    margin: 10px 0;
-    max-width: 1400px;
-    width: 100%;
-    box-sizing: border-box; /* Garante que o padding não quebre o layout */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.recipe-owner-actions .button-danger {
-    background-color: #e63946; /* Vermelho perigo */
-}
-.recipe-owner-actions .button-danger:hover {
-    background-color: #d0303c;
-}
-
-
-/* Botões de Ação (Mobile) */
-.recipe-owner-actions-mobile {
-    display: none; /* Escondido por padrão */
-    position: fixed;
-    bottom: 60px; /* Acima do 'mobile-user-avatar' */
-    left: 0;
-    width: 100%;
-    padding: 10px;
-    justify-content: center;
-    gap: 20px;
-    z-index: 50;
-}
-
-.r-page .user-menu-container .avatar-wrapper .user-avatar{
-    margin-bottom: 110px;
-}
-
-.r-page .user-menu-container {
-    margin-bottom: 75px;
-}
-
-@media (max-width: 768px) {
-    .recipe-owner-actions {
-        display: none; /* Esconde botões do desktop em mobile */
-    }
-
-    .recipe-owner-actions-mobile {
-        display: flex; /* Mostra botões mobile */
-    }
-
-    /* Ajusta a página para ter espaço para os botões mobile */
-    .recipe-page main {
-        padding-bottom: 120px; /* Espaço para botões de ação + avatar */
     }
 }

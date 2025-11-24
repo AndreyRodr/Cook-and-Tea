@@ -1,121 +1,137 @@
+/* src/components/EditRecipeModal/EditRecipeModal.css */
 
+/* Overlay que cobre toda a tela */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7);
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    padding: 20px;
 }
 
-.modal-content {
-    background: #fff;
-    padding: 20px 30px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 900px;
-    height: 90vh;
-    overflow-y: auto;
-    position: relative;
+/* O cartão de conteúdo do modal */
+.modal-content-card {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 600px; /* Um pouco mais largo para acomodar o carrossel */
+    
+    /* 3. Configuração de Scroll */
+    max-height: 90vh; /* Limita a altura a 90% da tela */
+    overflow-y: auto; /* Adiciona barra de rolagem se necessário */
+    
+    transform: scale(1);
+    animation: fade-in 0.2s ease-out;
 }
 
-.modal-close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: transparent;
-    border: none;
-    font-size: 2rem;
-    color: #888;
-    cursor: pointer;
+@keyframes fade-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }
 
-.modal-content h2 {
-    color: var(--primary-color);
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
-    text-align: center;
 }
 
-/* Reutiliza o layout de 'CreateRecipePage' */
-.edit-recipe-form .create-recipe-page {
+.modal-header h2 {
+    color: #2b2520f5;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: #555;
+    cursor: pointer;
+    line-height: 1;
     padding: 0;
-    gap: 20px;
 }
 
-/* Ajustes no formulário dentro do modal */
-.edit-recipe-form .form-column {
-    flex-basis: 48%;
+.close-button:hover {
+    color: #f77f00;
+}
+
+.edit-recipe-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Estilização para Textareas */
+.form-group-textarea {
     display: flex;
     flex-direction: column;
 }
 
-.edit-recipe-form label {
+.form-group-textarea label, 
+.form-group label,
+.form-group-image label {
+    font-size: 16px;
     font-weight: 600;
-    color: var(--text-primary);
-    margin-top: 15px;
+    color: #2b2520f5;
     margin-bottom: 5px;
 }
 
-.edit-recipe-form input[type="text"],
-.edit-recipe-form textarea {
-    width: 100%;
+.custom-textarea {
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-family: var(--font-primary);
-}
-
-.edit-recipe-form textarea {
-    min-height: 100px;
+    font-size: 16px;
+    border: 2px solid #f77f00;
+    border-radius: 8px;
     resize: vertical;
 }
 
-.edit-recipe-form .dynamic-field {
+.custom-textarea:focus {
+    outline: none;
+    border-color: #cc6a00;
+}
+
+/* Estilização do Select para igualar o InputBox */
+select.custom-input {
+    height: 48px; /* Altura padrão aproximada do InputBox */
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* Grupo de Tempo e Porções lado a lado */
+.time-servings-group {
     display: flex;
-    gap: 5px;
-    margin-bottom: 5px;
+    gap: 20px;
 }
 
-.edit-recipe-form .dynamic-field input,
-.edit-recipe-form .dynamic-field textarea {
-    flex-grow: 1;
+.time-servings-group > div {
+    flex: 1;
 }
 
-.edit-recipe-form .dynamic-field button {
-    background: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    width: 30px;
-    height: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    flex-shrink: 0;
-    align-self: flex-start;
+/* Carrossel dentro do Modal */
+.form-group-carousel .carousel-container {
+    height: 250px; /* Altura reduzida para o modal */
+    width: 100%;
+    margin-bottom: 0;
 }
 
-.edit-recipe-form .add-field-btn {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 5px;
-    font-size: 0.9rem;
+/* Input de Imagem */
+.form-group-image input[type="file"] {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    width: 100%;
 }
 
-.edit-recipe-form .form-actions {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.edit-recipe-form .error-message {
-    color: red;
+.save-button {
     margin-top: 10px;
+    width: 100%;
 }

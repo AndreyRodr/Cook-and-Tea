@@ -140,31 +140,23 @@ export const getRecipeByAuthor = async (req, res) => {
  */
 export const getRecipeByName = async (req, res) => {
     try {
-        const { q, favorites } = req.query;
-
-        let whereCondition = {};
-
-        if (q) {
-            whereCondition.name = {
-                [Op.iLike]: `%${q}%`
-            };
-        }
-
-        if (favorites === 'true') {;
-            whereCondition.tags = {
-                [Op.contains]: ['favoritos']
-            };
-        }
-
+        const query = req.query.q;
         const recipes = await Recipe.findAll({
-            where: whereCondition,
+            where: {
+                name: {
+                    [Op.iLike]: `%${query}%` 
+                }
+            },
             include: [
-                { model: User, as: 'user', attributes: ['userId'] },
-                { model: Avaliation, as: 'avaliations', include: { model: User, attributes: ['userId', 'name'] } },
-                { model: RecipeImage, as: 'recipeImages', attributes: ['imageUrl'] } 
+                { model: User, as: 'user', attributes: ['userId', 'name'] },
+                // CORREÇÃO: Incluir as imagens na busca
+                {
+                    model: RecipeImage,
+                    as: 'recipeImages',
+                    attributes: ['imageUrl']
+                }
             ]
         });
-
         res.status(200).json(recipes);
     } catch (err) {
         console.error("Erro ao buscar receitas: ", err);
@@ -191,7 +183,7 @@ export const getRecipeByTag = async (req, res) => {
                 { model: RecipeImage, as: 'recipeImages', attributes: ['imageUrl'] } 
             ]
         });
-        res.status(200).json(recipes);
+        res.status(200).json(recipes); 
     } catch (err) {
         console.error("Erro ao buscar por tag: ", err);
         res.status(500).json({ message: "Erro no servidor" });
@@ -205,29 +197,59 @@ export const getRecipeByTag = async (req, res) => {
 export const updateRecipe = async (req, res) => {
     try {
         const { id } = req.params;
+
+        const { name, description, prepTime, portions } = req.body;
+
+        const ingredients = req.body.ingredients ? JSON.parse(req.body.ingredients) : undefined;
+        const instructions = req.body.instructions ? JSON.parse(req.body.instructions) : undefined;
+        const tags = req.body.tags ? JSON.parse(req.body.tags) : undefined;
+        
         const recipe = await Recipe.findByPk(id);
 
         console.log(id);
         
-
-        if (!recipe) {
-            return res.status(404).json({ message: "Receita não encontrada." });
-        }
-
-        if (recipe.authorId !== req.user.userId) {
-            return res.status(403).json({ message: "Acesso negado. Você não é o autor desta receita." });
-        }
-
-        const [updated] = await Recipe.update(req.body, {
-            where: { recipeId: id }
+        // 1. Atualiza dados de texto
+        await recipe.update({
+            name,
+            description,
+            ingredients,
+            instructions,
+            tags,
+            prepTime,
+            portions
         });
 
-        if (updated) {
-            const updatedRecipe = await Recipe.findByPk(id);
-            return res.status(200).json(updatedRecipe);
+        // 2. Substituição de Imagens (se houver novos arquivos)
+        if (req.files && req.files.length > 0) {
+            // a) Busca imagens antigas
+            const oldImages = await RecipeImage.findAll({ where: { recipeId: id } });
+            
+            // b) Deleta do S3
+            for (const img of oldImages) {
+                await deleteFileFromS3(img.imageUrl);
+            }
+
+            // c) Deleta do Banco
+            await RecipeImage.destroy({ where: { recipeId: id } });
+
+            // d) Upload das novas
+            const uploadPromises = req.files.map(file => uploadFileToS3(file));
+            const imageUrls = await Promise.all(uploadPromises);
+
+            // e) Salva as novas no Banco
+            const imagesData = imageUrls.map(url => ({
+                recipeId: id,
+                imageUrl: url
+            }));
+            await RecipeImage.bulkCreate(imagesData);
         }
+
+        // Retorna a receita atualizada com as imagens
+        const updatedRecipe = await Recipe.findByPk(id, {
+            include: [{ model: RecipeImage, as: 'recipeImages', attributes: ['imageUrl'] }]
+        });
         
-        throw new Error('Falha ao atualizar a receita.');
+        return res.status(200).json(updatedRecipe);
 
     } catch (err) {
         console.error("Erro ao editar receita: ", err);

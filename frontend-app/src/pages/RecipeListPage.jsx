@@ -17,15 +17,23 @@ import './RecipeListPage.css'
 
 function RecipeElement( {recipe} ){
     const navigate = useNavigate();
-    const imageUrl = recipe?.recipeImages?.[0]?.imageUrl || noImg;
+    let recipeImage = noImg;
+
+    if (recipe.recipeImages && recipe.recipeImages.length > 0) {
+        // Pega a primeira imagem do array de objetos
+        recipeImage = recipe.recipeImages[0].imageUrl;
+    } else if (recipe.images && recipe.images.length > 0) {
+        // Fallback para o array de strings antigo (se houver)
+        recipeImage = recipe.images[0];
+    }
 
     const handleRecipeClick = () => {
         navigate(`/recipe/${recipe.recipeId}`);
     };
 
-    return(
+    return (
         <div className="recipe-element" onClick={handleRecipeClick}>
-            <img src={imageUrl} alt={recipe.name} /> 
+            <img src={recipeImage} alt={recipe.name} /> 
             <div className="info-content">
                 <h3>{recipe.name}</h3>
                 <p>{recipe.description}</p>
@@ -125,7 +133,7 @@ export default function RecipeListPage({ currentUser }) {
     const getPageTitle = () => {
         if (favorites === 'true') return 'Minhas Receitas Favoritas';
         if (searchTerm) return `Resultados para: "${searchTerm}"`;
-        if (tag) return `Resltados para: "${tag}"`
+        if (tag) return `Resultados para: "${tag}"`
         return 'Todas as Receitas';
     };
 

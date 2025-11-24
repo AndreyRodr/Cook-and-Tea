@@ -1,21 +1,18 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import { IconContext } from "react-icons";
+import { useNavigate } from "react-router-dom"; 
 import './MobileSearchBar.css'
 
-import { useNavigate } from "react-router-dom";
-
 export default function MobileSearchBar( {searchSetter, isOpened} ) {
-    
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     const searchHandle = () => {
-        let text = document.getElementById('search-bar').value
-        searchSetter(text)
+        let text = document.getElementById('mobile-search-bar').value;
+        searchSetter(text);
 
         if (text.trim() !== "") {
-            navigate(`/recipe-list?favorites=false&?q=${encodeURIComponent(text)}`);
+            navigate(`/recipe-list?favorites=false&q=${encodeURIComponent(text)}`);
         }
     }
 
@@ -31,10 +28,10 @@ export default function MobileSearchBar( {searchSetter, isOpened} ) {
                 <div className="mobile-search-bar">
                     <input 
                         type="text" 
-                        id="search-bar" 
+                        id="mobile-search-bar" // ID ÚNICO
                         className="mobile-search-bar-input" 
                         placeholder="Procure uma receita"
-                        onKeyDown={handleKeyDown} 
+                        onKeyDown={handleKeyDown}
                     />
                     <button className="mobile-search-bar-btn" onClick={searchHandle}>
                         <IconContext.Provider value={{ className: "search-btn-icon", size: '20px' }}>

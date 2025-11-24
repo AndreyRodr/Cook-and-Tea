@@ -182,12 +182,7 @@ export default function Recipe({ currentUser }) {
                 />
                 <Navbar currentUser={currentUser} />
                 <MobileSearchBar searchSetter={setSearchText} isOpened={isMobileSearchBarOpened} />
-                {isOwner && (
-                    <div className="recipe-owner-actions">
-                        <Button children="Editar Receita" onClick={() => setIsEditModalOpen(true)} />
-                        <Button children="Excluir Receita" onClick={handleDeleteRecipe} styleType="danger" />
-                    </div>
-                )}
+                
 
                 <main>
                     <div className="left-content">
@@ -196,6 +191,24 @@ export default function Recipe({ currentUser }) {
                             <div className="rating-display">
                                 <ReadOnlyStarsRate rate={recipe.starsAvg} />
                                 <p>({recipe.avaliationsAmount} avaliações)</p>
+                                {isOwner && (
+                                    <div className="recipe-owner-actions-inline">
+                                        <Button
+                                            onClick={() => setIsEditModalOpen(true)}  
+                                            className="edit-btn small-btn"
+                                        >
+                                            Editar Receita
+                                        </Button>
+
+
+                                        <Button 
+                                            onClick={handleDeleteRecipe} 
+                                            className="danger-btn small-btn" 
+                                        >
+                                            Excluir Receita
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -260,8 +273,8 @@ export default function Recipe({ currentUser }) {
                 </main>
                 {isOwner && (
                     <div className="recipe-owner-actions-mobile">
-                        <Button children="Editar" onClick={() => setIsEditModalOpen(true)} />
-                        <Button children="Excluir" onClick={handleDeleteRecipe} styleType="danger" />
+                        <Button onClick={() => setIsEditModalOpen(true)}>Editar</Button>
+                        <Button onClick={handleDeleteRecipe} className="danger-btn">Excluir</Button>
                     </div>
                 )}
 
@@ -280,7 +293,8 @@ export default function Recipe({ currentUser }) {
 
                 {isEditModalOpen && (
                     <EditRecipeModal
-                        recipeToEdit={recipe}
+                        isOpen={isEditModalOpen}
+                        recipeId={recipe.recipeId}
                         onClose={() => setIsEditModalOpen(false)}
                         onRecipeUpdated={handleRecipeUpdate}
                     />

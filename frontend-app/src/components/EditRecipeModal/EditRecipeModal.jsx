@@ -1,177 +1,208 @@
-import { useState, useEffect } from 'react';
-import { RecipeService } from '../../services/apiService';
-import Button from '../Button/Button';
-import InputBox from '../Input/InputBox';
-import './EditRecipeModal.css'; 
+import React, { useState, useEffect } from 'react';
+import './EditRecipeModal.css';
 
-// Props:
-// - recipeToEdit: O objeto da receita com os dados atuais
-// - onClose: Função para fechar o modal
-// - onRecipeUpdated: Função para avisar a página 'Recipe.jsx' que os dados mudaram
-export default function EditRecipeModal({ recipeToEdit, onClose, onRecipeUpdated }) {
+import InputBox from '../Input/InputBox';
+import Button from '../Button/Button';
+import Carousel from '../Carousel/Carousel'; 
+import { RecipeService } from '../../services/apiService';
+
+export default function EditRecipeModal({ isOpen, onClose, recipeId, onRecipeUpdated }) {
+    // Estados do Formulário
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [category, setCategory] = useState('');
+    const [ingredients, setIngredients] = useState('');
+    const [steps, setSteps] = useState('');
+    const [prepTime, setPrepTime] = useState('');
+    const [servings, setServings] = useState('');
     
-    // Estado do formulário, pré-preenchido com os dados da receita
-    const [name, setName] = useState(recipeToEdit.name || '');
-    const [description, setDescription] = useState(recipeToEdit.description || '');
-    const [prepTime, setPrepTime] = useState(recipeToEdit.prepTime || '');
-    const [portions, setPortions] = useState(recipeToEdit.portions || '');
-    const [ingredients, setIngredients] = useState(recipeToEdit.ingredients || ['']);
-    const [instructions, setInstructions] = useState(recipeToEdit.instructions || ['']);
-    const [tags, setTags] = useState(recipeToEdit.tags?.join(', ') || '');
-    const [recipeImages, setRecipeImages] = useState([]); // Começa vazio, usuário adiciona NOVAS imagens
-    
-    const [error, setError] = useState(null);
+    // Estados de Imagem e UI
+    const [imageFiles, setImageFiles] = useState([]); 
+    const [imagePreviews, setImagePreviews] = useState([]); 
     const [isLoading, setIsLoading] = useState(false);
 
-    // Funções dinâmicas para listas (idênticas a CreateRecipePage)
-    const handleAddField = (setter) => {
-        setter(prev => [...prev, '']);
-    };
+    // Categorias disponíveis (Opções)
+    const categories = [
+        "Bolos",
+        "Bebidas",
+        "Doces",
+        "Lanches",
+        "Prato Principal",
+        "Outros"
+    ];
 
-    const handleRemoveField = (index, setter, getter) => {
-        if (getter.length > 1) {
-            setter(prev => prev.filter((_, i) => i !== index));
+    // Carregar dados ao abrir
+    useEffect(() => {
+        if (isOpen && recipeId) {
+            const fetchRecipe = async () => {
+                setIsLoading(true);
+                try {
+                    const data = await RecipeService.getRecipeById(recipeId);
+                    
+                    setTitle(data.name);
+                    setDescription(data.description);
+                    setPrepTime(data.prepTime);
+                    setServings(data.portions);
+                    
+                    setIngredients(data.ingredients ? data.ingredients.join('\n') : '');
+                    setSteps(data.instructions ? data.instructions.join('\n') : '');
+                    
+                    // Ajuste para pegar a primeira tag se for um array, ou a string direta
+                    const tagValue = data.tags && data.tags.length > 0 ? data.tags[0] : '';
+                    setCategory(tagValue);
+
+                    if (data.recipeImages && data.recipeImages.length > 0) {
+                        setImagePreviews(data.recipeImages.map(img => img.imageUrl));
+                    } else {
+                        setImagePreviews([]);
+                    }
+                    setImageFiles([]); 
+
+                } catch (error) {
+                    console.error("Erro ao carregar receita:", error);
+                    alert("Erro ao carregar dados da receita.");
+                    onClose();
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchRecipe();
+        }
+    }, [isOpen, recipeId]);
+
+    // Efeito para preview de imagens
+    useEffect(() => {
+        if (!imageFiles || imageFiles.length === 0) return;
+
+        const objectUrls = Array.from(imageFiles).map(file => URL.createObjectURL(file));
+        setImagePreviews(objectUrls); 
+
+        return () => {
+            objectUrls.forEach(url => URL.revokeObjectURL(url));
+        };
+    }, [imageFiles]);
+
+    const handleImageSelect = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > 5) {
+            alert("Máximo de 5 imagens.");
+            setImageFiles(files.slice(0, 5));
+        } else {
+            setImageFiles(files);
         }
     };
 
-    const handleChangeField = (index, value, setter) => {
-        setter(prev => prev.map((item, i) => (i === index ? value : item)));
-    };
-
-    const handleImageChange = (e) => {
-        setRecipeImages(e.target.files);
-    };
-
-    const handleSubmit = async (e) => {
+    const handleSave = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        setError(null);
+
+        const formData = new FormData();
+        formData.append('name', title);
+        formData.append('description', description);
+        formData.append('prepTime', prepTime);
+        formData.append('portions', parseInt(servings));
+
+        const ingredientsArray = ingredients.split('\n').filter(i => i.trim() !== '');
+        const instructionsArray = steps.split('\n').filter(s => s.trim() !== '');
+        // Envia a categoria selecionada como um array de tags
+        const tagsArray = [category]; 
+
+        formData.append('ingredients', JSON.stringify(ingredientsArray));
+        formData.append('instructions', JSON.stringify(instructionsArray));
+        formData.append('tags', JSON.stringify(tagsArray));
+
+        if (imageFiles.length > 0) {
+            imageFiles.forEach(file => formData.append('recipeImages', file));
+        }
 
         try {
-            const formData = new FormData();
-            formData.append('name', name);
-            formData.append('description', description);
-            formData.append('prepTime', prepTime);
-            formData.append('portions', portions);
-            formData.append('tags', tags);
-            
-            // Adiciona listas
-            ingredients.forEach(ing => formData.append('ingredients[]', ing));
-            instructions.forEach(inst => formData.append('instructions[]', inst));
-            
-            if (recipeImages.length > 0) {
-                for (let i = 0; i < recipeImages.length; i++) {
-                    formData.append('recipeImages', recipeImages[i]);
-                }
-            }
-            
-            // Chama o serviço de ATUALIZAÇÃO
-            await RecipeService.updateRecipe(recipeToEdit.recipeId, formData);
-            
-            setIsLoading(false);
+            await RecipeService.updateRecipe(recipeId, formData);
             alert("Receita atualizada com sucesso!");
-            onRecipeUpdated(); 
-
-        } catch (err) {
-            console.error("Erro ao atualizar receita:", err);
-            setError(err.message);
+            if (onRecipeUpdated) onRecipeUpdated();
+            onClose();
+        } catch (error) {
+            console.error("Erro ao atualizar:", error);
+            alert(`Erro: ${error.message}`);
+        } finally {
             setIsLoading(false);
         }
     };
+
+    if (!isOpen) return null;
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <button className="modal-close-btn" onClick={onClose}>&times;</button>
-                <h2>Editar Receita</h2>
-                
-                <form onSubmit={handleSubmit} className="edit-recipe-form">
-                    <div className="create-recipe-page" style={{ padding: 0 }}>
-                        <div className="form-column">
-                            <InputBox 
-                                label="Nome da Receita" 
-                                type="text" 
-                                value={name} 
-                                setter={setName} 
-                                required 
-                            />
-                            
-                            <label>Descrição</label>
-                            <textarea 
-                                value={description} 
-                                onChange={(e) => setDescription(e.target.value)} 
-                                required 
-                            />
+            <div className="modal-content-card" onClick={e => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h2>Editar Receita</h2>
+                    <button className="close-button" onClick={onClose}>&times;</button>
+                </div>
 
-                            <InputBox 
-                                label="Tempo de Preparo (ex: 45 min)" 
-                                type="text" 
-                                value={prepTime} 
-                                setter={setPrepTime} 
-                                required 
-                            />
-                            
-                            <InputBox 
-                                label="Porções (ex: 4 porções)" 
-                                type="text" 
-                                value={portions} 
-                                setter={setPortions} 
-                                required 
-                            />
-                            
-                            <InputBox 
-                                label="Tags (separadas por vírgula)" 
-                                type="text" 
-                                value={tags} 
-                                setter={setTags} 
-                            />
-
-                            <label>Novas Imagens (substituirão as antigas)</label>
-                            <br />
-                            <input 
-                                type="file" 
-                                multiple 
-                                onChange={handleImageChange} 
-                                accept="image/*"
-                            />
-                        </div>
-
-                        <div className="form-column">
-                            <label>Ingredientes</label>
-                            {ingredients.map((ing, index) => (
-                                <div key={index} className="dynamic-field">
-                                    <input 
-                                        type="text" 
-                                        value={ing} 
-                                        onChange={(e) => handleChangeField(index, e.target.value, setIngredients)} 
-                                    />
-                                    <button type="button" onClick={() => handleRemoveField(index, setIngredients, ingredients)}>-</button>
-                                </div>
-                            ))}
-                            <button type="button" onClick={() => handleAddField(setIngredients)} className="add-field-btn">+ Adicionar Ingrediente</button>
-                            <br />
-                            <label>Modo de Preparo</label>
-                            {instructions.map((step, index) => (
-                                <div key={index} className="dynamic-field">
-                                    <textarea 
-                                        value={step} 
-                                        onChange={(e) => handleChangeField(index, e.target.value, setInstructions)} 
-                                    />
-                                    <button type="button" onClick={() => handleRemoveField(index, setInstructions, instructions)}>-</button>
-                                </div>
-                            ))}
-                            <button type="button" onClick={() => handleAddField(setInstructions)} className="add-field-btn">+ Adicionar Passo</button>
-                        </div>
-                    </div>
+                <form className="edit-recipe-form" onSubmit={handleSave}>
                     
-                    <div className="form-actions">
-                        <Button 
-                            children={isLoading ? "Salvando..." : "Salvar Alterações"} 
-                            type="submit" 
-                            disabled={isLoading} 
-                        />
-                        {error && <p className="error-message">{error}</p>}
+                    <InputBox label="Título" value={title} onChange={e => setTitle(e.target.value)} required />
+                    
+
+                    
+                    <div className="form-group-textarea">
+                        <label>Descrição</label>
+                        <textarea className="custom-textarea" rows="3" value={description} onChange={e => setDescription(e.target.value)} required />
                     </div>
+
+                    {/* 2. Categoria como Select (Opções) */}
+                    <div className="form-group">
+                        <label htmlFor="category-select">Categoria</label>
+                        <select 
+                            id="category-select"
+                            value={category} 
+                            onChange={e => setCategory(e.target.value)} 
+                            className="custom-input" // Reutiliza o estilo do InputBox
+                            required
+                        >
+                            <option value="" disabled>Selecione uma categoria</option>
+                            {categories.map((cat) => (
+                                <option key={cat} value={cat}>{cat}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="time-servings-group">
+                        <InputBox label="Tempo (min)" value={prepTime} onChange={e => setPrepTime(e.target.value)} required />
+                        <InputBox label="Porções" type="number" value={servings} onChange={e => setServings(e.target.value)} required />
+                    </div>
+
+                    <div className="form-group-textarea">
+                        <label>Ingredientes (Um por linha)</label>
+                        <textarea className="custom-textarea" rows="5" value={ingredients} onChange={e => setIngredients(e.target.value)} required />
+                    </div>
+
+                    <div className="form-group-textarea">
+                        <label>Modo de Preparo (Um por linha)</label>
+                        <textarea className="custom-textarea" rows="5" value={steps} onChange={e => setSteps(e.target.value)} required />
+                    </div>
+
+                    {/* 3. Input de Imagem movido para o final */}
+                    <div className="form-group-image">
+                        <label htmlFor="edit-image-upload" className="file-label">
+                            {imageFiles.length > 0 
+                                ? `(${imageFiles.length}) Novas Imagens Selecionadas` 
+                                : 'Selecionar Novas Imagens (Substitui as atuais)'}
+                        </label>
+                        <div className="form-group-carousel">
+                            <Carousel images={imagePreviews} />
+                        </div>
+                        <input 
+                            type="file" 
+                            id="edit-image-upload" 
+                            accept="image/*" 
+                            multiple 
+                            onChange={handleImageSelect} 
+                        />
+                    </div>
+
+                    <Button type="submit" className="save-button" disabled={isLoading}>
+                        {isLoading ? 'Salvando...' : 'Salvar Alterações'}
+                    </Button>
                 </form>
             </div>
         </div>
