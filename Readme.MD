@@ -20,7 +20,6 @@ O **Cook n' Tea** é uma plataforma web interativa para compartilhamento e desco
 ## 🚀 Tecnologias Utilizadas
 
 ### Frontend
-* [Figma](https://www.figma.com/design/Uk7t4ugtcKmlMBbTLVxwdB/Cook%60N%60Tea?node-id=1-997&p=f&t=pxL5sljhnzSvFyVL-0)
 * **React + Vite:** Framework e Build tool para alta performance.
 * **React Router DOM:** Gerenciamento de rotas e navegação.
 * **CSS Modules / Vanilla CSS:** Estilização personalizada.
