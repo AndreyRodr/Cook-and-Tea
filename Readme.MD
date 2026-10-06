@@ -1,130 +1,172 @@
 # 🍳 Cook n' Tea
 
-O **Cook n' Tea** é uma plataforma web interativa para compartilhamento e descoberta de receitas culinárias. O sistema permite que usuários se cadastrem, publiquem suas próprias receitas (se forem Chefs), avaliem pratos, favoritem suas escolhas preferidas e explorem um mundo de sabores.
+**Cook n' Tea** is a team-built full stack recipe-sharing platform focused on discovering, publishing and interacting with culinary content.
 
-![Logo](frontend-app/src/assets/images/logo.png)
+The application supports different user roles, recipe management, ratings, favorites, image uploads and authenticated flows backed by a REST API.
 
-## 📋 Funcionalidades
+![Cook n' Tea logo](frontend-app/src/assets/images/logo.png)
 
-* **Autenticação de Usuários:** Login e Cadastro seguros com criptografia de senha e autenticação via JWT (Cookies).
-* **Perfis de Usuário:**
-    * **Usuário Comum:** Pode visualizar, buscar, favoritar e avaliar receitas.
-    * **Chef:** Além das funções comuns, pode criar, editar e excluir suas próprias receitas.
-    * Edição de perfil e upload de foto de perfil (armazenamento via AWS S3).
-* **Gestão de Receitas:** Criação completa de receitas com lista de ingredientes, modo de preparo, tempo, porções, categorias e upload de múltiplas imagens.
-* **Interação:**
-    * Sistema de Avaliação (Média de Estrelas).
-    * Sistema de Favoritos.
-* **Busca e Filtros:** Barra de pesquisa por nome e navegação por categorias (Salgados, Doces, Veganos, etc.).
+## ✨ Features
 
-## 🚀 Tecnologias Utilizadas
+- User registration and login
+- JWT-based authentication using cookies
+- Common user and Chef roles
+- Protected routes
+- Profile editing
+- Profile image upload to AWS S3
+- Recipe creation, editing and deletion
+- Up to 5 images per recipe
+- Ingredients, preparation steps, portions, categories and cooking time
+- Search by recipe name
+- Browsing by category/tag
+- Ratings
+- Favorites
+
+## 🧱 Architecture
+
+The project is split into two main applications:
+
+- **Frontend:** React + Vite
+- **Backend:** Node.js + Express REST API
+
+The backend uses **Sequelize** with **PostgreSQL** and stores uploaded images in **AWS S3**.
+
+Authentication is handled with JWT tokens stored in cookies, and protected endpoints use authentication middleware. Chef-only recipe creation is also protected by role validation.
+
+## 🛠️ Tech Stack
 
 ### Frontend
-* **React + Vite:** Framework e Build tool para alta performance.
-* **React Router DOM:** Gerenciamento de rotas e navegação.
-* **CSS Modules / Vanilla CSS:** Estilização personalizada.
-* **React Icons & Material UI Icons:** Ícones e componentes visuais.
+
+- React
+- Vite
+- React Router
+- Material UI / React Icons
+- CSS
 
 ### Backend
-* **Node.js + Express:** Servidor e API REST.
-* **Sequelize (ORM):** Manipulação e modelagem do banco de dados.
-* **PostgreSQL:** Banco de dados relacional.
-* **JWT (JSON Web Token):** Segurança e controle de sessão via cookies.
-* **AWS SDK (S3):** Armazenamento em nuvem para imagens de receitas e perfis.
 
----
+- Node.js
+- Express
+- Sequelize
+- PostgreSQL
+- JWT
+- bcrypt
+- Multer
+- AWS SDK / S3
 
-## ⚙️ Pré-requisitos
+## 📁 Project Structure
 
-Antes de começar, certifique-se de ter instalado em sua máquina:
-* [Node.js](https://nodejs.org/)
-* [PostgreSQL](https://www.postgresql.org/)
-
----
-
-## 🔧 Configuração das Variáveis de Ambiente
-
-O backend necessita de um arquivo `.env` para funcionar corretamente e conectar ao banco de dados e à AWS.
-
-1.  Navegue até a pasta do backend: `backend-api/src`
-2.  Crie um arquivo chamado `.env`.
-
-Exemplo de `.env`:
-
-```env
-# Banco de Dados (PostgreSQL)
-PGHOST=localhost
-PGDATABASE=nome_do_banco
-PGUSER=seu_usuario
-PGPASSWORD=sua_senha
-
-# Autenticação
-JWT_SECRET=sua_chave_secreta
-NODE_ENV=development
-
-# AWS S3 (Imagens)
-AWS_BUCKET_NAME=nome_do_bucket
-AWS_BUCKET_REGION=regiao_do_bucket
-AWS_ACCESS_KEY=sua_access_key
-AWS_SECRET_KEY=sua_secret_key
-```
-
-
-## 🏃‍♂️ Como Rodar o Projeto
-Para executar a aplicação, é necessário abrir dois terminais simultaneamente.
-
-### Terminal 1: Backend (API)
-Neste terminal, instalaremos as dependências do servidor e o iniciaremos.
-
-```Bash```
-
-#### Entre na pasta do código fonte do backend
-```cd backend-api/src```
-
-#### Instale as dependências
-``` npm install ```
-
-#### Inicie o servidor
-``` node server.js ```
-
-O servidor rodará na porta 3001.
-
-### Terminal 2: Frontend (Aplicação Web)
-Neste terminal, instalaremos as dependências da interface e iniciaremos o ambiente de desenvolvimento.
-
-``` Bash ```
-
-#### Entre na pasta do frontend
-``` cd frontend-app ```
-
-#### Instale as dependências
-``` npm install ```
-
-#### Inicie o projeto
-``` npm run dev ```
-
-A aplicação estará disponível geralmente em http://localhost:5173.
-
-# 📂 Estrutura de Pastas
-```cook-and-tea/
-├── backend-api/           # Servidor e API
+```text
+Cook-and-Tea/
+├── backend-api/
 │   └── src/
-│       ├── config/        # Conexão com Banco de Dados
-│       ├── controllers/   # Lógica das rotas (Auth, Recipes, Users)
-│       ├── middleware/    # Proteção de rotas
-│       ├── models/        # Modelos Sequelize
-│       ├── routes/        # Definição de endpoints da API
-│       ├── utils/         # Serviços auxiliares (AWS S3, JWT)
-│       └── server.js      # Ponto de entrada do servidor
+│       ├── config/
+│       ├── controllers/
+│       ├── middleware/
+│       ├── models/
+│       ├── routes/
+│       ├── utils/
+│       └── server.js
 │
-└── frontend-app/          # Interface React
+└── frontend-app/
     ├── public/
     └── src/
-        ├── assets/        # Imagens
-        ├── components/    # Componentes Reutilizáveis (Navbar, Modais, Inputs)
-        ├── pages/         # Páginas (Home, Recipe, Auth, CreateRecipe)
-        └── services/      # Integração com a API
+        ├── assets/
+        ├── components/
+        ├── pages/
+        └── services/
 ```
 
-# 📝 Licença
-Este projeto foi desenvolvido para fins educacionais.
+## ⚙️ Requirements
+
+- Node.js
+- npm
+- PostgreSQL
+- An AWS S3 bucket if image upload functionality is required
+
+## 🔐 Environment Variables
+
+Create a `.env` file inside:
+
+```text
+backend-api/src/
+```
+
+Example:
+
+```env
+PGHOST=localhost
+PGDATABASE=cook_n_tea
+PGUSER=postgres
+PGPASSWORD=your_password
+
+JWT_SECRET=your_jwt_secret
+NODE_ENV=development
+
+AWS_BUCKET_NAME=your_bucket_name
+AWS_BUCKET_REGION=your_bucket_region
+AWS_ACCESS_KEY=your_access_key
+AWS_SECRET_KEY=your_secret_key
+```
+
+Do not commit real credentials or secrets.
+
+## ▶️ Running Locally
+
+The frontend and backend run separately.
+
+### Backend
+
+```bash
+cd backend-api/src
+npm install
+node server.js
+```
+
+The API runs on:
+
+```text
+http://localhost:3001
+```
+
+### Frontend
+
+Open another terminal:
+
+```bash
+cd frontend-app
+npm install
+npm run dev
+```
+
+The frontend is available by default at:
+
+```text
+http://localhost:5173
+```
+
+## 🔒 Authentication and Authorization
+
+Passwords are hashed with **bcrypt** before being persisted.
+
+The API validates JWT tokens from cookies through authentication middleware. Protected endpoints require a valid authenticated user, while recipe creation is additionally restricted to users with the Chef role.
+
+## 🖼️ Image Storage
+
+Recipe and profile images are uploaded to **AWS S3** using the AWS SDK.
+
+Recipe routes currently accept up to **5 images** per recipe.
+
+## 🧪 Development Status
+
+This repository represents an academic team project and currently targets local development.
+
+The backend CORS configuration currently points to the local frontend origin (`http://localhost:5173`), so a production deployment would require environment-based origin configuration and a review of cross-domain cookie settings.
+
+## 👥 Team Project
+
+Cook n' Tea was developed collaboratively as an academic project.
+
+## 📄 License
+
+Developed for educational purposes.
